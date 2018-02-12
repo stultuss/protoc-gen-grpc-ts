@@ -1,0 +1,48 @@
+{
+  "name": "protoc-gen-grpc",
+  "version": "0.0.1",
+  "author": "fengjie",
+  "description": "Protocol Buffers Compiler (protoc) plugin for generating grpc interfaces in TypeScript..",
+  "homepage": "https://github.com/niklaus0823/protoc-gen-grpc#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/niklaus0823/protoc-gen-grpc.git"
+  },
+  "bugs": "https://github.com/niklaus0823/protoc-gen-grpc/issues",
+  "keywords": [
+    "TypeScript",
+    "Protobuf",
+    "gRPC"
+  ],
+  "engines": {
+    "node": ">=8"
+  },
+  "main": "./build/index.js",
+  "bin": {
+    "protoc-gen-ts-plugin": "./bin/protoc-gen-ts-plugin",
+    "protoc-gen-grpc": "./bin/protoc-gen-grpc.js",
+    "protoc-gen-grpc-ts": "./bin/protoc-gen-grpc-ts.js"
+  },
+  "scripts": {
+    "install": "./node_modules/.bin/node-pre-gyp install"
+  },
+  "bundledDependencies": [
+    "node-pre-gyp"
+  ],
+  "binary": {
+    "module_name": "grpc_tools",
+    "host": "https://storage.googleapis.com/",
+    "remote_path": "grpc-precompiled-binaries/node/grpc-tools/v1.6.6",
+    "package_name": "{platform}-{arch}.tar.gz",
+    "module_path": "bin"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "google-protobuf": "^3.5.0",
+    "node-pre-gyp": "^0.6.39"
+  },
+  "devDependencies": {
+    "@types/google-protobuf": "^3.2.7",
+    "@types/node": "^9.4.1"
+  }
+}
