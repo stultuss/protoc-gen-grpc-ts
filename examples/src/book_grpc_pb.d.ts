@@ -1,4 +1,4 @@
-``// package: com.book
+// package: com.book
 // file: book.proto
 
 /* tslint:disable */
