@@ -15,9 +15,7 @@ var FileDescriptorTSD;
         printer.printLn(`// package: ${packageName}`);
         printer.printLn(`// file: ${fileDescriptor.getName()}`);
         printer.printEmptyLn();
-        printer.printLn(`/* tslint:disable */`);
         const upToRoot = Utility_1.Utility.getPathToRoot(fileName);
-        printer.printEmptyLn();
         printer.printLn(`import * as jspb from 'google-protobuf';`);
         fileDescriptor.getDependencyList().forEach((dependency) => {
             const pseudoNamespace = Utility_1.Utility.filePathToPseudoNamespace(dependency);

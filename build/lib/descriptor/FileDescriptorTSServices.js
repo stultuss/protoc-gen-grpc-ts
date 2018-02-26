@@ -32,8 +32,6 @@ var FileDescriptorTSServices;
         printer.printLn(`// package: ${packageName}`);
         printer.printLn(`// file: ${fileDescriptor.getName()}`);
         printer.printEmptyLn();
-        printer.printLn(`/* tslint:disable */`);
-        printer.printEmptyLn();
         // Need to import the non-service file that was generated for this .proto file
         printer.printLn(`import * as grpc from 'grpc';`);
         const asPseudoNamespace = Utility_1.Utility.filePathToPseudoNamespace(fileName);
@@ -79,7 +77,7 @@ var FileDescriptorTSServices;
                 serviceData.methods.push(methodData);
             });
             // print service interface
-            printer.printLn(`interface I${serviceData.serviceName}Service extends grpc.ServiceDefinition {`);
+            printer.printLn(`interface I${serviceData.serviceName}Service extends grpc.ServiceDefinition<grpc.UntypedServiceImplementation> {`);
             serviceData.methods.forEach(methodData => {
                 printer.printIndentedLn(`${Utility_1.Utility.lcFirst(methodData.methodName)}: I${methodData.methodName}`);
             });
@@ -112,14 +110,14 @@ var FileDescriptorTSServices;
                         printer.printIndentedLn(`${methodName}(request: ${requestTypeName}, metadata: grpc.Metadata, callback: (error: Error | null, response: ${responseTypeName}) => void): grpc.ClientUnaryCall;`);
                         break;
                     case 'ClientWritableStream':
-                        printer.printIndentedLn(`${methodName}(callback: (error: Error | null, response: ${responseTypeName}) => void): grpc.ClientWritableStream;`);
-                        printer.printIndentedLn(`${methodName}(callback: (error: Error | null, metadata: grpc.Metadata, response: ${responseTypeName}) => void): grpc.ClientWritableStream;`);
+                        printer.printIndentedLn(`${methodName}(callback: (error: Error | null, response: ${responseTypeName}) => void): grpc.ClientWritableStream<${responseTypeName}>;`);
+                        printer.printIndentedLn(`${methodName}(callback: (error: Error | null, metadata: grpc.Metadata, response: ${responseTypeName}) => void): grpc.ClientWritableStream<${responseTypeName}>;`);
                         break;
                     case 'ClientReadableStream':
-                        printer.printIndentedLn(`${methodName}(request: ${requestTypeName}, metadata?: grpc.Metadata): grpc.ClientReadableStream;`);
+                        printer.printIndentedLn(`${methodName}(request: ${requestTypeName}, metadata?: grpc.Metadata): grpc.ClientReadableStream<${responseTypeName}>;`);
                         break;
                     case 'ClientDuplexStream':
-                        printer.printIndentedLn(`${methodName}(metadata?: grpc.Metadata): grpc.ClientDuplexStream;`);
+                        printer.printIndentedLn(`${methodName}(metadata?: grpc.Metadata): grpc.ClientDuplexStream<${requestTypeName}, ${responseTypeName}>;`);
                         break;
                 }
             });
@@ -139,14 +137,14 @@ var FileDescriptorTSServices;
                         printer.printIndentedLn(`public ${methodName}(request: ${requestTypeName}, metadata: grpc.Metadata, callback: (error: Error | null, response: ${responseTypeName}) => void): grpc.ClientUnaryCall;`);
                         break;
                     case 'ClientWritableStream':
-                        printer.printIndentedLn(`public ${methodName}(callback: (error: Error | null, response: ${responseTypeName}) => void): grpc.ClientWritableStream;`);
-                        printer.printIndentedLn(`public ${methodName}(callback: (error: Error | null, metadata: grpc.Metadata, response: ${responseTypeName}) => void): grpc.ClientWritableStream;`);
+                        printer.printIndentedLn(`public ${methodName}(callback: (error: Error | null, response: ${responseTypeName}) => void): grpc.ClientWritableStream<${responseTypeName}>;`);
+                        printer.printIndentedLn(`public ${methodName}(callback: (error: Error | null, metadata: grpc.Metadata, response: ${responseTypeName}) => void): grpc.ClientWritableStream<${responseTypeName}>;`);
                         break;
                     case 'ClientReadableStream':
-                        printer.printIndentedLn(`public ${methodName}(request: ${requestTypeName}, metadata?: grpc.Metadata): grpc.ClientReadableStream;`);
+                        printer.printIndentedLn(`public ${methodName}(request: ${requestTypeName}, metadata?: grpc.Metadata): grpc.ClientReadableStream<${responseTypeName}>;`);
                         break;
                     case 'ClientDuplexStream':
-                        printer.printIndentedLn(`public ${methodName}(metadata?: grpc.Metadata): grpc.ClientDuplexStream;`);
+                        printer.printIndentedLn(`public ${methodName}(metadata?: grpc.Metadata): grpc.ClientDuplexStream<${requestTypeName}, ${responseTypeName}>;`);
                         break;
                 }
             });

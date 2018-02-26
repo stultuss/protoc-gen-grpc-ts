@@ -1,8 +1,6 @@
 // package: com.book
 // file: book.proto
 
-/* tslint:disable */
-
 import * as jspb from 'google-protobuf';
 
 export class Book extends jspb.Message {
@@ -53,21 +51,21 @@ export namespace GetBookRequest {
   }
 }
 
-export class GetBookViaAuthor extends jspb.Message {
+export class GetBookViaAuthorRequest extends jspb.Message {
   getAuthor(): string;
   setAuthor(value: string): void;
 
   serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): GetBookViaAuthor.AsObject;
-  static toObject(includeInstance: boolean, msg: GetBookViaAuthor): GetBookViaAuthor.AsObject;
+  toObject(includeInstance?: boolean): GetBookViaAuthorRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: GetBookViaAuthorRequest): GetBookViaAuthorRequest.AsObject;
   static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
   static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
-  static serializeBinaryToWriter(message: GetBookViaAuthor, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): GetBookViaAuthor;
-  static deserializeBinaryFromReader(message: GetBookViaAuthor, reader: jspb.BinaryReader): GetBookViaAuthor;
+  static serializeBinaryToWriter(message: GetBookViaAuthorRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetBookViaAuthorRequest;
+  static deserializeBinaryFromReader(message: GetBookViaAuthorRequest, reader: jspb.BinaryReader): GetBookViaAuthorRequest;
 }
 
-export namespace GetBookViaAuthor {
+export namespace GetBookViaAuthorRequest {
   export type AsObject = {
     author: string,
   }
