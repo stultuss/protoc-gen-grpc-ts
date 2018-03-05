@@ -20,6 +20,7 @@
   "main": "./build/index.js",
   "bin": {
     "protoc-gen-ts-plugin": "./bin/protoc-gen-ts-plugin",
+    "protoc-gen": "./bin/protoc-gen.js",
     "protoc-gen-grpc": "./bin/protoc-gen-grpc.js",
     "protoc-gen-grpc-ts": "./bin/protoc-gen-grpc-ts.js"
   },
