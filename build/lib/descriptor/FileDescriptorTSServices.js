@@ -138,7 +138,7 @@ var FileDescriptorTSServices;
                         break;
                     case 'ClientWritableStream':
                         printer.printIndentedLn(`public ${methodName}(callback: (error: Error | null, response: ${responseTypeName}) => void): grpc.ClientWritableStream<${responseTypeName}>;`);
-                        printer.printIndentedLn(`public ${methodName}(callback: (error: Error | null, metadata: grpc.Metadata, response: ${responseTypeName}) => void): grpc.ClientWritableStream<${responseTypeName}>;`);
+                        printer.printIndentedLn(`public ${methodName}(metadata: grpc.Metadata, callback: (error: Error | null, response: ${responseTypeName}) => void): grpc.ClientWritableStream<${responseTypeName}>;`);
                         break;
                     case 'ClientReadableStream':
                         printer.printIndentedLn(`public ${methodName}(request: ${requestTypeName}, metadata?: grpc.Metadata): grpc.ClientReadableStream<${responseTypeName}>;`);
