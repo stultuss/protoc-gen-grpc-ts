@@ -16,6 +16,7 @@ This project was forked from [agreatfool/grpc_tools_node_protoc_ts](https://gith
 ```bash
 npm install protoc-gen-grpc -g
 ```
+> If the installation failed, please try to add `--unsafe-perm` parameters
 
 ## How to use
 
