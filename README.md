@@ -14,9 +14,10 @@ This project was forked from [agreatfool/grpc_tools_node_protoc_ts](https://gith
 ## Install
 
 ```bash
-npm install protoc-gen-grpc -g
+npm config set unsafe-perm true
+npm install protoc-gen-grpc -g 
 ```
-> If the installation failed, please try to add `--unsafe-perm` parameters
+> If you don't want to set up a public configuration for NPM, you can try to add after the installation command `-unsafe-perm` parameters.
 
 ## How to use
 
