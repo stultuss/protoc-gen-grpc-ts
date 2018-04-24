@@ -2,3 +2,5 @@
 node_modules/
 bin/google/
 bin/*.exe
+bin/grpc_node_plugin
+bin/protoc
