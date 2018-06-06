@@ -136,7 +136,7 @@ var Message;
                 printer.printIndentedLn(`has${fieldData.camelUpperName}(): boolean;`);
                 printClearIfNotPresent();
             }
-            if (field.getLabel() === descriptor_pb_1.FieldDescriptorProto.Label.LABEL_REPEATED) {
+            if (field.getLabel() === descriptor_pb_1.FieldDescriptorProto.Label.LABEL_REPEATED) { // is repeated
                 printClearIfNotPresent();
                 if (fieldData.type === FieldTypes_1.BYTES_TYPE) {
                     printerToObjectType.printIndentedLn(`${fieldData.camelCaseName}List: Array<Uint8Array | string>,`);

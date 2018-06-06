@@ -1,4 +1,4 @@
-import {EnumDescriptorProto} from "google-protobuf/google/protobuf/descriptor_pb";
+import {EnumDescriptorProto} from 'google-protobuf/google/protobuf/descriptor_pb';
 import {Printer} from '../../Printer';
 
 export namespace Enum {
