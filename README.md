@@ -1,4 +1,4 @@
-protoc-gen-grpc-ts
+protoc-gen-grpc
 =========================
 Protocol Buffers Compiler (protoc) plugin for generating grpc interfaces in TypeScript.
 
@@ -15,7 +15,7 @@ This project was forked from [agreatfool/grpc_tools_node_protoc_ts](https://gith
 
 ```bash
 npm config set unsafe-perm true
-npm install protoc-gen-grpc-ts -g
+npm install protoc-gen-grpc -g
 ```
 > If you don't want to set up a public configuration for NPM, you can try to add after the installation command `-unsafe-perm` parameters.
 
