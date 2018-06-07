@@ -2,13 +2,13 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const Utility_1 = require("../Utility");
 const Printer_1 = require("../Printer");
-const WellKnown_1 = require("../WellKnown");
+const DependencyTypesMap_1 = require("../DependencyTypesMap");
 const Message_1 = require("./partial/Message");
 const Enum_1 = require("./partial/Enum");
 const Extensions_1 = require("./partial/Extensions");
 var FileDescriptorTSD;
 (function (FileDescriptorTSD) {
-    function print(fileDescriptor, exportMap) {
+    function print(fileDescriptor, entrymap) {
         const fileName = fileDescriptor.getName();
         const packageName = fileDescriptor.getPackage();
         const printer = new Printer_1.Printer(0);
@@ -19,8 +19,8 @@ var FileDescriptorTSD;
         printer.printLn(`import * as jspb from 'google-protobuf';`);
         fileDescriptor.getDependencyList().forEach((dependency) => {
             const pseudoNamespace = Utility_1.Utility.filePathToPseudoNamespace(dependency);
-            if (dependency in WellKnown_1.WellKnownTypesMap) {
-                printer.printLn(`import * as ${pseudoNamespace} from '${WellKnown_1.WellKnownTypesMap[dependency]}';`);
+            if (dependency in DependencyTypesMap_1.DependencyTypesMap) {
+                printer.printLn(`import * as ${pseudoNamespace} from '${DependencyTypesMap_1.DependencyTypesMap[dependency]}';`);
             }
             else {
                 const filePath = Utility_1.Utility.filePathFromProtoWithoutExtension(dependency);
@@ -28,10 +28,10 @@ var FileDescriptorTSD;
             }
         });
         fileDescriptor.getMessageTypeList().forEach(enumType => {
-            printer.print(Message_1.Message.print(fileName, exportMap, enumType, 0, fileDescriptor));
+            printer.print(Message_1.Message.print(fileName, entrymap, enumType, 0, fileDescriptor));
         });
         fileDescriptor.getExtensionList().forEach(extension => {
-            printer.print(Extensions_1.Extension.print(fileName, exportMap, extension, 0));
+            printer.print(Extensions_1.Extension.print(fileName, entrymap, extension, 0));
         });
         fileDescriptor.getEnumTypeList().forEach(enumType => {
             printer.print(Enum_1.Enum.print(enumType, 0));

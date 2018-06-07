@@ -5,47 +5,50 @@ Object.defineProperty(exports, "__esModule", { value: true });
  *
  * It only accepts stdin/stdout output according to the protocol
  * specified in [plugin.proto](https://github.com/google/protobuf/blob/master/src/google/protobuf/compiler/plugin.proto).
+ *
+ * source code copy from [ts-protoc-gen](https://github.com/improbable-eng/ts-protoc-gen/blob/master/src/index.ts)
  */
 const plugin_pb_1 = require("google-protobuf/google/protobuf/compiler/plugin_pb");
-const ExportMap_1 = require("./lib/ExportMap");
 const Utility_1 = require("./lib/Utility");
+const EntryMap_1 = require("./lib/EntryMap");
 const FileDescriptorTSD_1 = require("./lib/descriptor/FileDescriptorTSD");
-const FileDescriptorTSServices_1 = require("./lib/descriptor/FileDescriptorTSServices");
-Utility_1.Utility.withAllStdIn((inputBuff) => {
+const FileDescriptorTSGRPC_1 = require("./lib/descriptor/FileDescriptorTSGRPC");
+Utility_1.Utility.withAllStdIn((input) => {
     try {
-        const typedInputBuff = new Uint8Array(inputBuff.length);
-        typedInputBuff.set(inputBuff);
-        const codeGenRequest = plugin_pb_1.CodeGeneratorRequest.deserializeBinary(typedInputBuff);
-        const codeGenResponse = new plugin_pb_1.CodeGeneratorResponse();
-        const exportMap = new ExportMap_1.ExportMap();
+        const binary = new Uint8Array(input.length);
+        binary.set(input);
+        const request = plugin_pb_1.CodeGeneratorRequest.deserializeBinary(binary);
+        const response = new plugin_pb_1.CodeGeneratorResponse();
+        const generateServices = (request.getParameter() === 'service=true');
+        // Parse request proto file
         const fileNameToDescriptor = {};
-        // Generate separate `.ts` files for services if param is set
-        const generateServices = codeGenRequest.getParameter() === 'service=true';
-        codeGenRequest.getProtoFileList().forEach(protoFileDescriptor => {
-            fileNameToDescriptor[protoFileDescriptor.getName()] = protoFileDescriptor;
-            exportMap.addFileDescriptor(protoFileDescriptor);
+        const entryMap = new EntryMap_1.EntryMap();
+        request.getProtoFileList().forEach((fileDescriptor) => {
+            fileNameToDescriptor[fileDescriptor.getName()] = fileDescriptor;
+            entryMap.parseFileDescriptor(fileDescriptor);
         });
-        codeGenRequest.getFileToGenerateList().forEach(fileName => {
+        // Generate *_pb.d.ts && *_grpc_pb.d.ts
+        request.getFileToGenerateList().forEach(fileName => {
             const outputFileName = Utility_1.Utility.filePathFromProtoWithoutExtension(fileName);
-            const thisFile = new plugin_pb_1.CodeGeneratorResponse.File();
-            thisFile.setName(outputFileName + '.d.ts');
-            thisFile.setContent(FileDescriptorTSD_1.FileDescriptorTSD.print(fileNameToDescriptor[fileName], exportMap));
-            codeGenResponse.addFile(thisFile);
+            const outputFile = new plugin_pb_1.CodeGeneratorResponse.File();
+            outputFile.setName(outputFileName + '.d.ts');
+            outputFile.setContent(FileDescriptorTSD_1.FileDescriptorTSD.print(fileNameToDescriptor[fileName], entryMap));
+            response.addFile(outputFile);
             if (generateServices) {
-                const fileDescriptorOutput = FileDescriptorTSServices_1.FileDescriptorTSServices.print(fileNameToDescriptor[fileName], exportMap);
+                const fileDescriptorOutput = FileDescriptorTSGRPC_1.FileDescriptorTSGRPC.print(fileNameToDescriptor[fileName], entryMap);
                 if (fileDescriptorOutput !== '') {
                     const thisServiceFileName = Utility_1.Utility.svcFilePathFromProtoWithoutExtension(fileName);
                     const thisServiceFile = new plugin_pb_1.CodeGeneratorResponse.File();
                     thisServiceFile.setName(thisServiceFileName + '.d.ts');
                     thisServiceFile.setContent(fileDescriptorOutput);
-                    codeGenResponse.addFile(thisServiceFile);
+                    response.addFile(thisServiceFile);
                 }
             }
         });
-        process.stdout.write(new Buffer(codeGenResponse.serializeBinary()));
+        process.stdout.write(new Buffer(response.serializeBinary()));
     }
     catch (err) {
-        console.error('protoc-gen-ts error: ' + err.stack + '\n');
+        console.error('error: ' + err.stack + '\n');
         process.exit(1);
     }
 });

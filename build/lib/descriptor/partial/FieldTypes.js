@@ -29,13 +29,13 @@ var FieldTypes;
         return TypeNumToTypeString[fieldTypeNum];
     }
     FieldTypes.getTypeName = getTypeName;
-    function getFieldType(type, typeName, currentFileName, exportMap) {
+    function getFieldType(type, typeName, currentFileName, entryMap) {
         let fieldType;
         let fromExport;
         let withinNamespace;
         switch (type) {
             case exports.MESSAGE_TYPE:
-                fromExport = exportMap.getMessage(typeName);
+                fromExport = entryMap.getMessageEntry(typeName);
                 if (!fromExport) {
                     throw new Error('Could not getFieldType for message: ' + typeName);
                 }
@@ -48,7 +48,7 @@ var FieldTypes;
                 }
                 break;
             case exports.ENUM_TYPE:
-                fromExport = exportMap.getEnum(typeName);
+                fromExport = entryMap.getEnumEntry(typeName);
                 if (!fromExport) {
                     throw new Error('Could not getFieldType for enum: ' + typeName);
                 }

@@ -5,7 +5,7 @@ import {
     OneofDescriptorProto
 } from 'google-protobuf/google/protobuf/descriptor_pb';
 import {Printer} from '../../Printer';
-import {ExportMap} from '../../ExportMap';
+import {EntryMap} from '../../EntryMap';
 import {Utility} from '../../Utility';
 import {BYTES_TYPE, ENUM_TYPE, MESSAGE_TYPE, FieldTypes} from './FieldTypes';
 
@@ -72,7 +72,7 @@ export namespace Message {
     }
 
 
-    export function print(fileName: string, exportMap: ExportMap, descriptor: DescriptorProto, indentLevel: number, fileDescriptor: FileDescriptorProto) {
+    export function print(fileName: string, entryMap: EntryMap, descriptor: DescriptorProto, indentLevel: number, fileDescriptor: FileDescriptorProto) {
 
         let messageData = JSON.parse(defaultMessageType) as MessageType;
 
@@ -118,7 +118,7 @@ export namespace Message {
             let withinNamespace: string;
             switch (fieldData.type) {
                 case MESSAGE_TYPE:
-                    const fieldMessageType = exportMap.getMessage(fullTypeName);
+                    const fieldMessageType = entryMap.getMessageEntry(fullTypeName);
                     if (fieldMessageType === undefined) {
                         throw new Error('No message export for: ' + fullTypeName);
                     }
@@ -126,10 +126,10 @@ export namespace Message {
                     if (fieldMessageType.messageOptions !== undefined && fieldMessageType.messageOptions.getMapEntry()) {
                         let keyTuple = fieldMessageType.mapFieldOptions!.key;
                         let keyType = keyTuple[0] as FieldDescriptorProto.Type;
-                        let keyTypeName = FieldTypes.getFieldType(keyType, keyTuple[1] as string, fileName, exportMap);
+                        let keyTypeName = FieldTypes.getFieldType(keyType, keyTuple[1] as string, fileName, entryMap);
                         let valueTuple = fieldMessageType.mapFieldOptions!.value;
                         let valueType = valueTuple[0] as FieldDescriptorProto.Type;
-                        let valueTypeName = FieldTypes.getFieldType(valueType, valueTuple[1] as string, fileName, exportMap);
+                        let valueTypeName = FieldTypes.getFieldType(valueType, valueTuple[1] as string, fileName, entryMap);
                         if (valueType === BYTES_TYPE) {
                             valueTypeName = 'Uint8Array | string';
                         }
@@ -149,7 +149,7 @@ export namespace Message {
                     break;
 
                 case ENUM_TYPE:
-                    let fieldEnumType = exportMap.getEnum(fullTypeName);
+                    let fieldEnumType = entryMap.getEnumEntry(fullTypeName);
                     if (fieldEnumType === undefined) {
                         throw new Error('No enum export for: ' + fullTypeName);
                     }
@@ -255,7 +255,7 @@ export namespace Message {
         printer.print(printerToObjectType.getOutput());
 
         descriptor.getNestedTypeList().forEach(nested => {
-            const msgOutput = Message.print(fileName, exportMap, nested, indentLevel + 1, fileDescriptor);
+            const msgOutput = Message.print(fileName, entryMap, nested, indentLevel + 1, fileDescriptor);
             if (msgOutput !== '') {
                 // If the message class is a Map entry then it isn't output, so don't print the namespace block
                 printer.print(msgOutput);
@@ -268,7 +268,7 @@ export namespace Message {
             printer.print(`${OneOf.print(oneOfDecl, oneOfGroups[index] || [], indentLevel + 1)}`);
         });
         descriptor.getExtensionList().forEach(extension => {
-            printer.print(Extension.print(fileName, exportMap, extension, indentLevel + 1));
+            printer.print(Extension.print(fileName, entryMap, extension, indentLevel + 1));
         });
 
         printer.printLn(`}`);

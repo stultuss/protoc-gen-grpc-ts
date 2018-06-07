@@ -1,5 +1,5 @@
 import {FieldDescriptorProto} from 'google-protobuf/google/protobuf/descriptor_pb';
-import {ExportEnumEntry, ExportMap, ExportMessageEntry} from '../../ExportMap';
+import {EntryMap, EnumEntry, MessageEntry} from '../../EntryMap';
 import {Utility} from '../../Utility';
 
 export const MESSAGE_TYPE = 11;
@@ -32,14 +32,14 @@ export namespace FieldTypes {
         return TypeNumToTypeString[fieldTypeNum];
     }
 
-    export function getFieldType(type: FieldDescriptorProto.Type, typeName: string, currentFileName: string, exportMap: ExportMap): string {
+    export function getFieldType(type: FieldDescriptorProto.Type, typeName: string, currentFileName: string, entryMap: EntryMap): string {
         let fieldType: string;
-        let fromExport: ExportMessageEntry | ExportEnumEntry;
+        let fromExport: MessageEntry | EnumEntry;
         let withinNamespace: string;
 
         switch (type) {
             case MESSAGE_TYPE:
-                fromExport = exportMap.getMessage(typeName);
+                fromExport = entryMap.getMessageEntry(typeName);
                 if (!fromExport) {
                     throw new Error('Could not getFieldType for message: ' + typeName);
                 }
@@ -52,7 +52,7 @@ export namespace FieldTypes {
                 break;
 
             case ENUM_TYPE:
-                fromExport = exportMap.getEnum(typeName);
+                fromExport = entryMap.getEnumEntry(typeName);
                 if (!fromExport) {
                     throw new Error('Could not getFieldType for enum: ' + typeName);
                 }

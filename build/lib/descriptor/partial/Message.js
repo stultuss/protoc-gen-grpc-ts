@@ -40,7 +40,7 @@ var Message;
         return (Utility_1.Utility.isProto2(fileDescriptor));
     }
     Message.hasFieldPresence = hasFieldPresence;
-    function print(fileName, exportMap, descriptor, indentLevel, fileDescriptor) {
+    function print(fileName, entryMap, descriptor, indentLevel, fileDescriptor) {
         let messageData = JSON.parse(Message.defaultMessageType);
         messageData.messageName = descriptor.getName();
         messageData.oneOfDeclList = descriptor.getOneofDeclList();
@@ -75,17 +75,17 @@ var Message;
             let withinNamespace;
             switch (fieldData.type) {
                 case FieldTypes_1.MESSAGE_TYPE:
-                    const fieldMessageType = exportMap.getMessage(fullTypeName);
+                    const fieldMessageType = entryMap.getMessageEntry(fullTypeName);
                     if (fieldMessageType === undefined) {
                         throw new Error('No message export for: ' + fullTypeName);
                     }
                     if (fieldMessageType.messageOptions !== undefined && fieldMessageType.messageOptions.getMapEntry()) {
                         let keyTuple = fieldMessageType.mapFieldOptions.key;
                         let keyType = keyTuple[0];
-                        let keyTypeName = FieldTypes_1.FieldTypes.getFieldType(keyType, keyTuple[1], fileName, exportMap);
+                        let keyTypeName = FieldTypes_1.FieldTypes.getFieldType(keyType, keyTuple[1], fileName, entryMap);
                         let valueTuple = fieldMessageType.mapFieldOptions.value;
                         let valueType = valueTuple[0];
-                        let valueTypeName = FieldTypes_1.FieldTypes.getFieldType(valueType, valueTuple[1], fileName, exportMap);
+                        let valueTypeName = FieldTypes_1.FieldTypes.getFieldType(valueType, valueTuple[1], fileName, entryMap);
                         if (valueType === FieldTypes_1.BYTES_TYPE) {
                             valueTypeName = 'Uint8Array | string';
                         }
@@ -104,7 +104,7 @@ var Message;
                     fieldData.exportType = exportType;
                     break;
                 case FieldTypes_1.ENUM_TYPE:
-                    let fieldEnumType = exportMap.getEnum(fullTypeName);
+                    let fieldEnumType = entryMap.getEnumEntry(fullTypeName);
                     if (fieldEnumType === undefined) {
                         throw new Error('No enum export for: ' + fullTypeName);
                     }
@@ -200,7 +200,7 @@ var Message;
         printer.printLn(`export namespace ${messageData.messageName} {`);
         printer.print(printerToObjectType.getOutput());
         descriptor.getNestedTypeList().forEach(nested => {
-            const msgOutput = Message.print(fileName, exportMap, nested, indentLevel + 1, fileDescriptor);
+            const msgOutput = Message.print(fileName, entryMap, nested, indentLevel + 1, fileDescriptor);
             if (msgOutput !== '') {
                 // If the message class is a Map entry then it isn't output, so don't print the namespace block
                 printer.print(msgOutput);
@@ -213,7 +213,7 @@ var Message;
             printer.print(`${OneOf_1.OneOf.print(oneOfDecl, oneOfGroups[index] || [], indentLevel + 1)}`);
         });
         descriptor.getExtensionList().forEach(extension => {
-            printer.print(Extensions_1.Extension.print(fileName, exportMap, extension, indentLevel + 1));
+            printer.print(Extensions_1.Extension.print(fileName, entryMap, extension, indentLevel + 1));
         });
         printer.printLn(`}`);
         return printer.getOutput();

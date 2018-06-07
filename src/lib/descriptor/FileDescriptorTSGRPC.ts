@@ -1,14 +1,18 @@
-import {FileDescriptorProto} from 'google-protobuf/google/protobuf/descriptor_pb';
+import {
+    FileDescriptorProto,
+    MethodDescriptorProto,
+    ServiceDescriptorProto
+} from 'google-protobuf/google/protobuf/descriptor_pb';
 
-import {ExportMap} from '../ExportMap';
+import {EntryMap} from '../EntryMap';
 import {Utility} from '../Utility';
 import {Printer} from '../Printer';
-import {WellKnownTypesMap} from '../WellKnown';
+import {DependencyTypesMap} from '../DependencyTypesMap';
 import {DependencyFilter} from '../DependencyFilter';
 
 import {FieldTypes, MESSAGE_TYPE} from './partial/FieldTypes';
 
-export namespace FileDescriptorTSServices {
+export namespace FileDescriptorTSGRPC {
 
     export interface ServiceType {
         serviceName: string;
@@ -42,7 +46,7 @@ export namespace FileDescriptorTSServices {
         type: 'ClientUnaryCall',
     } as ServiceMethodType);
 
-    export function print(fileDescriptor: FileDescriptorProto, exportMap: ExportMap): string {
+    export function print(fileDescriptor: FileDescriptorProto, entryMap: EntryMap): string {
         if (fileDescriptor.getServiceList().length === 0) {
             return '';
         }
@@ -66,8 +70,8 @@ export namespace FileDescriptorTSServices {
                 return; // filtered
             }
             const pseudoNamespace = Utility.filePathToPseudoNamespace(dependency);
-            if (dependency in WellKnownTypesMap) {
-                printer.printLn(`import * as ${pseudoNamespace} from '${WellKnownTypesMap[dependency]}';`);
+            if (dependency in DependencyTypesMap) {
+                printer.printLn(`import * as ${pseudoNamespace} from '${DependencyTypesMap[dependency]}';`);
             } else {
                 const filePath = Utility.filePathFromProtoWithoutExtension(dependency);
                 printer.printLn(`import * as ${pseudoNamespace} from '${upToRoot + filePath}';`);
@@ -75,20 +79,20 @@ export namespace FileDescriptorTSServices {
         });
         printer.printEmptyLn();
 
-        fileDescriptor.getServiceList().forEach(service => {
+        fileDescriptor.getServiceList().forEach((service: ServiceDescriptorProto) => {
             let serviceData = JSON.parse(defaultServiceType) as ServiceType;
 
             serviceData.serviceName = service.getName();
 
-            service.getMethodList().forEach(method => {
+            service.getMethodList().forEach((method: MethodDescriptorProto) => {
                 let methodData = JSON.parse(defaultServiceMethodType) as ServiceMethodType;
                 methodData.packageName = packageName;
                 methodData.serviceName = serviceData.serviceName;
                 methodData.methodName = method.getName();
                 methodData.requestStream = method.getClientStreaming();
                 methodData.responseStream = method.getServerStreaming();
-                methodData.requestTypeName = FieldTypes.getFieldType(MESSAGE_TYPE, method.getInputType().slice(1), '', exportMap);
-                methodData.responseTypeName = FieldTypes.getFieldType(MESSAGE_TYPE, method.getOutputType().slice(1), '', exportMap);
+                methodData.requestTypeName = FieldTypes.getFieldType(MESSAGE_TYPE, method.getInputType().slice(1), '', entryMap);
+                methodData.responseTypeName = FieldTypes.getFieldType(MESSAGE_TYPE, method.getOutputType().slice(1), '', entryMap);
 
                 if (!method.getClientStreaming() && !method.getServerStreaming()) {
                     methodData.type = 'ClientUnaryCall';

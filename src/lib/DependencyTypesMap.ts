@@ -1,4 +1,4 @@
-export const WellKnownTypesMap: {[key: string]: string} = {
+export const DependencyTypesMap: {[key: string]: string} = {
     'google/protobuf/compiler/plugin.proto': 'google-protobuf/google/protobuf/compiler/plugin_pb',
     'google/protobuf/any.proto': 'google-protobuf/google/protobuf/any_pb',
     'google/protobuf/api.proto': 'google-protobuf/google/protobuf/api_pb',
