@@ -9,7 +9,7 @@ import {Message} from './partial/Message';
 import {Enum} from './partial/Enum';
 import {Extension} from './partial/Extensions';
 
-export namespace FileDescriptorTSD {
+export namespace FileDescriptorMSG {
 
     export function print(fileDescriptor: FileDescriptorProto, entrymap: EntryMap) {
         const fileName = fileDescriptor.getName();

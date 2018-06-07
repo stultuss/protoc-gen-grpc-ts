@@ -11,8 +11,8 @@ import {FileDescriptorProto} from 'google-protobuf/google/protobuf/descriptor_pb
 import {Utility} from './lib/Utility';
 import {EntryMap} from './lib/EntryMap';
 
-import {FileDescriptorTSD} from './lib/descriptor/FileDescriptorTSD';
-import {FileDescriptorTSGRPC} from './lib/descriptor/FileDescriptorTSGRPC';
+import {FileDescriptorMSG} from './lib/descriptor/FileDescriptorMSG';
+import {FileDescriptorGRPC} from './lib/descriptor/FileDescriptorGRPC';
 
 Utility.withAllStdIn((input: Buffer) => {
     try {
@@ -36,11 +36,11 @@ Utility.withAllStdIn((input: Buffer) => {
             const outputFileName = Utility.filePathFromProtoWithoutExtension(fileName);
             const outputFile = new CodeGeneratorResponse.File();
             outputFile.setName(outputFileName + '.d.ts');
-            outputFile.setContent(FileDescriptorTSD.print(fileNameToDescriptor[fileName], entryMap));
+            outputFile.setContent(FileDescriptorMSG.print(fileNameToDescriptor[fileName], entryMap));
             response.addFile(outputFile);
 
             if (generateServices) {
-                const fileDescriptorOutput = FileDescriptorTSGRPC.print(fileNameToDescriptor[fileName], entryMap);
+                const fileDescriptorOutput = FileDescriptorGRPC.print(fileNameToDescriptor[fileName], entryMap);
                 if (fileDescriptorOutput !== '') {
                     const thisServiceFileName = Utility.svcFilePathFromProtoWithoutExtension(fileName);
                     const thisServiceFile = new CodeGeneratorResponse.File();

@@ -11,8 +11,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const plugin_pb_1 = require("google-protobuf/google/protobuf/compiler/plugin_pb");
 const Utility_1 = require("./lib/Utility");
 const EntryMap_1 = require("./lib/EntryMap");
-const FileDescriptorTSD_1 = require("./lib/descriptor/FileDescriptorTSD");
-const FileDescriptorTSGRPC_1 = require("./lib/descriptor/FileDescriptorTSGRPC");
+const FileDescriptorMSG_1 = require("./lib/descriptor/FileDescriptorMSG");
+const FileDescriptorGRPC_1 = require("./lib/descriptor/FileDescriptorGRPC");
 Utility_1.Utility.withAllStdIn((input) => {
     try {
         const binary = new Uint8Array(input.length);
@@ -32,10 +32,10 @@ Utility_1.Utility.withAllStdIn((input) => {
             const outputFileName = Utility_1.Utility.filePathFromProtoWithoutExtension(fileName);
             const outputFile = new plugin_pb_1.CodeGeneratorResponse.File();
             outputFile.setName(outputFileName + '.d.ts');
-            outputFile.setContent(FileDescriptorTSD_1.FileDescriptorTSD.print(fileNameToDescriptor[fileName], entryMap));
+            outputFile.setContent(FileDescriptorMSG_1.FileDescriptorMSG.print(fileNameToDescriptor[fileName], entryMap));
             response.addFile(outputFile);
             if (generateServices) {
-                const fileDescriptorOutput = FileDescriptorTSGRPC_1.FileDescriptorTSGRPC.print(fileNameToDescriptor[fileName], entryMap);
+                const fileDescriptorOutput = FileDescriptorGRPC_1.FileDescriptorGRPC.print(fileNameToDescriptor[fileName], entryMap);
                 if (fileDescriptorOutput !== '') {
                     const thisServiceFileName = Utility_1.Utility.svcFilePathFromProtoWithoutExtension(fileName);
                     const thisServiceFile = new plugin_pb_1.CodeGeneratorResponse.File();

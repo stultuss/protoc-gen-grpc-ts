@@ -12,7 +12,7 @@ import {DependencyFilter} from '../DependencyFilter';
 
 import {FieldTypes, MESSAGE_TYPE} from './partial/FieldTypes';
 
-export namespace FileDescriptorTSGRPC {
+export namespace FileDescriptorGRPC {
 
     export interface ServiceType {
         serviceName: string;
@@ -110,26 +110,60 @@ export namespace FileDescriptorTSGRPC {
             // print service interface
             printer.printLn(`interface I${serviceData.serviceName}Service extends grpc.ServiceDefinition<grpc.UntypedServiceImplementation> {`);
             serviceData.methods.forEach(methodData => {
-                printer.printIndentedLn(`${Utility.lcFirst(methodData.methodName)}: I${methodData.methodName}`);
+                printer.printIndentedLn(`${Utility.lcFirst(methodData.methodName)}: I${serviceData.serviceName}Service_I${methodData.methodName};`);
             });
             printer.printLn(`}`);
             printer.printEmptyLn();
 
             // print method interface
             serviceData.methods.forEach(methodData => {
-                printer.printLn(`interface I${methodData.methodName} {`);
+                printer.printLn(`interface I${serviceData.serviceName}Service_I${methodData.methodName} {`);
                 printer.printIndentedLn(`path: string; // "/${methodData.packageName}.${methodData.serviceName}/${methodData.methodName}"`);
                 printer.printIndentedLn(`requestStream: boolean; // ${methodData.requestStream}`);
                 printer.printIndentedLn(`responseStream: boolean; // ${methodData.responseStream}`);
-                printer.printIndentedLn(`requestType: ${methodData.requestTypeName};`);
-                printer.printIndentedLn(`responseType: ${methodData.responseTypeName};`);
-                printer.printIndentedLn(`requestSerialize: (arg: ${methodData.requestTypeName}) => Buffer;`);
-                printer.printIndentedLn(`requestDeserialize: (buffer: Uint8Array) => ${methodData.requestTypeName};`);
-                printer.printIndentedLn(`responseSerialize: (arg: ${methodData.responseTypeName}) => Buffer;`);
-                printer.printIndentedLn(`responseDeserialize: (buffer: Uint8Array) => ${methodData.responseTypeName};`);
+                printer.printIndentedLn(`requestSerialize: grpc.serialize<${methodData.requestTypeName}>;`);
+                printer.printIndentedLn(`requestDeserialize: grpc.deserialize<${methodData.requestTypeName}>;`);
+                printer.printIndentedLn(`responseSerialize: grpc.serialize<${methodData.responseTypeName}>;`);
+                printer.printIndentedLn(`responseDeserialize: grpc.deserialize<${methodData.responseTypeName}>;`);
                 printer.printLn(`}`);
                 printer.printEmptyLn();
             });
+
+            printer.printLn(`export const ${serviceData.serviceName}Service: I${serviceData.serviceName}Service;`);
+
+
+            // export interface IBookServiceServer {
+            //     getBook: grpc.handleUnaryCall<book_pb.GetBookRequest, book_pb.Book>;
+            //     getBooksViaAuthor: grpc.handleServerStreamingCall<book_pb.GetBookViaAuthor, book_pb.Book>;
+            //     getGreatestBook: grpc.handleClientStreamingCall<book_pb.GetBookRequest, book_pb.Book>;
+            //     getBooks: grpc.handleBidiStreamingCall<book_pb.GetBookRequest, book_pb.Book>;
+            // }
+
+            // print server interface
+            printer.printLn(`export interface I${serviceData.serviceName}Server {`);
+            serviceData.methods.forEach((methodData) => {
+                const methodName = Utility.lcFirst(methodData.methodName);
+                const requestTypeName = methodData.requestTypeName;
+                const responseTypeName = methodData.responseTypeName;
+
+                switch (methodData.type) {
+                    case 'ClientUnaryCall':
+                        printer.printIndentedLn(`${methodName}: grpc.handleUnaryCall<${requestTypeName}, ${responseTypeName}>;`);
+                        break;
+                    case 'ClientWritableStream':
+                        printer.printIndentedLn(`${methodName}: grpc.handleClientStreamingCall<${requestTypeName}, ${responseTypeName}>;`);
+                        break;
+                    case 'ClientReadableStream':
+                        printer.printIndentedLn(`${methodName}: grpc.handleServerStreamingCall<${requestTypeName}, ${responseTypeName}>;`);
+                        break;
+                    case 'ClientDuplexStream':
+                        printer.printIndentedLn(`${methodName}: grpc.handleBidiStreamingCall<${requestTypeName}, ${responseTypeName}>;`);
+                        break;
+                }
+
+            });
+            printer.printLn(`}`);
+            printer.printEmptyLn();
 
             // print service client interface
             printer.printLn(`export interface I${serviceData.serviceName}Client {`);
@@ -159,7 +193,6 @@ export namespace FileDescriptorTSGRPC {
             printer.printEmptyLn();
 
             // print service client
-            printer.printLn(`export const ${serviceData.serviceName}Service: I${serviceData.serviceName}Service;`);
             printer.printLn(`export class ${serviceData.serviceName}Client extends grpc.Client implements I${serviceData.serviceName}Client {`);
             printer.printIndentedLn(`constructor(address: string, credentials: grpc.ChannelCredentials, options?: object);`);
             serviceData.methods.forEach(methodData => {
