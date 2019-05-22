@@ -35,12 +35,5 @@ protoc-gen-grpc-ts \
 --proto_path ./examples/proto \
 ./examples/proto/book.proto
 ```
-## Tool Chain
+## Example
 
-- [protoc-gen-grpc-ts](https://github.com/niklaus0823/protoc-gen-grpc-ts)
-- [matrixes-cli](https://github.com/niklaus0823/matrixes-cli)
-- [matrixes-lib](https://github.com/niklaus0823/matrixes-lib)
-
-## Simple
-
-- [matrixes-simple](https://github.com/niklaus0823/matrixes-simple)
