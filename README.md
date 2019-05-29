@@ -11,6 +11,18 @@ This project was forked from [agreatfool/grpc_tools_node_protoc_ts](https://gith
   * Remove handlebar template engine. 
   * Support: Linux, OSX, Windows
 
+## WARN 
+
+> node-pre-gyp WARN Using needle for node-pre-gyp https download 
+> node-pre-gyp ERR! install error 
+> node-pre-gyp ERR! stack Error: There was a fatal problem while downloading/extracting the tarball
+
+issue：https://github.com/mapbox/node-pre-gyp/issues/462
+
+```bash
+npm install request -g
+```
+
 ## Install
 
 ```bash
@@ -37,3 +49,12 @@ protoc-gen-grpc-ts \
 ```
 ## Example
 
+There is a complete & runnable example in folder `examples`.
+
+Dirs:
+
+* proto: sample proto definition
+* bash: useful commands
+    * build.sh: build js & d.ts codes from proto file, and tsc to build/*.js
+    * server.sh: start the server
+    * client.sh: start the client & send requests
