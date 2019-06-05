@@ -45,7 +45,7 @@ Utility_1.Utility.withAllStdIn((input) => {
                 }
             }
         });
-        process.stdout.write(new Buffer(response.serializeBinary()));
+        process.stdout.write(Buffer.from(response.serializeBinary()));
     }
     catch (err) {
         console.error('error: ' + err.stack + '\n');
