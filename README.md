@@ -289,3 +289,7 @@ export class BookServiceClient extends grpc.Client implements IBookServiceClient
   public getBooks(metadata?: grpc.Metadata): grpc.ClientDuplexStream<book_pb.GetBookRequest, book_pb.Book>;
 }
 ```
+
+## Changes
+### 1.3.2
+Add the version changes title to README.md
