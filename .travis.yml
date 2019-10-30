@@ -22,8 +22,6 @@ before_install:
   - |
     # Skip updating unsafe-perm / false
     npm config set unsafe-perm true
-install:
-  - npm install protoc-gen-grpc -g
 script:
   # Run test script
   - npm run test-js-out
