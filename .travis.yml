@@ -12,6 +12,9 @@ before_install:
   - |
     # Skip updating unsafe-perm / false
     npm config set unsafe-perm true
+install:
+  # npm install
+  - npm install
 script:
   # Run test script
   - npm run test-js-out
