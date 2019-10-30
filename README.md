@@ -307,9 +307,9 @@ Add the version changes title to README.md
 [npm-url]: https://npmjs.org/package/protoc-gen-grpc
 [downloads-image]: https://img.shields.io/npm/dm/protoc-gen-grpc.svg
 [downloads-url]: https://npmjs.org/package/protoc-gen-grpc
-[travis-linux-image]: https://img.shields.io/travis/expressjs/express/master.svg?label=linux
-[travis-linux-url]: https://travis-ci.org/expressjs/express
-[travis-windows-image]: https://img.shields.io/travis/expressjs/express/master.svg?label=windows
-[travis-windows-url]: https://travis-ci.org/expressjs/express
-[coveralls-image]: https://img.shields.io/coveralls/expressjs/express/master.svg
-[coveralls-url]: https://coveralls.io/r/expressjs/express?branch=master
+[travis-linux-image]: https://img.shields.io/travis/niklaus0823/protoc-gen-grpc/master.svg?label=linux
+[travis-linux-url]: https://travis-ci.org/niklaus0823/protoc-gen-grpc
+[travis-windows-image]: https://img.shields.io/travis/niklaus0823/protoc-gen-grpc/master.svg?label=windows
+[travis-windows-url]: https://travis-ci.org/niklaus0823/protoc-gen-grpc
+[coveralls-image]: https://img.shields.io/coveralls/niklaus0823/protoc-gen-grpc/master.svg
+[coveralls-url]: https://coveralls.io/r/niklaus0823/protoc-gen-grpc?branch=master
