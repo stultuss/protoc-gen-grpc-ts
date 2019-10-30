@@ -26,7 +26,6 @@
 'use strict';
 
 var path = require('path');
-var execSync = require('child_process').execSync;
 var execFile = require('child_process').execFile;
 
 var exe_ext = process.platform === 'win32' ? '.exe' : '';
@@ -35,7 +34,7 @@ var protoc = path.resolve(__dirname, 'protoc' + exe_ext);
 
 var plugin = (process.platform === 'win32')
   ? path.resolve(__dirname, 'protoc-gen-ts-plugin.cmd')
-  : execSync('which protoc-gen-ts-plugin').toString().replace(/\n$/, '').replace(/\r$/, '');
+  : path.resolve(__dirname, 'protoc-gen-ts-plugin');
 
 var args = ['--plugin=protoc-gen-ts=' + plugin].concat(process.argv.slice(2));
 
