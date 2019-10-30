@@ -16,14 +16,6 @@ before_install:
 install:
   # npm install
   - npm install
-
-before_script:
-  # move code to npm global module
-  - mkdir -p ../protoc-gen-grpc
-  - cp -r . ../protoc-gen-grpc
-  - chmod -R 777 ../protoc-gen-grpc
-  - ln -s ../protoc-gen-grpc/bin/protoc-gen-ts-plugin /usr/local/bin/protoc-gen-ts-plugin
 script:
   # Run test script
   - npm run test-js-out
-  - npm run test-ts-out
