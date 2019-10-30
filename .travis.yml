@@ -7,6 +7,7 @@ node_js:
 os:
   - linux
   - windows
+sudo: true
 before_install:
   # Configure npm
   - |
@@ -18,10 +19,10 @@ install:
 
 before_script:
   # move code to npm global module
-  - mkdir -p /usr/local/lib/node_modules/protoc-gen-grpc
-  - cp -r . /usr/local/lib/node_modules/protoc-gen-grpc
-  - chmod -R 777 /usr/local/lib/node_modules/protoc-gen-grpc
-  - ln -s /usr/local/lib/node_modules/protoc-gen-grpc/bin/protoc-gen-ts-plugin /usr/local/bin/protoc-gen-ts-plugin
+  - mkdir -p ../protoc-gen-grpc
+  - cp -r . ../protoc-gen-grpc
+  - chmod -R 777 ../protoc-gen-grpc
+  - ln -s ../protoc-gen-grpc/bin/protoc-gen-ts-plugin /usr/local/bin/protoc-gen-ts-plugin
 script:
   # Run test script
   - npm run test-js-out
