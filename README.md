@@ -5,6 +5,7 @@ protoc-gen-grpc
 [![Linux Build][travis-linux-image]][travis-linux-url]
 [![Windows Build][travis-windows-image]][travis-windows-url]
 [![Test Coverage][coveralls-image]][coveralls-url]
+
 Protocol Buffers Compiler (protoc) plugin for generating grpc interfaces in TypeScript.
 
 ## Aim
