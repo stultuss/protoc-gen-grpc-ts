@@ -18,7 +18,7 @@ install:
 
 before_script:
   # move code to npm global module
-  - mkdir /usr/local/lib/node_modules/protoc-gen-grpc
+  - mkdir -p /usr/local/lib/node_modules/protoc-gen-grpc
   - cp -r . /usr/local/lib/node_modules/protoc-gen-grpc
   - chmod -R 777 /usr/local/lib/node_modules/protoc-gen-grpc
   - ln -s /usr/local/lib/node_modules/protoc-gen-grpc/bin/protoc-gen-ts-plugin /usr/local/bin/protoc-gen-ts-plugin
