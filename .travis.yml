@@ -1,0 +1,21 @@
+language: node_js
+node_js:
+  - '10'
+  - '8'
+  - '6'
+  - '4'
+os:
+  - linux
+  - windows
+sudo: true
+before_install:
+  # Configure npm
+  - |
+    # Skip updating unsafe-perm / false
+    npm config set unsafe-perm true
+install:
+  # npm install
+  - npm install
+script:
+  # Run test script
+  - npm run test-js-out

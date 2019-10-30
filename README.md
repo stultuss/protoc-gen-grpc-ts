@@ -1,6 +1,12 @@
 protoc-gen-grpc
 =========================
-Protocol Buffers Compiler (protoc) plugin for generating grpc interfaces in TypeScript.
+[![NPM Version][npm-image]][npm-url]
+[![NPM Downloads][downloads-image]][downloads-url]
+[![Linux Build][travis-linux-image]][travis-linux-url]
+[![Windows Build][travis-windows-image]][travis-windows-url]
+[![Test Coverage][coveralls-image]][coveralls-url]
+
+> Protocol Buffers Compiler (protoc) plugin for generating grpc interfaces in TypeScript.
 
 ## Aim
 
@@ -36,14 +42,14 @@ npm install protoc-gen-grpc -g
 ```bash
 # generate js codes
 protoc-gen-grpc \
---js_out=import_style=commonjs,binary:./examples/src \
---grpc_out=./examples/src \
+--js_out=import_style=commonjs,binary:./examples/src/proto \
+--grpc_out=./examples/src/proto \
 --proto_path ./examples/proto \
 ./examples/proto/book.proto
 
 # generate d.ts codes
 protoc-gen-grpc-ts \
---ts_out=service=true:./examples/src \
+--ts_out=service=true:./examples/src/proto \
 --proto_path ./examples/proto \
 ./examples/proto/book.proto
 ```
@@ -293,3 +299,18 @@ export class BookServiceClient extends grpc.Client implements IBookServiceClient
 ## Changes
 ### 1.3.2
 Add the version changes title to README.md
+
+## License
+
+[MIT](LICENSE)
+
+[npm-image]: https://img.shields.io/npm/v/protoc-gen-grpc.svg
+[npm-url]: https://npmjs.org/package/protoc-gen-grpc
+[downloads-image]: https://img.shields.io/npm/dm/protoc-gen-grpc.svg
+[downloads-url]: https://npmjs.org/package/protoc-gen-grpc
+[travis-linux-image]: https://img.shields.io/travis/niklaus0823/protoc-gen-grpc-ts/master.svg?label=linux
+[travis-linux-url]: https://travis-ci.org/niklaus0823/protoc-gen-grpc-ts
+[travis-windows-image]: https://img.shields.io/travis/niklaus0823/protoc-gen-grpc-ts/master.svg?label=windows
+[travis-windows-url]: https://travis-ci.org/niklaus0823/protoc-gen-grpc-ts
+[coveralls-image]: https://img.shields.io/coveralls/niklaus0823/protoc-gen-grpc-ts/master.svg
+[coveralls-url]: https://coveralls.io/r/niklaus0823/protoc-gen-grpc-ts?branch=master
