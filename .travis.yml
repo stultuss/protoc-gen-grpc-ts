@@ -13,9 +13,16 @@ before_install:
   - |
     # Skip updating unsafe-perm / false
     npm config set unsafe-perm true
+  # Change chmod
+  - |
+   chmod -R 777 ./bin
 install:
   # npm install
   - npm install
 script:
   # Run test script
+  - npm run test
   - npm run test-js-out
+after_success:
+  # Run coveralls
+  - npm run coveralls

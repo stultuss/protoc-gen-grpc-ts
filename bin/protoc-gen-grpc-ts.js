@@ -35,7 +35,8 @@ var protoc = path.resolve(__dirname, 'protoc' + exe_ext);
 
 var plugin = (process.platform === 'win32')
   ? path.resolve(__dirname, 'protoc-gen-ts-plugin.cmd')
-  : execSync('which protoc-gen-ts-plugin').toString().replace(/\n$/, '').replace(/\r$/, '');
+  : path.resolve(__dirname, 'protoc-gen-ts-plugin');
+  // : execSync('which protoc-gen-ts-plugin').toString().replace(/\n$/, '').replace(/\r$/, '');
 
 var args = ['--plugin=protoc-gen-ts=' + plugin].concat(process.argv.slice(2));
 

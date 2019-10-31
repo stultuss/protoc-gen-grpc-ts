@@ -8,7 +8,7 @@ const Enum_1 = require("./partial/Enum");
 const Extensions_1 = require("./partial/Extensions");
 var FileDescriptorMSG;
 (function (FileDescriptorMSG) {
-    function print(fileDescriptor, entrymap) {
+    function print(fileDescriptor, entryMap) {
         const fileName = fileDescriptor.getName();
         const packageName = fileDescriptor.getPackage();
         const printer = new Printer_1.Printer(0);
@@ -28,10 +28,10 @@ var FileDescriptorMSG;
             }
         });
         fileDescriptor.getMessageTypeList().forEach(enumType => {
-            printer.print(Message_1.Message.print(fileName, entrymap, enumType, 0, fileDescriptor));
+            printer.print(Message_1.Message.print(fileName, entryMap, enumType, 0, fileDescriptor));
         });
         fileDescriptor.getExtensionList().forEach(extension => {
-            printer.print(Extensions_1.Extension.print(fileName, entrymap, extension, 0));
+            printer.print(Extensions_1.Extension.print(fileName, entryMap, extension, 0));
         });
         fileDescriptor.getEnumTypeList().forEach(enumType => {
             printer.print(Enum_1.Enum.print(enumType, 0));
