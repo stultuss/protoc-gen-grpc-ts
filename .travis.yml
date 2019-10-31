@@ -9,13 +9,9 @@ os:
   - windows
 sudo: true
 before_install:
-  # Configure npm
-  - |
-    # Skip updating unsafe-perm / false
-    npm config set unsafe-perm true
-  # Change chmod
-  - |
-   chmod -R 777 ./bin
+  # Configure npm && dir
+  - npm config set unsafe-perm true
+  - chmod -R 777 ./bin
 install:
   # npm install
   - npm install
