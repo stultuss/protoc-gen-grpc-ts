@@ -308,9 +308,9 @@ Add the version changes title to README.md
 [npm-url]: https://npmjs.org/package/protoc-gen-grpc
 [downloads-image]: https://img.shields.io/npm/dm/protoc-gen-grpc.svg
 [downloads-url]: https://npmjs.org/package/protoc-gen-grpc
-[travis-linux-image]: https://img.shields.io/travis/niklaus0823/protoc-gen-grpc-ts/master.svg?label=linux
-[travis-linux-url]: https://travis-ci.org/niklaus0823/protoc-gen-grpc-ts
-[travis-windows-image]: https://img.shields.io/travis/niklaus0823/protoc-gen-grpc-ts/master.svg?label=windows
-[travis-windows-url]: https://travis-ci.org/niklaus0823/protoc-gen-grpc-ts
-[coveralls-image]: https://img.shields.io/coveralls/niklaus0823/protoc-gen-grpc-ts/master.svg
-[coveralls-url]: https://coveralls.io/r/niklaus0823/protoc-gen-grpc-ts?branch=master
+[travis-linux-image]: https://img.shields.io/travis/stultuss/protoc-gen-grpc-ts/master.svg?label=linux
+[travis-linux-url]: https://travis-ci.org/stultuss/protoc-gen-grpc-ts
+[travis-windows-image]: https://img.shields.io/travis/stultuss/protoc-gen-grpc-ts/master.svg?label=windows
+[travis-windows-url]: https://travis-ci.org/stultuss/protoc-gen-grpc-ts
+[coveralls-image]: https://img.shields.io/coveralls/stultuss/protoc-gen-grpc-ts/master.svg
+[coveralls-url]: https://coveralls.io/r/stultuss/protoc-gen-grpc-ts?branch=master
