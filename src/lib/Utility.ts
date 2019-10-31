@@ -64,7 +64,6 @@ export namespace Utility {
         const stdin = process.stdin;
         stdin.on('readable', function () {
             let chunk;
-
             while ((chunk = stdin.read())) {
                 if (!(chunk instanceof Buffer)) throw new Error('Did not receive buffer');
                 ret.push(chunk);

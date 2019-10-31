@@ -9,13 +9,16 @@ os:
   - windows
 sudo: true
 before_install:
-  # Configure npm
-  - |
-    # Skip updating unsafe-perm / false
-    npm config set unsafe-perm true
+  # Configure npm && dir
+  - npm config set unsafe-perm true
+  - chmod -R 777 ./bin
 install:
   # npm install
   - npm install
 script:
   # Run test script
   - npm run test-js-out
+  - npm run test-ts-out
+after_success:
+  # Run coveralls
+  - npm run coveralls

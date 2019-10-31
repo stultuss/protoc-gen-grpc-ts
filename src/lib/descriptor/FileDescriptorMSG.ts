@@ -11,7 +11,7 @@ import {Extension} from './partial/Extensions';
 
 export namespace FileDescriptorMSG {
 
-    export function print(fileDescriptor: FileDescriptorProto, entrymap: EntryMap) {
+    export function print(fileDescriptor: FileDescriptorProto, entryMap: EntryMap) {
         const fileName = fileDescriptor.getName();
         const packageName = fileDescriptor.getPackage();
 
@@ -36,11 +36,11 @@ export namespace FileDescriptorMSG {
         });
 
         fileDescriptor.getMessageTypeList().forEach(enumType => {
-            printer.print(Message.print(fileName, entrymap, enumType, 0, fileDescriptor));
+            printer.print(Message.print(fileName, entryMap, enumType, 0, fileDescriptor));
         });
 
         fileDescriptor.getExtensionList().forEach(extension => {
-            printer.print(Extension.print(fileName, entrymap, extension, 0));
+            printer.print(Extension.print(fileName, entryMap, extension, 0));
         });
 
         fileDescriptor.getEnumTypeList().forEach(enumType => {
