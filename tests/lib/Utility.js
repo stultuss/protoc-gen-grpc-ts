@@ -20,7 +20,11 @@ test('lcFirst', () => {
 });
 
 test('isProto2', () => {
-  expect(Utility.isProto2(new FileDescriptorProto())).toBe(true);
+  expect.assertions(2);
+  const fileDescriptor = new FileDescriptorProto();
+  expect(Utility.isProto2(fileDescriptor)).toBe(true);
+  fileDescriptor.setSyntax('proto3');
+  expect(Utility.isProto2(fileDescriptor)).toBe(false);
 });
 
 test('oneOfName', () => {
@@ -32,16 +36,25 @@ test('generateIndent', () => {
 });
 
 test('getPathToRoot', () => {
+  expect.assertions(2);
+  expect(Utility.getPathToRoot('com.book_market.proto')).toBe('./');
   expect(Utility.getPathToRoot('/opt/proto/com.book_market.proto')).toBe('../../../');
 });
 
 test('withinNamespaceFromExportEntry', () => {
-  const fieldEnumType = {
+  expect.assertions(2);
+  const fieldEnumType1 = {
     pkg: 'com',
     fileName: 'com.book_market.proto',
     messageOptions: new MessageOptions()
   };
-  expect(Utility.withinNamespaceFromExportEntry('com.book_market.proto', fieldEnumType)).toBe('book_market.proto');
+  expect(Utility.withinNamespaceFromExportEntry('com.book_market.proto', fieldEnumType1)).toBe('book_market.proto');
+  const fieldEnumType2 = {
+    pkg: null,
+    fileName: 'com.book_market.proto',
+    messageOptions: new MessageOptions()
+  };
+  expect(Utility.withinNamespaceFromExportEntry('com.book_market.proto', fieldEnumType2)).toBe('com.book_market.proto');
 });
 
 test('filePathFromProtoWithoutExtension', () => {
