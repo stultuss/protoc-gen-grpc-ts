@@ -7,7 +7,11 @@ protoc-gen-grpc
 [![Windows Build][travis-windows-image]][travis-windows-url]
 [![Test Coverage][coveralls-image]][coveralls-url]
 
-> Protocol Buffers Compiler (protoc) plugin for generating grpc interfaces in TypeScript.
+> Protocol compiler plugin for generating grpc interfaces in TypeScript.
+
+## Notes
+
+This repo has been moved from [niklaus0823/protoc-gen-grpc-ts](https://github.com/niklaus0823/protoc-gen-grpc-ts) to [stultuss/protoc-gen-grpc-ts](https://github.com/stultuss/protoc-gen-grpc-ts), and future versions will be released on [stultuss/protoc-gen-grpc-ts](https://github.com/stultuss/protoc-gen-grpc-ts)
 
 ## Aim
 
@@ -296,10 +300,6 @@ export class BookServiceClient extends grpc.Client implements IBookServiceClient
   public getBooks(metadata?: grpc.Metadata): grpc.ClientDuplexStream<book_pb.GetBookRequest, book_pb.Book>;
 }
 ```
-
-## Changes
-### 1.3.2
-Add the version changes title to README.md
 
 ## License
 
