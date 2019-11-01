@@ -19,6 +19,3 @@ script:
   # Run test script
   - npm run test-js-out
   - npm run test-ts-out
-after_success:
-  # Run coveralls
-  - npm run coveralls
