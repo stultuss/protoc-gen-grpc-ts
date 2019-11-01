@@ -2,6 +2,7 @@ protoc-gen-grpc
 =========================
 [![NPM Version][npm-image]][npm-url]
 [![NPM Downloads][downloads-image]][downloads-url]
+[![Build][travis-image]][travis-url]
 [![Linux Build][travis-linux-image]][travis-linux-url]
 [![Windows Build][travis-windows-image]][travis-windows-url]
 [![Test Coverage][coveralls-image]][coveralls-url]
@@ -308,6 +309,8 @@ Add the version changes title to README.md
 [npm-url]: https://npmjs.org/package/protoc-gen-grpc
 [downloads-image]: https://img.shields.io/npm/dm/protoc-gen-grpc.svg
 [downloads-url]: https://npmjs.org/package/protoc-gen-grpc
+[travis-image]: https://travis-ci.org/stultuss/protoc-gen-grpc-ts.svg?branch=master
+[travis-url]: https://travis-ci.org/stultuss/protoc-gen-grpc-ts
 [travis-linux-image]: https://img.shields.io/travis/stultuss/protoc-gen-grpc-ts/master.svg?label=linux
 [travis-linux-url]: https://travis-ci.org/stultuss/protoc-gen-grpc-ts
 [travis-windows-image]: https://img.shields.io/travis/stultuss/protoc-gen-grpc-ts/master.svg?label=windows
