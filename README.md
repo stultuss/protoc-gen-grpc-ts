@@ -9,19 +9,6 @@ protoc-gen-grpc
 
 > Protocol compiler plugin for generating grpc interfaces in TypeScript.
 
-## Notes
-
-This repo has been moved from [niklaus0823/protoc-gen-grpc-ts](https://github.com/niklaus0823/protoc-gen-grpc-ts) to [stultuss/protoc-gen-grpc-ts](https://github.com/stultuss/protoc-gen-grpc-ts), and future versions will be released on [stultuss/protoc-gen-grpc-ts](https://github.com/stultuss/protoc-gen-grpc-ts)
-
-## Aim
-
-This project was forked from [agreatfool/grpc_tools_node_protoc_ts](https://github.com/agreatfool/grpc_tools_node_protoc_ts), and was intended to fix an error in Window10: `%1 XXX not a valid win32 application`
-
-* difference
-  * No other tools (or npm global package) need to be installed. such as `protoc`, `grpc_tools`
-  * Remove handlebar template engine. 
-  * Support: Linux, OSX, Windows
-
 ## WARN 
 
 > node-pre-gyp WARN Using needle for node-pre-gyp https download 
