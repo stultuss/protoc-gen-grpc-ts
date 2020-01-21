@@ -12,7 +12,7 @@ var OneOf;
         printer.printLn(`export enum ${oneOfName}Case {`);
         printer.printIndentedLn(`${oneOfNameUpper}_NOT_SET = 0,`);
         fieldsDescriptor.forEach(field => {
-            printer.printIndentedLn(`${oneOfNameUpper} = ${field.getNumber()},`);
+            printer.printIndentedLn(`${oneOfNameUpper}_${field.getName().toUpperCase()} = ${field.getNumber()},`);
         });
         printer.printLn('}');
         return printer.output;
