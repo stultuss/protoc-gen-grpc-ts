@@ -34,3 +34,15 @@ enum EnumSample {
     STARTED = 1;
     RUNNING = 1;
 }
+
+message OneOfSample {
+    oneof single_words {
+        bool a1 = 1;
+        bool b1 = 2;
+    }
+
+    oneof two_words {
+        bool a_2 = 3;
+        bool b_2 = 4;
+    }
+}
