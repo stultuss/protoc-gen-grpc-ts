@@ -51,7 +51,7 @@
     "@types/google-protobuf": "^3.7.1",
     "@types/node": "^9.4.1",
     "coveralls": "^3.0.7",
-    "jest": "^24.9.0",
+    "jest": "^26.2.2",
     "lodash": ">=4.17.11",
     "mock-stdin": "^0.3.1",
     "tar": ">=4.4.2"

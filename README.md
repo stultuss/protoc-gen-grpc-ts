@@ -52,11 +52,13 @@ There is a complete & runnable example in folder `examples`.
 ```bash
 ## bash1
 cd ./examples
+npm install
 sh ./bash/build.sh  # build js & d.ts codes from proto file, and tsc to build/*.js
 sh ./bash/server.sh # start the grpc server
 
 ## bash2
 cd ./examples
+npm install
 sh ./bash/client.sh # start the grpc client & send requests
 ```
 
