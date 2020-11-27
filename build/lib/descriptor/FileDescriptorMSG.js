@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.FileDescriptorMSG = void 0;
 const Utility_1 = require("../Utility");
 const Printer_1 = require("../Printer");
 const DependencyTypesMap_1 = require("../DependencyTypesMap");

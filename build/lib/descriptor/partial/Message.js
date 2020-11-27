@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Message = exports.OBJECT_TYPE_NAME = void 0;
 const descriptor_pb_1 = require("google-protobuf/google/protobuf/descriptor_pb");
 const Printer_1 = require("../../Printer");
 const Utility_1 = require("../../Utility");

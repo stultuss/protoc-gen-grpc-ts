@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Printer = void 0;
 const Utility_1 = require("./Utility");
 class Printer {
     constructor(indentLevel) {
