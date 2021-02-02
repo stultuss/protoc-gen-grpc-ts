@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "outDir": "dist",
+    "target": "ESNext",
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "downlevelIteration": true,
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true,
+    "noEmitOnError": true,
+    "sourceMap": true,
+    "noImplicitAny": false,
+    "strict": false,
+    "alwaysStrict": false,
+    "noUnusedParameters": false,
+    "typeRoots": ["./node_modules/@types"]
+  },
+  "include": ["server/**/*.ts", "client/**/*.ts"],
+  "exclude": ["./node_modules", "./dist"]
+}

@@ -29,37 +29,65 @@ npm install protoc-gen-grpc -g
 ```
 > If you don't want to set up a public configuration for NPM, you can try to add after the installation command `-unsafe-perm` parameters.
 
-## How to use
+### How To Install Make GNU
 
-```bash
-# generate js codes
-protoc-gen-grpc \
---js_out=import_style=commonjs,binary:./examples/src/proto \
---grpc_out=./examples/src/proto \
---proto_path ./examples/proto \
-./examples/proto/book.proto
+- MacOs
+ ```sh
+  brew install make
+ ```
 
-# generate d.ts codes
-protoc-gen-grpc-ts \
---ts_out=service=true:./examples/src/proto \
---proto_path ./examples/proto \
-./examples/proto/book.proto
+- Linux
+ ```sh
+  apt-get install make
+ ```
+ 
+ - Windows
+ ```sh
+  choco install make
+ ```
+
+### Run Command
+
+```sh
+make protocgen 
 ```
-## Example
 
-There is a complete & runnable example in folder `examples`.
+### How To Use
 
-```bash
-## bash1
-cd ./examples
-npm install
-sh ./bash/build.sh  # build js & d.ts codes from proto file, and tsc to build/*.js
-sh ./bash/server.sh # start the grpc server
+before you use this script you are required to install `protoc-gen-grpc -g` in your local machine first, and then create a folder named **protos** to save the `.proto` file and then create a folder named **typedefs** to save the results of the `.proto` that has been generated, after successfully creating the **typedefs**, then create a **Makefile** and copy and paste this script.
 
-## bash2
-cd ./examples
-npm install
-sh ./bash/client.sh # start the grpc client & send requests
+```makefile
+INPUT_DIR := ${realpath protos}
+OUTPUT_DIR := ${realpath typedefs}
+FIND_FILE := ${wildcard ${OUTPUT_DIR}/*.ts}
+PROTOC_GEN_GRPC := protoc-gen-grpc
+
+################################################################################
+####============================================================================
+#### GENERATE PROTO FILE FOR LINUX/MAC OR WINDOWS FOR grpc with protoc-gen-grpc
+####============================================================================
+################################################################################
+
+protocgen:
+ifneq (${FIND_FILE}, )
+#remove old all files typedefs
+	rm ${OUTPUT_DIR}/**.{ts,js}
+
+#generate protofile typedefs
+	${PROTOC_GEN_GRPC} \
+	--js_out=import_style=commonjs,binary:${OUTPUT_DIR} \
+	--grpc_out=${OUTPUT_DIR} \
+	--ts_out=protoc-gen-grpc-ts:${OUTPUT_DIR} \
+	--proto_path ${INPUT_DIR} ${INPUT_DIR}/*.proto
+
+else
+#generate protofile typedefs if file not exist
+	${PROTOC_GEN_GRPC} \
+	--js_out=import_style=commonjs,binary:${OUTPUT_DIR} \
+	--grpc_out=${OUTPUT_DIR} \
+	--ts_out=protoc-gen-grpc-ts:${OUTPUT_DIR} \
+	--proto_path ${INPUT_DIR} ${INPUT_DIR}/*.proto
+endif
 ```
 
 ### book.proto
@@ -306,3 +334,7 @@ export class BookServiceClient extends grpc.Client implements IBookServiceClient
 [travis-windows-url]: https://travis-ci.org/stultuss/protoc-gen-grpc-ts
 [coveralls-image]: https://img.shields.io/coveralls/stultuss/protoc-gen-grpc-ts/master.svg
 [coveralls-url]: https://coveralls.io/r/stultuss/protoc-gen-grpc-ts?branch=master
+
+<p align="right" style="padding: 5px; border-radius: 100%; background-color: red; font-size: 2rem;">
+  <b><a href="#protoc-gen-grpc">BACK TO TOP</a></b>
+</p>
