@@ -52,13 +52,16 @@ npm install protoc-gen-grpc -g
 make protocgen 
 ```
 
+### Example
+There is a complete & runnable example in folder **[examples](https://github.com/stultuss/protoc-gen-grpc-ts/tree/master/examples)**.
+
 ### How To Use
 
-before you use this script you are required to install `protoc-gen-grpc -g` in your local machine first, and then create a folder named **protos** to save the `.proto` file and then create a folder named **typedefs** to save the results of the `.proto` that has been generated, after successfully creating the **typedefs**, then create a **Makefile** and copy and paste this script.
+#### Makefile
 
 ```makefile
-INPUT_DIR := ${realpath protos}
-OUTPUT_DIR := ${realpath typedefs}
+INPUT_DIR := ${realpath your_proto_dir}
+OUTPUT_DIR := ${realpath your_output_dir}
 FIND_FILE := ${wildcard ${OUTPUT_DIR}/*.ts}
 PROTOC_GEN_GRPC := protoc-gen-grpc
 
@@ -88,6 +91,21 @@ else
 	--ts_out=protoc-gen-grpc-ts:${OUTPUT_DIR} \
 	--proto_path ${INPUT_DIR} ${INPUT_DIR}/*.proto
 endif
+```
+
+#### Shell/Bash
+
+```sh
+## bash1
+cd ./examples/example-book
+npm install
+sh ./bash/build.sh  # build js & d.ts codes from proto file, and tsc to build/*.js
+sh ./bash/server.sh # start the grpc server
+
+## bash2
+cd ./examples/example-book
+npm install
+sh ./bash/client.sh # start the grpc client & send requests
 ```
 
 ### book.proto
