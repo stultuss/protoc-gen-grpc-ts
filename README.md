@@ -46,12 +46,6 @@ npm install protoc-gen-grpc -g
   choco install make
  ```
 
-### Run Command
-
-```sh
-make protocgen 
-```
-
 ### Example
 There is a complete & runnable example in folder **[examples](https://github.com/stultuss/protoc-gen-grpc-ts/tree/master/examples)**.
 
@@ -60,6 +54,8 @@ There is a complete & runnable example in folder **[examples](https://github.com
 #### Makefile
 
 ```makefile
+# run command -> make protocgen 
+
 INPUT_DIR := ${realpath your_proto_dir}
 OUTPUT_DIR := ${realpath your_output_dir}
 FIND_FILE := ${wildcard ${OUTPUT_DIR}/*.ts}
