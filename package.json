@@ -1,59 +1,59 @@
 {
-  "name": "protoc-gen-grpc",
-  "version": "1.4.4",
-  "author": "fengjie",
-  "description": "Protocol Buffers Compiler (protoc) plugin for generating grpc interfaces in TypeScript..",
-  "homepage": "https://github.com/stultuss/protoc-gen-grpc-ts#readme",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/stultuss/protoc-gen-grpc-ts.git"
-  },
-  "bugs": "https://github.com/stultuss/protoc-gen-grpc-ts/issues",
-  "keywords": [
-    "TypeScript",
-    "Protobuf",
-    "gRPC"
-  ],
-  "engines": {
-    "node": ">=8"
-  },
-  "main": "./build/index.js",
-  "bin": {
-    "protoc-gen-ts-plugin": "./bin/protoc-gen-ts-plugin",
-    "protoc-gen": "./bin/protoc-gen.js",
-    "protoc-gen-grpc": "./bin/protoc-gen-grpc.js",
-    "protoc-gen-grpc-ts": "./bin/protoc-gen-grpc-ts.js"
-  },
-  "scripts": {
-    "install": "./node_modules/.bin/node-pre-gyp install",
-    "test": "jest",
-    "coveralls": "jest --coverage && cat ./coverage/lcov.info | coveralls",
-    "test-js-out": "node ./bin/protoc-gen-grpc.js --js_out=import_style=commonjs,binary:./examples/src/proto --grpc_out=./examples/src/proto --proto_path ./examples/proto ./examples/proto/book.proto",
-    "test-ts-out": "node ./bin/protoc-gen-grpc-ts.js --ts_out=service=true:./examples/src/proto --proto_path ./examples/proto ./examples/proto/book.proto"
-  },
-  "bundledDependencies": [
-    "node-pre-gyp"
-  ],
-  "binary": {
-    "module_name": "grpc_tools",
-    "host": "https://node-precompiled-binaries.grpc.io/",
-    "remote_path": "grpc-tools/v1.8.0",
-    "package_name": "{platform}-{arch}.tar.gz",
-    "module_path": "bin"
-  },
-  "license": "MIT",
-  "dependencies": {
-    "google-protobuf": "^3.8.0",
-    "node-pre-gyp": "^0.13.0",
-    "request": "^2.88.0"
-  },
-  "devDependencies": {
-    "@types/google-protobuf": "^3.7.1",
-    "@types/node": "^9.4.1",
-    "coveralls": "^3.0.7",
-    "jest": "^26.2.2",
-    "lodash": ">=4.17.11",
-    "mock-stdin": "^0.3.1",
-    "tar": ">=4.4.2"
-  }
+	"name": "protoc-gen-grpc",
+	"version": "1.4.4",
+	"author": "fengjie",
+	"description": "Protocol Buffers Compiler (protoc) plugin for generating grpc interfaces in TypeScript..",
+	"homepage": "https://github.com/stultuss/protoc-gen-grpc-ts#readme",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/stultuss/protoc-gen-grpc-ts.git"
+	},
+	"bugs": "https://github.com/stultuss/protoc-gen-grpc-ts/issues",
+	"keywords": [
+		"TypeScript",
+		"Protobuf",
+		"gRPC"
+	],
+	"engines": {
+		"node": ">=8"
+	},
+	"main": "./build/index.js",
+	"bin": {
+		"protoc-gen-ts-plugin": "./bin/protoc-gen-ts-plugin",
+		"protoc-gen": "./bin/protoc-gen.js",
+		"protoc-gen-grpc": "./bin/protoc-gen-grpc.js",
+		"protoc-gen-grpc-ts": "./bin/protoc-gen-grpc-ts.js"
+	},
+	"scripts": {
+		"install": "./node_modules/.bin/node-pre-gyp install",
+		"test": "jest",
+		"coveralls": "jest --coverage && cat ./coverage/lcov.info | coveralls",
+		"test-js-out": "node ./bin/protoc-gen-grpc.js --js_out=import_style=commonjs,binary:./examples/example-book/src/proto --grpc_out=./examples/example-book/src/proto --proto_path ./examples/example-book/proto ./examples/example-book/proto/book.proto",
+		"test-ts-out": "node ./bin/protoc-gen-grpc-ts.js --ts_out=service=true:./examples/example-book/src/proto --proto_path ./examples/example-book/proto ./examples/example-book/proto/book.proto"
+	},
+	"bundledDependencies": [
+		"node-pre-gyp"
+	],
+	"binary": {
+		"module_name": "grpc_tools",
+		"host": "https://node-precompiled-binaries.grpc.io/",
+		"remote_path": "grpc-tools/v1.8.0",
+		"package_name": "{platform}-{arch}.tar.gz",
+		"module_path": "bin"
+	},
+	"license": "MIT",
+	"dependencies": {
+		"google-protobuf": "^3.8.0",
+		"node-pre-gyp": "^0.13.0",
+		"request": "^2.88.0"
+	},
+	"devDependencies": {
+		"@types/google-protobuf": "^3.7.1",
+		"@types/node": "^9.4.1",
+		"coveralls": "^3.0.7",
+		"jest": "^26.2.2",
+		"lodash": ">=4.17.11",
+		"mock-stdin": "^0.3.1",
+		"tar": ">=4.4.2"
+	}
 }
