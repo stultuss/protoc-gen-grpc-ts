@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package com.product;
+
+message Product {
+    int64 id = 1;
+    string name = 2;
+    string category = 3;
+}
+
+message GetProductRequest {
+    int64 id = 1;
+}
+
+message GetProductViaCategoryRequest {
+    string category = 1;
+}
+
+service ProductService {
+    rpc GetProduct (GetProductRequest) returns (Product) {}
+    rpc GetProductViaCategory (GetProductViaCategoryRequest) returns (stream Product) {}
+    rpc GetBestProduct (stream GetProductRequest) returns (Product) {}
+    rpc GetProducts (stream GetProductRequest) returns (stream Product) {}
+}
+
+message Shop {
+    string name = 1;
+    map<int64, Product> list = 2;
+}

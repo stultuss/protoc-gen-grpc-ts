@@ -22,7 +22,7 @@ var FileDescriptorGRPC;
         responseTypeName: '',
         type: 'ClientUnaryCall',
     });
-    function print(fileDescriptor, entryMap) {
+    function print(fileDescriptor, entryMap, isGrpcJs) {
         if (fileDescriptor.getServiceList().length === 0) {
             return '';
         }
@@ -34,7 +34,12 @@ var FileDescriptorGRPC;
         printer.printLn(`// file: ${fileDescriptor.getName()}`);
         printer.printEmptyLn();
         // Need to import the non-service file that was generated for this .proto file
-        printer.printLn(`import * as grpc from 'grpc';`);
+        if (isGrpcJs) {
+            printer.printLn(`import * as grpc from '@grpc/grpc-js';`);
+        }
+        else {
+            printer.printLn(`import * as grpc from 'grpc';`);
+        }
         const asPseudoNamespace = Utility_1.Utility.filePathToPseudoNamespace(fileName);
         printer.printLn(`import * as ${asPseudoNamespace} from '${upToRoot}${Utility_1.Utility.filePathFromProtoWithoutExtension(fileName)}';`);
         fileDescriptor.getDependencyList().forEach((dependency) => {
@@ -86,10 +91,10 @@ var FileDescriptorGRPC;
             printer.printEmptyLn();
             // print method interface
             serviceData.methods.forEach(methodData => {
-                printer.printLn(`interface I${serviceData.serviceName}Service_I${methodData.methodName} {`);
-                printer.printIndentedLn(`path: string; // "/${methodData.packageName}.${methodData.serviceName}/${methodData.methodName}"`);
-                printer.printIndentedLn(`requestStream: boolean; // ${methodData.requestStream}`);
-                printer.printIndentedLn(`responseStream: boolean; // ${methodData.responseStream}`);
+                printer.printLn(`interface I${serviceData.serviceName}Service_I${methodData.methodName} extends grpc.MethodDefinition<${methodData.requestTypeName}, ${methodData.responseTypeName}> {`);
+                printer.printIndentedLn(`path: '/${methodData.packageName}.${methodData.serviceName}/${methodData.methodName}'`);
+                printer.printIndentedLn(`requestStream: ${methodData.requestStream}`);
+                printer.printIndentedLn(`responseStream: ${methodData.responseStream}`);
                 printer.printIndentedLn(`requestSerialize: grpc.serialize<${methodData.requestTypeName}>;`);
                 printer.printIndentedLn(`requestDeserialize: grpc.deserialize<${methodData.requestTypeName}>;`);
                 printer.printIndentedLn(`responseSerialize: grpc.serialize<${methodData.responseTypeName}>;`);
@@ -98,14 +103,8 @@ var FileDescriptorGRPC;
                 printer.printEmptyLn();
             });
             printer.printLn(`export const ${serviceData.serviceName}Service: I${serviceData.serviceName}Service;`);
-            // export interface IBookServiceServer {
-            //     getBook: grpc.handleUnaryCall<book_pb.GetBookRequest, book_pb.Book>;
-            //     getBooksViaAuthor: grpc.handleServerStreamingCall<book_pb.GetBookViaAuthor, book_pb.Book>;
-            //     getGreatestBook: grpc.handleClientStreamingCall<book_pb.GetBookRequest, book_pb.Book>;
-            //     getBooks: grpc.handleBidiStreamingCall<book_pb.GetBookRequest, book_pb.Book>;
-            // }
             // print server interface
-            printer.printLn(`export interface I${serviceData.serviceName}Server {`);
+            printer.printLn(`export interface I${serviceData.serviceName}Server extends grpc.UntypedServiceImplementation {`);
             serviceData.methods.forEach((methodData) => {
                 const methodName = Utility_1.Utility.lcFirst(methodData.methodName);
                 const requestTypeName = methodData.requestTypeName;
@@ -135,18 +134,24 @@ var FileDescriptorGRPC;
                 const responseTypeName = methodData.responseTypeName;
                 switch (methodData.type) {
                     case 'ClientUnaryCall':
-                        printer.printIndentedLn(`${methodName}(request: ${requestTypeName}, callback: (error: Error | null, response: ${responseTypeName}) => void): grpc.ClientUnaryCall;`);
-                        printer.printIndentedLn(`${methodName}(request: ${requestTypeName}, metadata: grpc.Metadata, callback: (error: Error | null, response: ${responseTypeName}) => void): grpc.ClientUnaryCall;`);
-                        break;
-                    case 'ClientWritableStream':
-                        printer.printIndentedLn(`${methodName}(callback: (error: Error | null, response: ${responseTypeName}) => void): grpc.ClientWritableStream<${requestTypeName}>;`);
-                        printer.printIndentedLn(`${methodName}(metadata: grpc.Metadata, callback: (error: Error | null, response: ${responseTypeName}) => void): grpc.ClientWritableStream<${requestTypeName}>;`);
+                        printer.printIndentedLn(`${methodName}(request: ${requestTypeName}, callback: (error: grpc.ServiceError | null, response: ${responseTypeName}) => void): grpc.ClientUnaryCall;`);
+                        printer.printIndentedLn(`${methodName}(request: ${requestTypeName}, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: ${responseTypeName}) => void): grpc.ClientUnaryCall;`);
+                        printer.printIndentedLn(`${methodName}(request: ${requestTypeName}, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: ${responseTypeName}) => void): grpc.ClientUnaryCall;`);
                         break;
                     case 'ClientReadableStream':
-                        printer.printIndentedLn(`${methodName}(request: ${requestTypeName}, metadata?: grpc.Metadata): grpc.ClientReadableStream<${responseTypeName}>;`);
+                        printer.printIndentedLn(`${methodName}(request: ${requestTypeName}, options?: Partial<grpc.CallOptions>): grpc.ClientReadableStream<${responseTypeName}>;`);
+                        printer.printIndentedLn(`${methodName}(request: ${requestTypeName}, metadata?: grpc.Metadata, options?: Partial<grpc.CallOptions>): grpc.ClientReadableStream<${responseTypeName}>;`);
+                        break;
+                    case 'ClientWritableStream':
+                        printer.printIndentedLn(`${methodName}(callback: (error: grpc.ServiceError | null, response: ${responseTypeName}) => void): grpc.ClientWritableStream<${requestTypeName}>;`);
+                        printer.printIndentedLn(`${methodName}(metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: ${responseTypeName}) => void): grpc.ClientWritableStream<${requestTypeName}>;`);
+                        printer.printIndentedLn(`${methodName}(options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: ${responseTypeName}) => void): grpc.ClientWritableStream<${requestTypeName}>;`);
+                        printer.printIndentedLn(`${methodName}(metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: ${responseTypeName}) => void): grpc.ClientWritableStream<${requestTypeName}>;`);
                         break;
                     case 'ClientDuplexStream':
-                        printer.printIndentedLn(`${methodName}(metadata?: grpc.Metadata): grpc.ClientDuplexStream<${requestTypeName}, ${responseTypeName}>;`);
+                        printer.printIndentedLn(`${methodName}(): grpc.ClientDuplexStream<${requestTypeName}, ${responseTypeName}>;`);
+                        printer.printIndentedLn(`${methodName}(options: Partial<grpc.CallOptions>): grpc.ClientDuplexStream<${requestTypeName}, ${responseTypeName}>;`);
+                        printer.printIndentedLn(`${methodName}(metadata: grpc.Metadata, options?: Partial<grpc.CallOptions>): grpc.ClientDuplexStream<${requestTypeName}, ${responseTypeName}>;`);
                         break;
                 }
             });
@@ -154,25 +159,31 @@ var FileDescriptorGRPC;
             printer.printEmptyLn();
             // print service client
             printer.printLn(`export class ${serviceData.serviceName}Client extends grpc.Client implements I${serviceData.serviceName}Client {`);
-            printer.printIndentedLn(`constructor(address: string, credentials: grpc.ChannelCredentials, options?: object);`);
+            printer.printIndentedLn(`constructor(address: string, credentials: grpc.ChannelCredentials, options?: Partial<grpc.ClientOptions>);`);
             serviceData.methods.forEach(methodData => {
                 const methodName = Utility_1.Utility.lcFirst(methodData.methodName);
                 const requestTypeName = methodData.requestTypeName;
                 const responseTypeName = methodData.responseTypeName;
                 switch (methodData.type) {
                     case 'ClientUnaryCall':
-                        printer.printIndentedLn(`public ${methodName}(request: ${requestTypeName}, callback: (error: Error | null, response: ${responseTypeName}) => void): grpc.ClientUnaryCall;`);
-                        printer.printIndentedLn(`public ${methodName}(request: ${requestTypeName}, metadata: grpc.Metadata, callback: (error: Error | null, response: ${responseTypeName}) => void): grpc.ClientUnaryCall;`);
-                        break;
-                    case 'ClientWritableStream':
-                        printer.printIndentedLn(`public ${methodName}(callback: (error: Error | null, response: ${responseTypeName}) => void): grpc.ClientWritableStream<${requestTypeName}>;`);
-                        printer.printIndentedLn(`public ${methodName}(metadata: grpc.Metadata, callback: (error: Error | null, response: ${responseTypeName}) => void): grpc.ClientWritableStream<${requestTypeName}>;`);
+                        printer.printIndentedLn(`public ${methodName}(request: ${requestTypeName}, callback: (error: grpc.ServiceError | null, response: ${responseTypeName}) => void): grpc.ClientUnaryCall;`);
+                        printer.printIndentedLn(`public ${methodName}(request: ${requestTypeName}, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: ${responseTypeName}) => void): grpc.ClientUnaryCall;`);
+                        printer.printIndentedLn(`public ${methodName}(request: ${requestTypeName}, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: ${responseTypeName}) => void): grpc.ClientUnaryCall;`);
                         break;
                     case 'ClientReadableStream':
-                        printer.printIndentedLn(`public ${methodName}(request: ${requestTypeName}, metadata?: grpc.Metadata): grpc.ClientReadableStream<${responseTypeName}>;`);
+                        printer.printIndentedLn(`public ${methodName}(request: ${requestTypeName}, options?: Partial<grpc.CallOptions>): grpc.ClientReadableStream<${responseTypeName}>;`);
+                        printer.printIndentedLn(`public ${methodName}(request: ${requestTypeName}, metadata?: grpc.Metadata, options?: Partial<grpc.CallOptions>): grpc.ClientReadableStream<${responseTypeName}>;`);
+                        break;
+                    case 'ClientWritableStream':
+                        printer.printIndentedLn(`public ${methodName}(callback: (error: grpc.ServiceError | null, response: ${responseTypeName}) => void): grpc.ClientWritableStream<${requestTypeName}>;`);
+                        printer.printIndentedLn(`public ${methodName}(metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: ${responseTypeName}) => void): grpc.ClientWritableStream<${requestTypeName}>;`);
+                        printer.printIndentedLn(`public ${methodName}(options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: ${responseTypeName}) => void): grpc.ClientWritableStream<${requestTypeName}>;`);
+                        printer.printIndentedLn(`public ${methodName}(metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: ${responseTypeName}) => void): grpc.ClientWritableStream<${requestTypeName}>;`);
                         break;
                     case 'ClientDuplexStream':
-                        printer.printIndentedLn(`public ${methodName}(metadata?: grpc.Metadata): grpc.ClientDuplexStream<${requestTypeName}, ${responseTypeName}>;`);
+                        printer.printIndentedLn(`public ${methodName}(): grpc.ClientDuplexStream<${requestTypeName}, ${responseTypeName}>;`);
+                        printer.printIndentedLn(`public ${methodName}(options?: Partial<grpc.CallOptions>): grpc.ClientDuplexStream<${requestTypeName}, ${responseTypeName}>;`);
+                        printer.printIndentedLn(`public ${methodName}(metadata?: grpc.Metadata, options?: Partial<grpc.CallOptions>): grpc.ClientDuplexStream<${requestTypeName}, ${responseTypeName}>;`);
                         break;
                 }
             });

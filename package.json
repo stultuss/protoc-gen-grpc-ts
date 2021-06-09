@@ -1,6 +1,6 @@
 {
   "name": "protoc-gen-grpc",
-  "version": "1.4.4",
+  "version": "2.0.1",
   "author": "fengjie",
   "description": "Protocol Buffers Compiler (protoc) plugin for generating grpc interfaces in TypeScript..",
   "homepage": "https://github.com/stultuss/protoc-gen-grpc-ts#readme",
@@ -37,23 +37,18 @@
   "binary": {
     "module_name": "grpc_tools",
     "host": "https://node-precompiled-binaries.grpc.io/",
-    "remote_path": "grpc-tools/v1.8.0",
+    "remote_path": "grpc-tools/v1.11.1",
     "package_name": "{platform}-{arch}.tar.gz",
     "module_path": "bin"
   },
   "license": "MIT",
   "dependencies": {
-    "google-protobuf": "^3.8.0",
-    "node-pre-gyp": "^0.13.0",
-    "request": "^2.88.0"
+    "google-protobuf": "^3.17.2"
   },
   "devDependencies": {
-    "@types/google-protobuf": "^3.7.1",
-    "@types/node": "^9.4.1",
-    "coveralls": "^3.0.7",
-    "jest": "^26.2.2",
-    "lodash": ">=4.17.11",
-    "mock-stdin": "^0.3.1",
-    "tar": ">=4.4.2"
+    "@mapbox/node-pre-gyp": "^1.0.5",
+    "@types/node": "^15.12.2",
+    "coveralls": "^3.1.0",
+    "jest": "^27.0.4"
   }
 }

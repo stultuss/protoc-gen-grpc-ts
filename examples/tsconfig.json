@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "ES6",
+    "target": "ES2017",
     "module": "commonjs",
     "sourceMap": true,
     "rootDir": "src",
@@ -9,7 +9,7 @@
     "emitDecoratorMetadata": true
   },
   "include": [
-    "src/*"
+    "src/**/*.ts"
   ],
   "exclude": [
     "node_modules"

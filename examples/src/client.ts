@@ -1,106 +1,117 @@
-#!/usr/bin/env node
+import * as debug from 'debug';
+import * as grpc from '@grpc/grpc-js';
 
-import * as debug from "debug";
-import * as grpc from "grpc";
+import {ProductServiceClient} from './proto/product_grpc_pb';
+import {GetProductRequest, GetProductViaCategoryRequest, Product} from './proto/product_pb';
 
-import { BookServiceClient } from "./proto/book_grpc_pb";
-import { Book, GetBookRequest, GetBookViaAuthorRequest } from "./proto/book_pb";
+const log = debug('[Demo:GrpcClient]');
 
-const log = debug("SampleClient");
+const client = new ProductServiceClient('127.0.0.1:50051', grpc.credentials.createInsecure());
 
-const client = new BookServiceClient("127.0.0.1:50051", grpc.credentials.createInsecure());
+const getProduct = async (id: number) => {
+    return new Promise<Product>((resolve, reject) => {
+        const req = new GetProductRequest();
+        req.setId(id);
 
-const getBook = async (isbn: number) => {
-  return new Promise((resolve, reject) => {
-    const request = new GetBookRequest();
-    request.setIsbn(isbn);
+        log(`[getProduct] Request: ${JSON.stringify(req.toObject())}`);
 
-    log(`[getBook] Request: ${JSON.stringify(request.toObject())}`);
-
-    client.getBook(request, (err, book: Book) => {
-      if (err != null) {
-        debug(`[getBook] err:\nerr.message: ${err.message}\nerr.stack:\n${err.stack}`);
-        reject(err); return;
-      }
-      log(`[getBook] Book: ${JSON.stringify(book.toObject())}`);
-      resolve(book);
+        client.getProduct(req, (e, data: Product) => {
+            if (e) {
+                debug(`[getProduct] err:\nerr.message: ${e.message}\nerr.stack:\n${e.stack}`);
+                reject(e);
+                return;
+            }
+            log(`[getProduct] Response: ${JSON.stringify(data.toObject())}`);
+            resolve(data);
+        });
     });
-  });
 };
 
-const getBooks = () => {
-  return new Promise((resolve) => {
-    const stream: grpc.ClientDuplexStream<GetBookRequest, Book> = client.getBooks();
+const getProductViaCategory = (category: string) => {
+    return new Promise<void>((resolve, reject) => {
+        const req = new GetProductViaCategoryRequest();
+        req.setCategory(category);
 
-    stream.on("data", (data: Book) => {
-      log(`[getBooks] Book: ${JSON.stringify(data.toObject())}`);
-    });
-    stream.on("end", () => {
-      log("[getBooks] Done.");
-      resolve();
-    });
+        log(`[getProductViaCategory] Request: ${JSON.stringify(req.toObject())}`);
 
-    for (let i = 0; i < 10; i++) {
-      const req = new GetBookRequest();
-      req.setIsbn(i);
-      log(`[getBooks] Request: ${JSON.stringify(req.toObject())}`);
-      stream.write(req);
-    }
-    stream.end();
-  });
+        const stream: grpc.ClientReadableStream<Product> = client.getProductViaCategory(req);
+        stream.on('data', (data: Product) => {
+            log(`[getProductViaCategory] Response: ${JSON.stringify(data.toObject())}`);
+        });
+        stream.on('end', () => {
+            log('[getProductViaCategory] Done.');
+            resolve();
+        });
+        stream.on('error', (e) => {
+            log(`[getProductViaCategory] err:\nerr.message: ${e.message}\nerr.stack:\n${e.stack}`);
+            reject(e);
+        });
+    });
 };
 
-const getBooksViaAuthor = (author: string) => {
-  return new Promise((resolve) => {
-    const request = new GetBookViaAuthorRequest();
-    request.setAuthor(author);
+const getBestProduct = () => {
+    return new Promise<void>((resolve, reject) => {
+        const stream: grpc.ClientWritableStream<GetProductRequest> = client.getBestProduct((e, data: Product) => {
+            if (e) {
+                log(`[getBestProduct] err:\nerr.message: ${e.message}\nerr.stack:\n${e.stack}`);
+                reject(e);
+                return;
+            }
+            log(`[getBestProduct] Response: ${JSON.stringify(data.toObject())}`);
+            resolve();
+        });
 
-    log(`[getBooksViaAuthor] Request: ${JSON.stringify(request.toObject())}`);
-
-    const stream: grpc.ClientReadableStream<Book> = client.getBooksViaAuthor(request);
-    stream.on("data", (data: Book) => {
-      log(`[getBooksViaAuthor] Book: ${JSON.stringify(data.toObject())}`);
+        for (let i = 15; i < 20; i++) {
+            const req = new GetProductRequest();
+            req.setId(i);
+            log(`[getBestProduct] Response: ${JSON.stringify(req.toObject())}`);
+            stream.write(req);
+        }
+        
+        stream.end();
     });
-    stream.on("end", () => {
-      log("[getBooksViaAuthor] Done.");
-      resolve();
-    });
-  });
 };
 
-const getGreatestBook = () => {
-  return new Promise((resolve) => {
-    const stream: grpc.ClientWritableStream<GetBookRequest> = client.getGreatestBook((err, data: Book) => {
-      if (err != null) {
-        log(`[getGreatestBook] err:\nerr.message: ${err.message}\nerr.stack:\n${err.stack}`);
-      }
-      log(`[getGreatestBook] Book: ${JSON.stringify(data.toObject())}`);
-      resolve();
-    });
 
-    for (let i = 0; i < 10; i++) {
-      const req = new GetBookRequest();
-      req.setIsbn(i);
-      log(`[getGreatestBook] Request: ${JSON.stringify(req.toObject())}`);
-      stream.write(req);
-    }
-    stream.end();
-  });
+const getProducts = () => {
+    return new Promise<void>((resolve, reject) => {
+        const stream: grpc.ClientDuplexStream<GetProductRequest, Product> = client.getProducts();
+
+        stream.on('data', (data: Product) => {
+            log(`[getProducts] Response: ${JSON.stringify(data.toObject())}`);
+        });
+        stream.on('end', () => {
+            log('[getProducts] Done.');
+            resolve();
+        });
+        stream.on('error', (e) => {
+            log(`[getProducts] err:\nerr.message: ${e.message}\nerr.stack:\n${e.stack}`);
+            reject(e);
+        });
+
+        for (let i = 15; i < 20; i++) {
+            const vo = new GetProductRequest();
+            vo.setId(i);
+            log(`[getProducts] Request: ${JSON.stringify(vo.toObject())}`);
+            stream.write(vo);
+        }
+        stream.end();
+    });
 };
 
 async function main() {
-  await getBook(1);
-  await getBooks();
-  await getBooksViaAuthor("DefaultAuthor");
-  await getGreatestBook();
+    await getProduct(1);
+    await getProductViaCategory('CategoryName');
+    await getBestProduct();
+    await getProducts()
 }
 
 main().then((_) => _);
 
-process.on("uncaughtException", (err) => {
-  log(`process on uncaughtException error: ${err}`);
+process.on('uncaughtException', (err) => {
+    log(`process on uncaughtException error: ${err}`);
 });
 
-process.on("unhandledRejection", (err) => {
-  log(`process on unhandledRejection error: ${err}`);
+process.on('unhandledRejection', (err) => {
+    log(`process on unhandledRejection error: ${err}`);
 });

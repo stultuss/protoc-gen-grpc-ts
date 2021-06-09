@@ -3,20 +3,20 @@
 BASEDIR=$(dirname "$0")
 cd ${BASEDIR}/../
 
-PROTO_DEST  =./proto
-OUTPUT_DEST =./src/proto
-BUILD_DEST  =./build/proto
+PROTO_DEST=./examples/proto
+OUTPUT_DEST=./examples/src/proto
+BUILD_DEST=./examples/build/proto
 
-mkdir -p ${PROTO_DEST}
+mkdir -p ${OUTPUT_DEST}
 
 # JavaScript code generating
-protoc-gen-grpc \
+node ./bin/protoc-gen-grpc.js \
 --js_out=import_style=commonjs,binary:${OUTPUT_DEST} \
 --grpc_out=grpc_js:${OUTPUT_DEST} \
 --proto_path ${PROTO_DEST} \
 ${PROTO_DEST}/*.proto
 
-protoc-gen-grpc-ts \
+node ./bin/protoc-gen-grpc-ts.js \
 --ts_out=grpc_js:${OUTPUT_DEST} \
 --proto_path ${PROTO_DEST} \
 ${PROTO_DEST}/*.proto

@@ -1,101 +1,100 @@
-#!/usr/bin/env node
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const debug = require("debug");
-const grpc = require("grpc");
-const book_grpc_pb_1 = require("./proto/book_grpc_pb");
-const book_pb_1 = require("./proto/book_pb");
-const log = debug("SampleClient");
-const client = new book_grpc_pb_1.BookServiceClient("127.0.0.1:50051", grpc.credentials.createInsecure());
-const getBook = (isbn) => __awaiter(this, void 0, void 0, function* () {
+const grpc = require("@grpc/grpc-js");
+const product_grpc_pb_1 = require("./proto/product_grpc_pb");
+const product_pb_1 = require("./proto/product_pb");
+const log = debug('[Demo:GrpcClient]');
+const client = new product_grpc_pb_1.ProductServiceClient('127.0.0.1:50051', grpc.credentials.createInsecure());
+const getProduct = async (id) => {
     return new Promise((resolve, reject) => {
-        const request = new book_pb_1.GetBookRequest();
-        request.setIsbn(isbn);
-        log(`[getBook] Request: ${JSON.stringify(request.toObject())}`);
-        client.getBook(request, (err, book) => {
-            if (err != null) {
-                debug(`[getBook] err:\nerr.message: ${err.message}\nerr.stack:\n${err.stack}`);
-                reject(err);
+        const req = new product_pb_1.GetProductRequest();
+        req.setId(id);
+        log(`[getProduct] Request: ${JSON.stringify(req.toObject())}`);
+        client.getProduct(req, (e, data) => {
+            if (e) {
+                debug(`[getProduct] err:\nerr.message: ${e.message}\nerr.stack:\n${e.stack}`);
+                reject(e);
                 return;
             }
-            log(`[getBook] Book: ${JSON.stringify(book.toObject())}`);
-            resolve(book);
-        });
-    });
-});
-const getBooks = () => {
-    return new Promise((resolve) => {
-        const stream = client.getBooks();
-        stream.on("data", (data) => {
-            log(`[getBooks] Book: ${JSON.stringify(data.toObject())}`);
-        });
-        stream.on("end", () => {
-            log("[getBooks] Done.");
-            resolve();
-        });
-        for (let i = 0; i < 10; i++) {
-            const req = new book_pb_1.GetBookRequest();
-            req.setIsbn(i);
-            log(`[getBooks] Request: ${JSON.stringify(req.toObject())}`);
-            stream.write(req);
-        }
-        stream.end();
-    });
-};
-const getBooksViaAuthor = (author) => {
-    return new Promise((resolve) => {
-        const request = new book_pb_1.GetBookViaAuthorRequest();
-        request.setAuthor(author);
-        log(`[getBooksViaAuthor] Request: ${JSON.stringify(request.toObject())}`);
-        const stream = client.getBooksViaAuthor(request);
-        stream.on("data", (data) => {
-            log(`[getBooksViaAuthor] Book: ${JSON.stringify(data.toObject())}`);
-        });
-        stream.on("end", () => {
-            log("[getBooksViaAuthor] Done.");
-            resolve();
+            log(`[getProduct] Response: ${JSON.stringify(data.toObject())}`);
+            resolve(data);
         });
     });
 };
-const getGreatestBook = () => {
-    return new Promise((resolve) => {
-        const stream = client.getGreatestBook((err, data) => {
-            if (err != null) {
-                log(`[getGreatestBook] err:\nerr.message: ${err.message}\nerr.stack:\n${err.stack}`);
+const getProductViaCategory = (category) => {
+    return new Promise((resolve, reject) => {
+        const req = new product_pb_1.GetProductViaCategoryRequest();
+        req.setCategory(category);
+        log(`[getProductViaCategory] Request: ${JSON.stringify(req.toObject())}`);
+        const stream = client.getProductViaCategory(req);
+        stream.on('data', (data) => {
+            log(`[getProductViaCategory] Response: ${JSON.stringify(data.toObject())}`);
+        });
+        stream.on('end', () => {
+            log('[getProductViaCategory] Done.');
+            resolve();
+        });
+        stream.on('error', (e) => {
+            log(`[getProductViaCategory] err:\nerr.message: ${e.message}\nerr.stack:\n${e.stack}`);
+            reject(e);
+        });
+    });
+};
+const getBestProduct = () => {
+    return new Promise((resolve, reject) => {
+        const stream = client.getBestProduct((e, data) => {
+            if (e) {
+                log(`[getBestProduct] err:\nerr.message: ${e.message}\nerr.stack:\n${e.stack}`);
+                reject(e);
+                return;
             }
-            log(`[getGreatestBook] Book: ${JSON.stringify(data.toObject())}`);
+            log(`[getBestProduct] Response: ${JSON.stringify(data.toObject())}`);
             resolve();
         });
-        for (let i = 0; i < 10; i++) {
-            const req = new book_pb_1.GetBookRequest();
-            req.setIsbn(i);
-            log(`[getGreatestBook] Request: ${JSON.stringify(req.toObject())}`);
+        for (let i = 15; i < 20; i++) {
+            const req = new product_pb_1.GetProductRequest();
+            req.setId(i);
+            log(`[getBestProduct] Response: ${JSON.stringify(req.toObject())}`);
             stream.write(req);
         }
         stream.end();
     });
 };
-function main() {
-    return __awaiter(this, void 0, void 0, function* () {
-        yield getBook(1);
-        yield getBooks();
-        yield getBooksViaAuthor("DefaultAuthor");
-        yield getGreatestBook();
+const getProducts = () => {
+    return new Promise((resolve, reject) => {
+        const stream = client.getProducts();
+        stream.on('data', (data) => {
+            log(`[getProducts] Response: ${JSON.stringify(data.toObject())}`);
+        });
+        stream.on('end', () => {
+            log('[getProducts] Done.');
+            resolve();
+        });
+        stream.on('error', (e) => {
+            log(`[getProducts] err:\nerr.message: ${e.message}\nerr.stack:\n${e.stack}`);
+            reject(e);
+        });
+        for (let i = 15; i < 20; i++) {
+            const vo = new product_pb_1.GetProductRequest();
+            vo.setId(i);
+            log(`[getProducts] Request: ${JSON.stringify(vo.toObject())}`);
+            stream.write(vo);
+        }
+        stream.end();
     });
+};
+async function main() {
+    await getProduct(1);
+    await getProductViaCategory('CategoryName');
+    await getBestProduct();
+    await getProducts();
 }
 main().then((_) => _);
-process.on("uncaughtException", (err) => {
+process.on('uncaughtException', (err) => {
     log(`process on uncaughtException error: ${err}`);
 });
-process.on("unhandledRejection", (err) => {
+process.on('unhandledRejection', (err) => {
     log(`process on unhandledRejection error: ${err}`);
 });
 //# sourceMappingURL=client.js.map

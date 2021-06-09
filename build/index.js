@@ -20,6 +20,7 @@ Utility_1.Utility.withAllStdIn((input) => {
         const request = plugin_pb_1.CodeGeneratorRequest.deserializeBinary(binary);
         const response = new plugin_pb_1.CodeGeneratorResponse();
         const generateServices = (request.getParameter() === 'service=true');
+        const isGrpcJs = ['generate_package_definition', 'grpc_js'].indexOf(request.getParameter()) !== -1;
         // Parse request proto file
         const fileNameToDescriptor = {};
         const entryMap = new EntryMap_1.EntryMap();
@@ -34,15 +35,13 @@ Utility_1.Utility.withAllStdIn((input) => {
             outputFile.setName(outputFileName + '.d.ts');
             outputFile.setContent(FileDescriptorMSG_1.FileDescriptorMSG.print(fileNameToDescriptor[fileName], entryMap));
             response.addFile(outputFile);
-            if (generateServices) {
-                const fileDescriptorOutput = FileDescriptorGRPC_1.FileDescriptorGRPC.print(fileNameToDescriptor[fileName], entryMap);
-                if (fileDescriptorOutput !== '') {
-                    const thisServiceFileName = Utility_1.Utility.svcFilePathFromProtoWithoutExtension(fileName);
-                    const thisServiceFile = new plugin_pb_1.CodeGeneratorResponse.File();
-                    thisServiceFile.setName(thisServiceFileName + '.d.ts');
-                    thisServiceFile.setContent(fileDescriptorOutput);
-                    response.addFile(thisServiceFile);
-                }
+            const fileDescriptorOutput = FileDescriptorGRPC_1.FileDescriptorGRPC.print(fileNameToDescriptor[fileName], entryMap, isGrpcJs);
+            if (fileDescriptorOutput !== '') {
+                const thisServiceFileName = Utility_1.Utility.svcFilePathFromProtoWithoutExtension(fileName);
+                const thisServiceFile = new plugin_pb_1.CodeGeneratorResponse.File();
+                thisServiceFile.setName(thisServiceFileName + '.d.ts');
+                thisServiceFile.setContent(fileDescriptorOutput);
+                response.addFile(thisServiceFile);
             }
         });
         process.stdout.write(Buffer.from(response.serializeBinary()));
