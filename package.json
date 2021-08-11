@@ -32,7 +32,7 @@
     "test-ts-out": "node ./bin/protoc-gen-grpc-ts.js --ts_out=grpc_js:./examples/src/proto --proto_path ./examples/proto ./examples/proto/product.proto"
   },
   "bundledDependencies": [
-    "node-pre-gyp"
+    "@mapbox/node-pre-gyp"
   ],
   "binary": {
     "module_name": "grpc_tools",
@@ -43,12 +43,12 @@
   },
   "license": "MIT",
   "dependencies": {
-    "google-protobuf": "^3.17.2"
+    "google-protobuf": "^3.17.2",
+    "@mapbox/node-pre-gyp": "^1.0.5"
   },
   "devDependencies": {
     "@types/node": "^15.12.2",
     "coveralls": "^3.1.0",
-    "jest": "^27.0.4",
-    "node-pre-gyp": "^0.17.0"
+    "jest": "^27.0.4"
   }
 }
