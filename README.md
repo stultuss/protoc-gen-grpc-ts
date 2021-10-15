@@ -342,11 +342,11 @@ export namespace Shop {
 [npm-url]: https://npmjs.org/package/protoc-gen-grpc
 [downloads-image]: https://img.shields.io/npm/dm/protoc-gen-grpc.svg
 [downloads-url]: https://npmjs.org/package/protoc-gen-grpc
-[travis-image]: https://travis-ci.org/stultuss/protoc-gen-grpc-ts.svg?branch=master
-[travis-url]: https://travis-ci.org/stultuss/protoc-gen-grpc-ts
+[travis-image]: https://app.travis-ci.com/stultuss/protoc-gen-grpc-ts.svg?branch=master
+[travis-url]: https://app.travis-ci.com/stultuss/protoc-gen-grpc-ts
 [travis-linux-image]: https://img.shields.io/travis/stultuss/protoc-gen-grpc-ts/master.svg?label=linux
-[travis-linux-url]: https://travis-ci.org/stultuss/protoc-gen-grpc-ts
+[travis-linux-url]: https://app.travis-ci.org/stultuss/protoc-gen-grpc-ts
 [travis-windows-image]: https://img.shields.io/travis/stultuss/protoc-gen-grpc-ts/master.svg?label=windows
-[travis-windows-url]: https://travis-ci.org/stultuss/protoc-gen-grpc-ts
+[travis-windows-url]: https://app.travis-ci.org/stultuss/protoc-gen-grpc-ts
 [coveralls-image]: https://img.shields.io/coveralls/stultuss/protoc-gen-grpc-ts/master.svg
 [coveralls-url]: https://coveralls.io/r/stultuss/protoc-gen-grpc-ts?branch=master
