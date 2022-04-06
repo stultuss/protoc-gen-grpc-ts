@@ -17,11 +17,7 @@ protoc-gen-grpc
 npm_config_target_arch=x64 npm i grpc-tools
 ```
 
-> About node-pre-gyp ERR
->
-> node-pre-gyp WARN Using needle for node-pre-gyp https download 
-> node-pre-gyp ERR! install error 
-> node-pre-gyp ERR! stack Error: There was a fatal problem while downloading/extracting the tarball
+> About node-pre-gyp ERR! stack Error: There was a fatal problem while downloading/extracting the tarball
 
 issue：https://github.com/mapbox/node-pre-gyp/issues/462
 
