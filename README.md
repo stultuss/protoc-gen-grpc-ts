@@ -11,14 +11,14 @@ protoc-gen-grpc
 
 ## WARN 
 
-> 1. About Apple M1 arm64
+> About Apple M1 arm64
 
 ```bash
 npm_config_target_arch=x64 npm i grpc-tools
 ```
 
-> 2. About node-pre-gyp ERR 
-> 
+> About node-pre-gyp ERR
+>
 > node-pre-gyp WARN Using needle for node-pre-gyp https download 
 > node-pre-gyp ERR! install error 
 > node-pre-gyp ERR! stack Error: There was a fatal problem while downloading/extracting the tarball
