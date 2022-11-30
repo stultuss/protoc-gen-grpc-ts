@@ -37,7 +37,7 @@
   "binary": {
     "module_name": "grpc_tools",
     "host": "https://node-precompiled-binaries.grpc.io/",
-    "remote_path": "grpc-tools/v1.11.1",
+    "remote_path": "grpc-tools/v1.11.3",
     "package_name": "{platform}-{arch}.tar.gz",
     "module_path": "bin"
   },
