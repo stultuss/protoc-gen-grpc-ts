@@ -25,7 +25,7 @@
     "protoc-gen-grpc-ts": "./bin/protoc-gen-grpc-ts.js"
   },
   "scripts": {
-    "install": "./node_modules/.bin/node-pre-gyp install",
+    "install": "node-pre-gyp install",
     "test": "jest",
     "coveralls": "jest --coverage && cat ./coverage/lcov.info | coveralls",
     "test-js-out": "node ./bin/protoc-gen-grpc.js --js_out=import_style=commonjs,binary:./examples/src/proto --grpc_out=grpc_js:./examples/src/proto --proto_path ./examples/proto ./examples/proto/product.proto",
