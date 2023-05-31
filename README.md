@@ -3,8 +3,6 @@ protoc-gen-grpc
 [![NPM Version][npm-image]][npm-url]
 [![NPM Downloads][downloads-image]][downloads-url]
 [![Build][travis-image]][travis-url]
-[![Linux Build][travis-linux-image]][travis-linux-url]
-[![Windows Build][travis-windows-image]][travis-windows-url]
 [![Test Coverage][coveralls-image]][coveralls-url]
 
 > Protocol compiler plugin for generating grpc interfaces in TypeScript.
@@ -34,6 +32,10 @@ npm install protoc-gen-grpc -g
 > If you don't want to set up a public configuration for NPM, you can try to add after the installation command `-unsafe-perm` parameters.
 
 ## How to use
+
+**Example**
+
+Please try ./example/build.sh
 
 **Support - grpc-js**
 
