@@ -1,13 +1,10 @@
 #!/usr/bin/env bash
 
-BASEDIR=$(dirname "$0")
-cd ${BASEDIR}/../
+PROTO_DEST=./proto
+OUTPUT_DEST=./src/proto
+BUILD_DEST=./build/proto
 
-PROTO_DEST  =./proto
-OUTPUT_DEST =./src/proto
-BUILD_DEST  =./build/proto
-
-mkdir -p ${PROTO_DEST}
+mkdir -p ${OUTPUT_DEST}
 
 # JavaScript code generating
 protoc-gen-grpc \
@@ -24,4 +21,3 @@ ${PROTO_DEST}/*.proto
 # TypeScript compiling
 mkdir -p ${BUILD_DEST}
 cp -r ${OUTPUT_DEST}/* ${BUILD_DEST}
-tsc

@@ -1,7 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const debug = require("debug");
+// support grpc-js
 const grpc = require("@grpc/grpc-js");
+// support grpc
+// import * as grpc from 'grpc';
 const product_grpc_pb_1 = require("./proto/product_grpc_pb");
 const product_pb_1 = require("./proto/product_pb");
 const log = debug('[Demo:GrpcServer]');
@@ -66,7 +69,10 @@ const ServerImpl = {
 };
 function startServer() {
     const server = new grpc.Server();
+    // support grpc-js
     server.addService(product_grpc_pb_1.ProductServiceService, ServerImpl);
+    // support grpc-js
+    // server.addService(ProductServiceService, new ServerImpl());
     server.bindAsync('127.0.0.1:50051', grpc.ServerCredentials.createInsecure(), (e, port) => {
         if (e)
             throw e;
