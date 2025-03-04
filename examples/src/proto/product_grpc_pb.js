@@ -85,4 +85,4 @@ var ProductServiceService = exports.ProductServiceService = {
   },
 };
 
-exports.ProductServiceClient = grpc.makeGenericClientConstructor(ProductServiceService);
+exports.ProductServiceClient = grpc.makeGenericClientConstructor(ProductServiceService, 'ProductService');

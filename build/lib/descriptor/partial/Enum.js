@@ -15,4 +15,4 @@ var Enum;
         return printer.getOutput();
     }
     Enum.print = print;
-})(Enum = exports.Enum || (exports.Enum = {}));
+})(Enum || (exports.Enum = Enum = {}));

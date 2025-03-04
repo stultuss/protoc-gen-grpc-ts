@@ -88,7 +88,6 @@ function startServer() {
     server.bindAsync('127.0.0.1:50051', grpc.ServerCredentials.createInsecure(), (e, port) => {
         if (e) throw e;
         log(`Server started, listening: 127.0.0.1:${port}`);
-        server.start();
     });
 }
 

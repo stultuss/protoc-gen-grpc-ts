@@ -19,4 +19,4 @@ var OneOf;
         return printer.output;
     }
     OneOf.print = print;
-})(OneOf = exports.OneOf || (exports.OneOf = {}));
+})(OneOf || (exports.OneOf = OneOf = {}));

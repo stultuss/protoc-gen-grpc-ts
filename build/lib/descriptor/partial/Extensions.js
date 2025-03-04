@@ -15,4 +15,4 @@ var Extension;
         return printer.output;
     }
     Extension.print = print;
-})(Extension = exports.Extension || (exports.Extension = {}));
+})(Extension || (exports.Extension = Extension = {}));

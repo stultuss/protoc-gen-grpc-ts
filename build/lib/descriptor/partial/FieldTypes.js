@@ -68,4 +68,4 @@ var FieldTypes;
         return fieldType;
     }
     FieldTypes.getFieldType = getFieldType;
-})(FieldTypes = exports.FieldTypes || (exports.FieldTypes = {}));
+})(FieldTypes || (exports.FieldTypes = FieldTypes = {}));

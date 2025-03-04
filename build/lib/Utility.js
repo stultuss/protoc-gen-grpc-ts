@@ -141,4 +141,4 @@ var Utility;
         return name;
     }
     Utility.normaliseFieldObjectName = normaliseFieldObjectName;
-})(Utility = exports.Utility || (exports.Utility = {}));
+})(Utility || (exports.Utility = Utility = {}));

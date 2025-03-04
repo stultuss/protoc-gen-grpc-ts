@@ -41,4 +41,4 @@ var FileDescriptorMSG;
         return printer.getOutput();
     }
     FileDescriptorMSG.print = print;
-})(FileDescriptorMSG = exports.FileDescriptorMSG || (exports.FileDescriptorMSG = {}));
+})(FileDescriptorMSG || (exports.FileDescriptorMSG = FileDescriptorMSG = {}));

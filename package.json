@@ -1,6 +1,6 @@
 {
   "name": "protoc-gen-grpc",
-  "version": "2.0.4",
+  "version": "3.0.0",
   "author": "fengjie",
   "description": "Protocol Buffers Compiler (protoc) plugin for generating grpc interfaces in TypeScript..",
   "homepage": "https://github.com/stultuss/protoc-gen-grpc-ts#readme",
@@ -15,7 +15,7 @@
     "gRPC"
   ],
   "engines": {
-    "node": ">=8"
+    "node": ">=16"
   },
   "main": "./build/index.js",
   "bin": {
@@ -26,32 +26,33 @@
   },
   "scripts": {
     "install": "node-pre-gyp install",
-    "test": "jest",
-    "coveralls": "jest --coverage && cat ./coverage/lcov.info | coveralls",
+    "build": "rimraf build && tsc",
+    "clean": "rimraf build",
+    "prepare": "npm run build",
     "test-js-out": "node ./bin/protoc-gen-grpc.js --js_out=import_style=commonjs,binary:./examples/src/proto --grpc_out=grpc_js:./examples/src/proto --proto_path ./examples/proto ./examples/proto/product.proto",
     "test-ts-out": "node ./bin/protoc-gen-grpc-ts.js --ts_out=grpc_js:./examples/src/proto --proto_path ./examples/proto ./examples/proto/product.proto"
   },
-  "bundledDependencies": [
-    "@mapbox/node-pre-gyp"
-  ],
+  "license": "MIT",
+  "dependencies": {
+    "@grpc/grpc-js": "~1.12.6",
+    "google-protobuf": "~3.21.2"
+  },
+  "devDependencies": {
+    "@mapbox/node-pre-gyp": "2.0.0",
+    "@types/google-protobuf": "^3.15.12",
+    "@types/node": "^18.19.0",
+    "rimraf": "^5.0.5",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.0"
+  },
   "binary": {
     "module_name": "grpc_tools",
     "host": "https://node-precompiled-binaries.grpc.io/",
-    "remote_path": "grpc-tools/v1.11.3",
+    "remote_path": "grpc-tools/v1.13.0",
     "package_name": "{platform}-{arch}.tar.gz",
     "module_path": "bin"
   },
-  "license": "MIT",
-  "dependencies": {
-    "google-protobuf": "^3.17.2",
-    "@mapbox/node-pre-gyp": "^1.0.5"
-  },
-  "devDependencies": {
-    "@types/node": "^15.12.2",
-    "coveralls": "^3.1.0",
-    "jest": "^27.0.4",
-    "ansi-regex": ">=5.0.1",
-    "tmpl": ">=1.0.5",
-    "tar": ">=4.4.18"
-  }
+  "bundleDependencies": [
+    "@mapbox/node-pre-gyp"
+  ]
 }

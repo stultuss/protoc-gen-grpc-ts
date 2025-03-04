@@ -19,7 +19,6 @@ Utility_1.Utility.withAllStdIn((input) => {
         binary.set(input);
         const request = plugin_pb_1.CodeGeneratorRequest.deserializeBinary(binary);
         const response = new plugin_pb_1.CodeGeneratorResponse();
-        const generateServices = (request.getParameter() === 'service=true');
         const isGrpcJs = ['generate_package_definition', 'grpc_js'].indexOf(request.getParameter()) !== -1;
         // Parse request proto file
         const fileNameToDescriptor = {};

@@ -18,12 +18,11 @@ Utility.withAllStdIn((input: Buffer) => {
     try {
         const binary = new Uint8Array(input.length);
         binary.set(input);
-        
+
         const request = CodeGeneratorRequest.deserializeBinary(binary);
         const response = new CodeGeneratorResponse();
-        const generateServices = (request.getParameter() === 'service=true');
         const isGrpcJs = ['generate_package_definition', 'grpc_js'].indexOf(request.getParameter()) !== -1;
-        
+
         // Parse request proto file
         const fileNameToDescriptor: { [key: string]: FileDescriptorProto } = {};
         const entryMap = new EntryMap();
@@ -31,7 +30,7 @@ Utility.withAllStdIn((input: Buffer) => {
             fileNameToDescriptor[fileDescriptor.getName()] = fileDescriptor;
             entryMap.parseFileDescriptor(fileDescriptor);
         });
-        
+
         // Generate *_pb.d.ts && *_grpc_pb.d.ts
         request.getFileToGenerateList().forEach(fileName => {
             const outputFileName = Utility.filePathFromProtoWithoutExtension(fileName);
@@ -39,7 +38,7 @@ Utility.withAllStdIn((input: Buffer) => {
             outputFile.setName(outputFileName + '.d.ts');
             outputFile.setContent(FileDescriptorMSG.print(fileNameToDescriptor[fileName], entryMap));
             response.addFile(outputFile);
-            
+
             const fileDescriptorOutput = FileDescriptorGRPC.print(fileNameToDescriptor[fileName], entryMap, isGrpcJs);
             if (fileDescriptorOutput !== '') {
                 const thisServiceFileName = Utility.svcFilePathFromProtoWithoutExtension(fileName);
@@ -49,7 +48,7 @@ Utility.withAllStdIn((input: Buffer) => {
                 response.addFile(thisServiceFile);
             }
         });
-        
+
         process.stdout.write(Buffer.from(response.serializeBinary()));
     } catch (err) {
         console.error('error: ' + err.stack + '\n');

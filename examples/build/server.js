@@ -77,7 +77,6 @@ function startServer() {
         if (e)
             throw e;
         log(`Server started, listening: 127.0.0.1:${port}`);
-        server.start();
     });
 }
 startServer();

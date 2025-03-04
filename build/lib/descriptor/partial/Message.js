@@ -220,4 +220,4 @@ var Message;
         return printer.getOutput();
     }
     Message.print = print;
-})(Message = exports.Message || (exports.Message = {}));
+})(Message || (exports.Message = Message = {}));

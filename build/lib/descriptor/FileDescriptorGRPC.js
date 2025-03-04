@@ -193,4 +193,4 @@ var FileDescriptorGRPC;
         return printer.getOutput();
     }
     FileDescriptorGRPC.print = print;
-})(FileDescriptorGRPC = exports.FileDescriptorGRPC || (exports.FileDescriptorGRPC = {}));
+})(FileDescriptorGRPC || (exports.FileDescriptorGRPC = FileDescriptorGRPC = {}));
