@@ -3,7 +3,7 @@
   "version": "2.0.1",
   "description": "gRPC generating example",
   "engines": {
-    "node": ">=16"
+    "node": ">=18"
   },
   "main": "index.js",
   "directories": {

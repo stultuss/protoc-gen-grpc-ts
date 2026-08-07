@@ -15,7 +15,7 @@
     "gRPC"
   ],
   "engines": {
-    "node": ">=16"
+    "node": ">=18"
   },
   "main": "./build/index.js",
   "bin": {
