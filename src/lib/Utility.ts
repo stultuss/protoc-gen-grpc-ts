@@ -53,6 +53,10 @@ export namespace Utility {
         return protoFilePath.replace('.proto', '_pb');
     }
 
+    export function getVersion(): string {
+        return require('../../package.json').version;
+    }
+
     export function svcFilePathFromProtoWithoutExtension(protoFilePath: string): string {
         return protoFilePath.replace('.proto', '_grpc_pb');
     }
