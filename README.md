@@ -34,13 +34,16 @@ npm install protoc-gen-grpc -g
 
 ## How to use
 
+**Supported features**
+
+- Generates TypeScript declarations for `@grpc/grpc-js`. Pass `grpc_js` as the
+  `--ts_out` parameter; additional comma-separated parameters are allowed,
+  e.g. `--ts_out=grpc_js,keep_case:...`.
+- Supports proto3 `optional` fields.
+
 **Example**
 
 Please try ./examples/build.sh
-
-The plugin generates TypeScript declarations for `@grpc/grpc-js` and supports
-proto3 `optional` fields. Pass `grpc_js` as the `--ts_out` parameter; additional
-comma-separated parameters are allowed, e.g. `--ts_out=grpc_js,keep_case:...`.
 
 **Support - grpc-js**
 
