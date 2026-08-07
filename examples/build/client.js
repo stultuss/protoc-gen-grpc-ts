@@ -22,9 +22,15 @@ const getProduct = async (id) => {
             if (data.hasRemark()) {
                 log(`[getProduct] remark: ${data.getRemark()}`);
             }
+            log(`[getProduct] bigId: ${data.getBigId()}`); // [jstype = JS_STRING]
             resolve(data);
         });
     });
+};
+const extensionDemo = () => {
+    const demo = new product_pb_1.ExtensionDemo();
+    demo.setExtension$('demo-value'); // occupied field name -> $ suffix
+    log(`[extensionDemo] extension$: ${demo.getExtension$()}`);
 };
 const createOrder = () => {
     return new Promise((resolve, reject) => {
@@ -113,6 +119,7 @@ async function main() {
     await getBestProduct();
     await getProducts();
     await createOrder();
+    extensionDemo();
 }
 main().then((_) => _);
 process.on('uncaughtException', (err) => {

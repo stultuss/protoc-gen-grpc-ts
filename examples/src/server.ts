@@ -19,6 +19,7 @@ const ServerImpl: IProductServiceServer = {
         vo.setName('DefaultName');
         vo.setCategory('DefaultCategory');
         vo.setRemark('DefaultRemark'); // proto3 optional
+        vo.setBigId('9007199254740993'); // [jstype = JS_STRING]
         
         log(`[getProduct] Done: ${JSON.stringify(vo.toObject())}`);
         callback(null, vo);

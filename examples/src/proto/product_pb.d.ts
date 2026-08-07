@@ -15,8 +15,11 @@ export class Product extends jspb.Message {
 
   hasRemark(): boolean;
   clearRemark(): void;
-  getRemark(): string;
+  getRemark(): string | undefined;
   setRemark(value: string): void;
+
+  getBigId(): string;
+  setBigId(value: string): void;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): Product.AsObject;
@@ -33,7 +36,8 @@ export namespace Product {
     id: number,
     name: string,
     category: string,
-    remark: string,
+    remark?: string,
+    bigId: string,
   }
 }
 
@@ -132,6 +136,26 @@ export namespace Order {
     PAYMENT_NOT_SET = 0,
     CASH = 1,
     CARD = 2,
+  }
+}
+
+export class ExtensionDemo extends jspb.Message {
+  getExtension$(): string;
+  setExtension$(value: string): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): ExtensionDemo.AsObject;
+  static toObject(includeInstance: boolean, msg: ExtensionDemo): ExtensionDemo.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: ExtensionDemo, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): ExtensionDemo;
+  static deserializeBinaryFromReader(message: ExtensionDemo, reader: jspb.BinaryReader): ExtensionDemo;
+}
+
+export namespace ExtensionDemo {
+  export type AsObject = {
+    extension: string,
   }
 }
 

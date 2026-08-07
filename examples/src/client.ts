@@ -2,7 +2,7 @@ import * as debug from 'debug';
 import * as grpc from '@grpc/grpc-js';
 
 import {ProductServiceClient} from './proto/product_grpc_pb';
-import {GetProductRequest, GetProductViaCategoryRequest, Order, Product} from './proto/product_pb';
+import {GetProductRequest, GetProductViaCategoryRequest, ExtensionDemo, Order, Product} from './proto/product_pb';
 
 const log = debug('[Demo:GrpcClient]');
 
@@ -26,9 +26,16 @@ const getProduct = async (id: number) => {
             if (data.hasRemark()) {
                 log(`[getProduct] remark: ${data.getRemark()}`);
             }
+            log(`[getProduct] bigId: ${data.getBigId()}`); // [jstype = JS_STRING]
             resolve(data);
         });
     });
+};
+
+const extensionDemo = () => {
+    const demo = new ExtensionDemo();
+    demo.setExtension$('demo-value'); // occupied field name -> $ suffix
+    log(`[extensionDemo] extension$: ${demo.getExtension$()}`);
 };
 
 const createOrder = () => {
@@ -130,6 +137,7 @@ async function main() {
     await getBestProduct();
     await getProducts();
     await createOrder();
+    extensionDemo();
 }
 
 main().then((_) => _);

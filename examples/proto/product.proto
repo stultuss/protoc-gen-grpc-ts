@@ -7,6 +7,7 @@ message Product {
     string name = 2;
     string category = 3;
     optional string remark = 4;
+    int64 big_id = 5 [jstype = JS_STRING];
 }
 
 message GetProductRequest {
@@ -35,4 +36,8 @@ message Order {
         int64 cash = 1;
         string card = 2;
     }
+}
+
+message ExtensionDemo {
+    string extension = 1;
 }

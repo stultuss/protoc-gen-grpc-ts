@@ -1,97 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
 <testsuites>
-	<testcase name="plugin generates grpc-js message and service files matching golden" time="0.169834" classname="test"/>
-	<testcase name="plugin generates legacy grpc output when the parameter is empty" time="0.118350" classname="test"/>
-	<testcase name="not_grpc_js does not select grpc-js" time="0.101126" classname="test"/>
-	<testcase name="comma-joined grpc_js parameter selects grpc-js" time="0.103510" classname="test"/>
-	<testcase name="files without services produce only the message declaration file" time="0.102466" classname="test"/>
-	<testcase name="plugin response declares support for proto3 optional fields" time="0.099850" classname="test"/>
-	<testcase name="plugin reports generation errors in the response with context" time="0.127337" classname="test"/>
-	<testcase name="plugin error messages include file, message and field context" time="0.101535" classname="test"/>
-	<testcase name="unparseable stdin is reported through the response error" time="0.093956" classname="test"/>
-	<testcase name="kitchen file with no services produces no grpc file through the full pipeline" time="0.107021" classname="test"/>
-	<testcase name="parseFileDescriptor indexes top-level and nested messages and enums" time="0.005323" classname="test"/>
-	<testcase name="parseFileDescriptor works without a package" time="0.000535" classname="test"/>
-	<testcase name="no-package nested messages and enums resolve without leading dots" time="0.005287" classname="test"/>
-	<testcase name="parseFileDescriptor records map entry options for map-entry messages" time="0.000933" classname="test"/>
-	<testcase name="parseFileDescriptor records non-map messages without mapFieldOptions" time="0.000355" classname="test"/>
-	<testcase name="getMessageEntry / getEnumEntry return undefined for unknown names" time="0.000202" classname="test"/>
-	<testcase name="parseFileDescriptor can be called multiple times and accumulates entries" time="0.000402" classname="test"/>
-	<testcase name="oneof fields are not specially indexed but messages still parse" time="0.000543" classname="test"/>
-	<testcase name="repeated fields and labels parse without error" time="0.000380" classname="test"/>
-	<testcase name="Enum.print renders values as uppercase constants" time="0.002771" classname="test"/>
-	<testcase name="Enum.print honours indent level" time="0.000314" classname="test"/>
-	<testcase name="Enum.print handles an empty value list" time="0.000413" classname="test"/>
-	<testcase name="Extension.print renders scalar extension fields" time="0.002626" classname="test"/>
-	<testcase name="Extension.print camel-cases snake_case extension names" time="0.000304" classname="test"/>
-	<testcase name="Extension.print resolves message-typed extensions via the entry map" time="0.000780" classname="test"/>
-	<testcase name="getTypeName maps every scalar descriptor type" time="0.002631" classname="test"/>
-	<testcase name="getFieldType resolves message types within the same file" time="0.000450" classname="test"/>
-	<testcase name="getFieldType resolves message types across files with the pseudo namespace" time="0.000311" classname="test"/>
-	<testcase name="getFieldType resolves message with empty package" time="0.000255" classname="test"/>
-	<testcase name="getFieldType throws for missing message entry" time="0.000687" classname="test"/>
-	<testcase name="getFieldType resolves enum types within and across files" time="0.000295" classname="test"/>
-	<testcase name="getFieldType throws for missing enum entry" time="0.000399" classname="test"/>
-	<testcase name="getFieldType passes scalar types straight through" time="0.000350" classname="test"/>
-	<testcase name="FileDescriptorGRPC grpc-js output matches the golden baseline" time="0.009195" classname="test"/>
-	<testcase name="FileDescriptorGRPC legacy output matches the golden baseline" time="0.000996" classname="test"/>
-	<testcase name="grpc-js and legacy outputs differ only in the import line" time="0.001573" classname="test"/>
-	<testcase name="files without services produce no output" time="0.000342" classname="test"/>
-	<testcase name="annotations dependency is filtered in grpc output" time="0.001122" classname="test"/>
-	<testcase name="well-known and relative dependencies are imported in grpc output" time="0.000999" classname="test"/>
-	<testcase name="service method paths use package, service and method names" time="0.001067" classname="test"/>
-	<testcase name="all four RPC shapes produce the correct handler types" time="0.000849" classname="test"/>
-	<testcase name="cross-file method types resolve through the pseudo namespace" time="0.001897" classname="test"/>
-	<testcase name="service data factories return fresh default objects" time="0.001528" classname="test"/>
-	<testcase name="FileDescriptorMSG kitchen-sink output matches the golden baseline" time="0.010078" classname="test"/>
-	<testcase name="FileDescriptorMSG service output matches the golden baseline" time="0.001099" classname="test"/>
-	<testcase name="FileDescriptorMSG proto2 output matches the golden baseline" time="0.001538" classname="test"/>
-	<testcase name="FileDescriptorMSG no-package output matches the golden baseline" time="0.000854" classname="test"/>
-	<testcase name="FileDescriptorMSG proto3-optional output matches the golden baseline" time="0.001049" classname="test"/>
-	<testcase name="well-known dependencies import from google-protobuf module" time="0.001124" classname="test"/>
-	<testcase name="relative dependencies import with path to root" time="0.000658" classname="test"/>
-	<testcase name="annotations dependency is filtered in message files too" time="0.000448" classname="test"/>
-	<testcase name="empty file renders only header and jspb import" time="0.000992" classname="test"/>
-	<testcase name="simple proto3 scalar message renders exact output" time="0.004578" classname="test"/>
-	<testcase name="proto2 scalar fields get has/clear and optional AsObject" time="0.000939" classname="test"/>
-	<testcase name="hasFieldPresence rules" time="0.000662" classname="test"/>
-	<testcase name="bytes fields render singular and repeated accessors" time="0.000888" classname="test"/>
-	<testcase name="reserved word field names are prefixed with pb_ in AsObject" time="0.000352" classname="test"/>
-	<testcase name="oneof fields render case accessor and enum" time="0.000802" classname="test"/>
-	<testcase name="proto3 optional fields keep has/clear but skip the synthetic case enum" time="0.000357" classname="test"/>
-	<testcase name="jstype JS_STRING fields map to string" time="0.000601" classname="test"/>
-	<testcase name="occupied field names get a $ suffix like the JS generator" time="0.000382" classname="test"/>
-	<testcase name="map fields render jspb.Map getter and tuple AsObject" time="0.001176" classname="test"/>
-	<testcase name="map fields with bytes values render Uint8Array | string" time="0.000436" classname="test"/>
-	<testcase name="map fields with scalar values render plain types" time="0.000264" classname="test"/>
-	<testcase name="map-entry messages themselves are not emitted" time="0.000261" classname="test"/>
-	<testcase name="nested messages and enums render inside the namespace" time="0.001351" classname="test"/>
-	<testcase name="cross-file message fields resolve to the pseudo namespace" time="0.000433" classname="test"/>
-	<testcase name="cross-file enum fields resolve to the pseudo namespace" time="0.000553" classname="test"/>
-	<testcase name="message-level extensions render inside the namespace" time="0.000364" classname="test"/>
-	<testcase name="missing message entry throws with the full type name" time="0.000678" classname="test"/>
-	<testcase name="missing enum entry throws with the full type name" time="0.000210" classname="test"/>
-	<testcase name="field names are lowercased before camel-casing" time="0.000276" classname="test"/>
-	<testcase name="OneOf.print renders the Case enum with NOT_SET and field numbers" time="0.002089" classname="test"/>
-	<testcase name="OneOf.print handles snake_case oneof names and empty fields" time="0.000338" classname="test"/>
-	<testcase name="OneOf.print honours indent level" time="0.000295" classname="test"/>
-	<testcase name="Printer accumulates output from every method" time="0.001164" classname="test"/>
-	<testcase name="Printer applies indentation level to printLn" time="0.000237" classname="test"/>
-	<testcase name="Printer starts empty" time="0.000246" classname="test"/>
-	<testcase name="printIndentedLn adds exactly two extra spaces" time="0.000245" classname="test"/>
-	<testcase name="filePathToPseudoNamespace replaces slashes, dots and dashes" time="0.001381" classname="test"/>
-	<testcase name="snakeToCamel converts snake_case to lower camelCase" time="0.000266" classname="test"/>
-	<testcase name="ucFirst / lcFirst" time="0.000181" classname="test"/>
-	<testcase name="isProto2: empty syntax defaults to proto2" time="0.000438" classname="test"/>
-	<testcase name="oneOfName" time="0.000186" classname="test"/>
-	<testcase name="generateIndent" time="0.001084" classname="test"/>
-	<testcase name="getPathToRoot" time="0.000209" classname="test"/>
-	<testcase name="withinNamespaceFromExportEntry strips the package prefix" time="0.000163" classname="test"/>
-	<testcase name="filePathFromProtoWithoutExtension / svcFilePathFromProtoWithoutExtension" time="0.000188" classname="test"/>
-	<testcase name="normaliseFieldObjectName prefixes all reserved words with pb_" time="0.000381" classname="test"/>
-	<testcase name="withAllStdIn concatenates all chunks" time="0.000714" classname="test"/>
-	<testcase name="withAllStdIn handles empty input" time="0.000187" classname="test"/>
-	<testcase name="withAllStdIn throws on non-buffer chunk" time="0.000487" classname="test"/>
+	<testcase name="plugin generates grpc-js message and service files matching golden" time="0.244457" classname="test"/>
+	<testcase name="plugin generates legacy grpc output when the parameter is empty" time="0.119542" classname="test"/>
+	<testcase name="not_grpc_js does not select grpc-js" time="0.112432" classname="test"/>
+	<testcase name="comma-joined grpc_js parameter selects grpc-js" time="0.108223" classname="test"/>
+	<testcase name="files without services produce only the message declaration file" time="0.102725" classname="test"/>
+	<testcase name="plugin response declares support for proto3 optional fields" time="0.101293" classname="test"/>
+	<testcase name="plugin reports generation errors in the response with context" time="0.108550" classname="test"/>
+	<testcase name="plugin error messages include file, message and field context" time="0.133261" classname="test"/>
+	<testcase name="unparseable stdin is reported through the response error" time="0.098352" classname="test"/>
+	<testcase name="kitchen file with no services produces no grpc file through the full pipeline" time="0.096775" classname="test"/>
+	<testcase name="parseFileDescriptor indexes top-level and nested messages and enums" time="0.005845" classname="test"/>
+	<testcase name="parseFileDescriptor works without a package" time="0.000400" classname="test"/>
+	<testcase name="no-package nested messages and enums resolve without leading dots" time="0.004987" classname="test"/>
+	<testcase name="parseFileDescriptor records map entry options for map-entry messages" time="0.000880" classname="test"/>
+	<testcase name="parseFileDescriptor records non-map messages without mapFieldOptions" time="0.000360" classname="test"/>
+	<testcase name="getMessageEntry / getEnumEntry return undefined for unknown names" time="0.000198" classname="test"/>
+	<testcase name="parseFileDescriptor can be called multiple times and accumulates entries" time="0.000500" classname="test"/>
+	<testcase name="oneof fields are not specially indexed but messages still parse" time="0.000496" classname="test"/>
+	<testcase name="repeated fields and labels parse without error" time="0.000379" classname="test"/>
+	<testcase name="Enum.print renders values as uppercase constants" time="0.002823" classname="test"/>
+	<testcase name="Enum.print honours indent level" time="0.000420" classname="test"/>
+	<testcase name="Enum.print handles an empty value list" time="0.001047" classname="test"/>
+	<testcase name="Extension.print renders scalar extension fields" time="0.003968" classname="test"/>
+	<testcase name="Extension.print camel-cases snake_case extension names" time="0.000363" classname="test"/>
+	<testcase name="Extension.print resolves message-typed extensions via the entry map" time="0.000544" classname="test"/>
+	<testcase name="getTypeName maps every scalar descriptor type" time="0.001734" classname="test"/>
+	<testcase name="getFieldType resolves message types within the same file" time="0.000637" classname="test"/>
+	<testcase name="getFieldType resolves message types across files with the pseudo namespace" time="0.000435" classname="test"/>
+	<testcase name="getFieldType resolves message with empty package" time="0.000323" classname="test"/>
+	<testcase name="getFieldType throws for missing message entry" time="0.001065" classname="test"/>
+	<testcase name="getFieldType resolves enum types within and across files" time="0.000394" classname="test"/>
+	<testcase name="getFieldType throws for missing enum entry" time="0.000412" classname="test"/>
+	<testcase name="getFieldType passes scalar types straight through" time="0.000267" classname="test"/>
+	<testcase name="FileDescriptorGRPC grpc-js output matches the golden baseline" time="0.012731" classname="test"/>
+	<testcase name="FileDescriptorGRPC legacy output matches the golden baseline" time="0.001314" classname="test"/>
+	<testcase name="grpc-js and legacy outputs differ only in the import line" time="0.001731" classname="test"/>
+	<testcase name="files without services produce no output" time="0.000286" classname="test"/>
+	<testcase name="annotations dependency is filtered in grpc output" time="0.003310" classname="test"/>
+	<testcase name="well-known and relative dependencies are imported in grpc output" time="0.001056" classname="test"/>
+	<testcase name="service method paths use package, service and method names" time="0.001079" classname="test"/>
+	<testcase name="all four RPC shapes produce the correct handler types" time="0.000870" classname="test"/>
+	<testcase name="cross-file method types resolve through the pseudo namespace" time="0.003502" classname="test"/>
+	<testcase name="service data factories return fresh default objects" time="0.001802" classname="test"/>
+	<testcase name="FileDescriptorMSG kitchen-sink output matches the golden baseline" time="0.019986" classname="test"/>
+	<testcase name="FileDescriptorMSG service output matches the golden baseline" time="0.002115" classname="test"/>
+	<testcase name="FileDescriptorMSG proto2 output matches the golden baseline" time="0.003920" classname="test"/>
+	<testcase name="FileDescriptorMSG no-package output matches the golden baseline" time="0.000905" classname="test"/>
+	<testcase name="FileDescriptorMSG proto3-optional output matches the golden baseline" time="0.001210" classname="test"/>
+	<testcase name="well-known dependencies import from google-protobuf module" time="0.001237" classname="test"/>
+	<testcase name="relative dependencies import with path to root" time="0.002896" classname="test"/>
+	<testcase name="annotations dependency is filtered in message files too" time="0.000520" classname="test"/>
+	<testcase name="empty file renders only header and jspb import" time="0.000343" classname="test"/>
+	<testcase name="simple proto3 scalar message renders exact output" time="0.007135" classname="test"/>
+	<testcase name="proto2 scalar fields get has/clear and optional AsObject" time="0.000604" classname="test"/>
+	<testcase name="hasFieldPresence rules" time="0.000383" classname="test"/>
+	<testcase name="bytes fields render singular and repeated accessors" time="0.000770" classname="test"/>
+	<testcase name="reserved word field names are prefixed with pb_ in AsObject" time="0.000335" classname="test"/>
+	<testcase name="oneof fields render case accessor and enum" time="0.000767" classname="test"/>
+	<testcase name="proto3 optional fields keep has/clear but skip the synthetic case enum" time="0.000467" classname="test"/>
+	<testcase name="jstype JS_STRING fields map to string" time="0.000900" classname="test"/>
+	<testcase name="occupied field names get a $ suffix like the JS generator" time="0.000375" classname="test"/>
+	<testcase name="map fields render jspb.Map getter and tuple AsObject" time="0.001395" classname="test"/>
+	<testcase name="map fields with bytes values render Uint8Array | string" time="0.000628" classname="test"/>
+	<testcase name="map fields with scalar values render plain types" time="0.000334" classname="test"/>
+	<testcase name="map-entry messages themselves are not emitted" time="0.000342" classname="test"/>
+	<testcase name="nested messages and enums render inside the namespace" time="0.000851" classname="test"/>
+	<testcase name="cross-file message fields resolve to the pseudo namespace" time="0.000307" classname="test"/>
+	<testcase name="cross-file enum fields resolve to the pseudo namespace" time="0.000353" classname="test"/>
+	<testcase name="message-level extensions render inside the namespace" time="0.000442" classname="test"/>
+	<testcase name="missing message entry throws with the full type name" time="0.000592" classname="test"/>
+	<testcase name="missing enum entry throws with the full type name" time="0.000231" classname="test"/>
+	<testcase name="field names are lowercased before camel-casing" time="0.000293" classname="test"/>
+	<testcase name="OneOf.print renders the Case enum with NOT_SET and field numbers" time="0.002054" classname="test"/>
+	<testcase name="OneOf.print handles snake_case oneof names and empty fields" time="0.000432" classname="test"/>
+	<testcase name="OneOf.print honours indent level" time="0.000319" classname="test"/>
+	<testcase name="Printer accumulates output from every method" time="0.002039" classname="test"/>
+	<testcase name="Printer applies indentation level to printLn" time="0.000297" classname="test"/>
+	<testcase name="Printer starts empty" time="0.000233" classname="test"/>
+	<testcase name="printIndentedLn adds exactly two extra spaces" time="0.000311" classname="test"/>
+	<testcase name="filePathToPseudoNamespace replaces slashes, dots and dashes" time="0.001591" classname="test"/>
+	<testcase name="snakeToCamel converts snake_case to lower camelCase" time="0.000337" classname="test"/>
+	<testcase name="ucFirst / lcFirst" time="0.000297" classname="test"/>
+	<testcase name="isProto2: empty syntax defaults to proto2" time="0.000519" classname="test"/>
+	<testcase name="oneOfName" time="0.000377" classname="test"/>
+	<testcase name="generateIndent" time="0.001531" classname="test"/>
+	<testcase name="getPathToRoot" time="0.000250" classname="test"/>
+	<testcase name="withinNamespaceFromExportEntry strips the package prefix" time="0.000176" classname="test"/>
+	<testcase name="filePathFromProtoWithoutExtension / svcFilePathFromProtoWithoutExtension" time="0.000226" classname="test"/>
+	<testcase name="normaliseFieldObjectName prefixes all reserved words with pb_" time="0.000636" classname="test"/>
+	<testcase name="withAllStdIn concatenates all chunks" time="0.001354" classname="test"/>
+	<testcase name="withAllStdIn handles empty input" time="0.000305" classname="test"/>
+	<testcase name="withAllStdIn throws on non-buffer chunk" time="0.000780" classname="test"/>
 	<!-- tests 92 -->
 	<!-- suites 0 -->
 	<!-- pass 92 -->
@@ -99,5 +99,5 @@
 	<!-- cancelled 0 -->
 	<!-- skipped 0 -->
 	<!-- todo 0 -->
-	<!-- duration_ms 1272.940411 -->
+	<!-- duration_ms 1395.651097 -->
 </testsuites>
