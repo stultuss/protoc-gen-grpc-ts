@@ -41,7 +41,7 @@ export namespace FieldTypes {
             case MESSAGE_TYPE:
                 fromExport = entryMap.getMessageEntry(typeName);
                 if (!fromExport) {
-                    throw new Error('Could not getFieldType for message: ' + typeName);
+                    throw new Error('Could not getFieldType for message: ' + typeName + ' (in ' + currentFileName + ')');
                 }
                 withinNamespace = Utility.withinNamespaceFromExportEntry(typeName, fromExport);
                 if (fromExport.fileName === currentFileName) {
@@ -54,7 +54,7 @@ export namespace FieldTypes {
             case ENUM_TYPE:
                 fromExport = entryMap.getEnumEntry(typeName);
                 if (!fromExport) {
-                    throw new Error('Could not getFieldType for enum: ' + typeName);
+                    throw new Error('Could not getFieldType for enum: ' + typeName + ' (in ' + currentFileName + ')');
                 }
                 withinNamespace = Utility.withinNamespaceFromExportEntry(typeName, fromExport);
                 if (fromExport.fileName === currentFileName) {

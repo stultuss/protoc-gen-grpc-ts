@@ -7,6 +7,9 @@
 - 2026-08-07: 测试基线已落地：82 个测试全部通过，golden 输出与测试结果已保存。
 - 2026-08-07: 用户同意开始 P0-A（supported_features + 合成 oneof 过滤），前置条件：合并 Dependabot 分支；后续修改在独立分支 codex/optimizations 上进行。
 - 2026-08-07: P0-A 已完成：声明 FEATURE_PROTO3_OPTIONAL + 过滤合成 oneof；87 个测试全绿；真实 protoc 端到端实证通过。
+- 2026-08-07: 用户偏好：不需要推送，之后不再提醒推送事项。
+- 2026-08-07: 开始 P2：参数逗号解析 + 错误写入 CodeGeneratorResponse.error 并带上下文。
+- 2026-08-07: P2 已完成：参数按逗号解析（grpc_js,keep_case 实证通过）、错误经 response.error 上报（不再 process.exit）、错误信息含文件名/消息名/字段名；88 个测试全绿。
 
 ## 关键参数
 - 项目: protoc-gen-grpc v3.0.0（protoc 插件，为 gRPC TypeScript 生成 *_pb.d.ts / *_grpc_pb.d.ts，基于 jspb / google-protobuf）
@@ -32,8 +35,8 @@
 - 2026-08-07: proto3 optional 硬阻断已修复（P0-A），端到端实证 protoc exit=0，输出含 has/clear 且无合成 oneof Case 枚举
 - 2026-08-07 测试基线发现的真实行为（测试已固化）:
   - 无 package 的 proto 文件，enum 的 EntryMap key 带前导点（如 '.Bar'），裸名查找失败 → 无包名 + enum 的项目会生成报错
-  - 插件参数是数组 indexOf 精确匹配，逗号分隔的多参数（如 grpc_js,keep_case）不生效，回落到 legacy grpc
-  - 无法解析的 stdin 不会报错，返回空响应且退出码 0（健壮性缺口）
+  - [已修复 P2] 插件参数按逗号解析，grpc_js 在参数列表中即生效；错误经 response.error 上报
+  - 无法解析的 stdin 不会报错，返回空响应且退出码 0（健壮性缺口，暂保留现状）
   - FileDescriptorMSG 不过滤 google/api/annotations.proto（与 grpc 文件不一致）
 - 无测试、无 CI（.travis.yml 在 v3.0.0 中被删除）
 - 未声明 CodeGeneratorResponse.supported_features（proto3 optional / editions）
@@ -44,7 +47,7 @@
 - 代码风格: JSON.stringify/parse 做默认模板克隆、FieldTypes 使用魔法数字
 
 ## 用户纠正记录
-- 暂无
+- 2026-08-07: 偏好：不推送、不提醒推送（原: 汇报里提到推送 → 改: 全部省略）
 
 ## 待解决问题
 - 待用户确认优先方向后，再决定是否实施（例如先补测试与 CI，还是先修功能缺口）

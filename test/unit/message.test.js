@@ -323,7 +323,10 @@ test('missing message entry throws with the full type name', () => {
         pkg: 'com.e',
         messages: [message('Bad', {fields: [field('m', 1, T.TYPE_MESSAGE, {typeName: '.missing.Type'})]})],
     });
-    assert.throws(() => printTopLevel(fd), /No message export for: missing\.Type/);
+    assert.throws(
+        () => printTopLevel(fd),
+        /No message export for: missing\.Type \(field 'm' of message 'Bad' in 'err\.proto'\)/,
+    );
 });
 
 test('missing enum entry throws with the full type name', () => {
@@ -332,7 +335,10 @@ test('missing enum entry throws with the full type name', () => {
         pkg: 'com.e',
         messages: [message('Bad', {fields: [field('e', 1, T.TYPE_ENUM, {typeName: '.missing.Enum'})]})],
     });
-    assert.throws(() => printTopLevel(fd), /No enum export for: missing\.Enum/);
+    assert.throws(
+        () => printTopLevel(fd),
+        /No enum export for: missing\.Enum \(field 'e' of message 'Bad' in 'err\.proto'\)/,
+    );
 });
 
 test('field names are lowercased before camel-casing', () => {

@@ -129,7 +129,10 @@ export namespace Message {
                 case MESSAGE_TYPE:
                     const fieldMessageType = entryMap.getMessageEntry(fullTypeName);
                     if (fieldMessageType === undefined) {
-                        throw new Error('No message export for: ' + fullTypeName);
+                        throw new Error(
+                            `No message export for: ${fullTypeName} ` +
+                            `(field '${field.getName()}' of message '${descriptor.getName()}' in '${fileName}')`
+                        );
                     }
 
                     if (fieldMessageType.messageOptions !== undefined && fieldMessageType.messageOptions.getMapEntry()) {
@@ -160,7 +163,10 @@ export namespace Message {
                 case ENUM_TYPE:
                     let fieldEnumType = entryMap.getEnumEntry(fullTypeName);
                     if (fieldEnumType === undefined) {
-                        throw new Error('No enum export for: ' + fullTypeName);
+                        throw new Error(
+                            `No enum export for: ${fullTypeName} ` +
+                            `(field '${field.getName()}' of message '${descriptor.getName()}' in '${fileName}')`
+                        );
                     }
                     withinNamespace = Utility.withinNamespaceFromExportEntry(fullTypeName, fieldEnumType);
                     if (fieldEnumType.fileName === fileName) {

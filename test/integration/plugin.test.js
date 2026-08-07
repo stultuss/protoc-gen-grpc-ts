@@ -56,7 +56,7 @@ test('plugin generates legacy grpc output when the parameter is empty', () => {
     assert.match(grpcFile.getContent(), /import \* as grpc from 'grpc';/);
 });
 
-test('parameter must match exactly; not_grpc_js selects legacy grpc (current behaviour)', () => {
+test('not_grpc_js does not select grpc-js', () => {
     const result = runPlugin(integrationRequest('not_grpc_js'));
     assert.equal(result.status, 0, result.stderr.toString());
     const response = CodeGeneratorResponse.deserializeBinary(result.stdout);
@@ -64,12 +64,12 @@ test('parameter must match exactly; not_grpc_js selects legacy grpc (current beh
     assert.match(grpcFile.getContent(), /import \* as grpc from 'grpc';/);
 });
 
-test('comma-joined parameters are not parsed and fall back to legacy (current behaviour)', () => {
+test('comma-joined grpc_js parameter selects grpc-js', () => {
     const result = runPlugin(integrationRequest('grpc_js,keep_case'));
     assert.equal(result.status, 0, result.stderr.toString());
     const response = CodeGeneratorResponse.deserializeBinary(result.stdout);
     const grpcFile = response.getFileList().find(f => f.getName().endsWith('_grpc_pb.d.ts'));
-    assert.match(grpcFile.getContent(), /import \* as grpc from 'grpc';/);
+    assert.match(grpcFile.getContent(), /import \* as grpc from '@grpc\/grpc-js';/);
 });
 
 test('files without services produce only the message declaration file', () => {
@@ -87,15 +87,32 @@ test('plugin response declares support for proto3 optional fields', () => {
     assert.equal(response.getSupportedFeatures(), CodeGeneratorResponse.Feature.FEATURE_PROTO3_OPTIONAL);
 });
 
-test('plugin exits non-zero with an error message when generation fails', () => {
+test('plugin reports generation errors in the response with context', () => {
     const request = integrationRequest('grpc_js', ['missing.proto']);
     const result = spawnSync(process.execPath, [PLUGIN], {
         input: Buffer.from(request.serializeBinary()),
         encoding: 'buffer',
     });
-    assert.equal(result.status, 1);
-    assert.match(result.stderr.toString(), /error:/);
-    assert.equal(result.stdout.length, 0);
+    assert.equal(result.status, 0);
+    const response = CodeGeneratorResponse.deserializeBinary(result.stdout);
+    assert.match(response.getError(), /Cannot read properties of undefined/);
+    assert.equal(response.getFileList().length, 0);
+});
+
+test('plugin error messages include file, message and field context', () => {
+    const {CodeGeneratorRequest} = require('google-protobuf/google/protobuf/compiler/plugin_pb');
+    const {kitchenSinkFile} = require('../helpers/fixtures');
+    const request = new CodeGeneratorRequest();
+    request.setFileToGenerateList(['kitchen/product.proto']);
+    request.setProtoFileList([kitchenSinkFile()]); // dependency other/types.proto omitted
+    const result = spawnSync(process.execPath, [PLUGIN], {
+        input: Buffer.from(request.serializeBinary()),
+        encoding: 'buffer',
+    });
+    assert.equal(result.status, 0);
+    const response = CodeGeneratorResponse.deserializeBinary(result.stdout);
+    assert.match(response.getError(), /No message export for: other\.types\.External/);
+    assert.match(response.getError(), /field 'ext' of message 'Product' in 'kitchen\/product\.proto'/);
 });
 
 test('unparseable stdin currently yields an empty response with exit 0 (current behaviour)', () => {
