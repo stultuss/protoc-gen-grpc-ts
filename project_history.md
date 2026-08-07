@@ -34,6 +34,7 @@
 
 ## 已知问题
 - 2026-08-07 实证: ./bin/protoc --version = libprotoc 3.19.1（捆绑 grpc-tools v1.13.0，2021 年产物）
+- 2026-08-07: P0-B 调查结论——grpc-tools 无新版可升（1.13.0 为最新）；下载源 2026-08-07 实测 HTTP 200 可用（2025-06 曾 DNS 故障）；完整工具链依赖 protoc + grpc_node_plugin 两个二进制。决策：保留捆绑架构，README 补充 npm_config_grpc_tools_binary_host_mirror 镜像配置与已知限制；等上游 grpc-node 把二进制发到 npm（issue #2967）再跟进。
 - 2026-08-07: proto3 optional 硬阻断已修复（P0-A），端到端实证 protoc exit=0，输出含 has/clear 且无合成 oneof Case 枚举
 - 2026-08-07 测试基线发现的真实行为（测试已固化）:
   - [已修复] 无 package 的 proto 文件类型查找（joinScope 统一拼接，无前导点）

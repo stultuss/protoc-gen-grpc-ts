@@ -11,6 +11,21 @@ protoc-gen-grpc
 npm install protoc-gen-grpc -g
 ```
 
+## Binary downloads
+
+During `npm install`, the package downloads the `protoc` and `grpc_node_plugin`
+binaries from `node-precompiled-binaries.grpc.io` (grpc-tools v1.13.0, bundling
+protoc 3.19.1). If that host is unreachable in your environment, point
+node-pre-gyp at a mirror:
+
+```bash
+export npm_config_grpc_tools_binary_host_mirror=https://your-mirror.example.com/
+npm install protoc-gen-grpc -g
+```
+
+> Known limitation: grpc-tools has not published a newer release, so the
+> bundled protoc stays at 3.19.1 and does not support proto editions.
+
 ## How to use
 
 **Example**
