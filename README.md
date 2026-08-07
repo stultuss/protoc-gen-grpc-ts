@@ -2,8 +2,7 @@ protoc-gen-grpc
 =========================
 [![NPM Version][npm-image]][npm-url]
 [![NPM Downloads][downloads-image]][downloads-url]
-[![Build][travis-image]][travis-url]
-[![Test Coverage][coveralls-image]][coveralls-url]
+[![CI](https://github.com/stultuss/protoc-gen-grpc-ts/actions/workflows/ci.yml/badge.svg)](https://github.com/stultuss/protoc-gen-grpc-ts/actions/workflows/ci.yml)
 
 > Protocol compiler plugin for generating grpc interfaces in TypeScript.
 
@@ -348,11 +347,3 @@ export namespace Shop {
 [npm-url]: https://npmjs.org/package/protoc-gen-grpc
 [downloads-image]: https://img.shields.io/npm/dm/protoc-gen-grpc.svg
 [downloads-url]: https://npmjs.org/package/protoc-gen-grpc
-[travis-image]: https://app.travis-ci.com/stultuss/protoc-gen-grpc-ts.svg?branch=master
-[travis-url]: https://app.travis-ci.com/stultuss/protoc-gen-grpc-ts
-[travis-linux-image]: https://img.shields.io/travis/stultuss/protoc-gen-grpc-ts/master.svg?label=linux
-[travis-linux-url]: https://app.travis-ci.org/stultuss/protoc-gen-grpc-ts
-[travis-windows-image]: https://img.shields.io/travis/stultuss/protoc-gen-grpc-ts/master.svg?label=windows
-[travis-windows-url]: https://app.travis-ci.org/stultuss/protoc-gen-grpc-ts
-[coveralls-image]: https://img.shields.io/coveralls/stultuss/protoc-gen-grpc-ts/master.svg
-[coveralls-url]: https://coveralls.io/r/stultuss/protoc-gen-grpc-ts?branch=master
