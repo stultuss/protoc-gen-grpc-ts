@@ -52,6 +52,7 @@
 ## 用户纠正记录
 - 2026-08-07: 偏好：不推送、不提醒推送（原: 汇报里提到推送 → 改: 全部省略）
 - 2026-08-07: 决策：删除 yarn.lock（主包与 examples），保留 npm package-lock.json；.gitignore 增加 yarn.lock 防止误提交（原: 双 lockfile 并存 → 改: 只保留 npm lockfile）
+- 2026-08-07: 决策：legacy grpc 代码保留现状（不删除），改为 README 顶部醒目 WARNING 提醒用户必须传 grpc_js 参数（原: 待决策 → 改: 保留 + 文档提醒）
 
 ## 待解决问题
 - 待用户确认优先方向后，再决定是否实施（例如先补测试与 CI，还是先修功能缺口）

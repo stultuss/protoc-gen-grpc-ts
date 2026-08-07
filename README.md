@@ -5,6 +5,12 @@ protoc-gen-grpc
 
 > Protocol compiler plugin for generating grpc interfaces in TypeScript.
 
+> **WARNING:** the legacy `grpc` npm package is no longer maintained and cannot
+> be installed on current Node.js. Declarations generated without the
+> `grpc_js` parameter import from that abandoned package and will not compile.
+> Always pass `grpc_js` to `--ts_out` (e.g. `--ts_out=grpc_js:./out`) unless
+> you are locked to the old runtime.
+
 ## Install
 
 ```bash
