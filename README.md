@@ -3,7 +3,8 @@ protoc-gen-grpc
 [![NPM Version][npm-image]][npm-url]
 [![NPM Downloads][downloads-image]][downloads-url]
 
-> Protocol compiler plugin for generating grpc interfaces in TypeScript.
+> An all-in-one `protoc` toolchain for gRPC in TypeScript. It bundles `protoc`
+> and the gRPC plugin, so a single global install works in every project.
 
 > **WARNING:** the legacy `grpc` npm package is no longer maintained and cannot
 > be installed on current Node.js. Declarations generated without the
@@ -11,10 +12,33 @@ protoc-gen-grpc
 > Always pass `grpc_js` to `--ts_out` (e.g. `--ts_out=grpc_js:./out`) unless
 > you are locked to the old runtime.
 
+## Why protoc-gen-grpc?
+
+- **Zero setup**: install once globally and run `protoc-gen-grpc` /
+  `protoc-gen-grpc-ts` from any project. No need to install `protoc` or
+  `grpc-tools` separately.
+- **All-in-one**: generates both JavaScript (`*_pb.js`, `*_grpc_pb.js`) and
+  TypeScript declarations (`*_pb.d.ts`, `*_grpc_pb.d.ts`) from your `.proto`
+  files.
+- **Small footprint**: the published npm package is only ~14 kB; the
+  `protoc`/`grpc_node_plugin` binaries are fetched once at install time.
+- **Modern**: `@grpc/grpc-js` output, proto3 `optional` fields, `oneof` groups,
+  and comma-joined `--ts_out` parameters.
+- **Tested**: 90+ unit tests with golden output baselines, run automatically
+  on GitHub Actions for Node.js 20 and 22.
+
 ## Install
 
 ```bash
 npm install protoc-gen-grpc -g
+```
+
+It also works as a project-local dev dependency, e.g. for reproducible CI
+builds:
+
+```bash
+npm install protoc-gen-grpc --save-dev
+# then use the binaries under ./node_modules/.bin
 ```
 
 ## Binary downloads
