@@ -14,7 +14,7 @@ protoc-gen-grpc \
 ${PROTO_DEST}/*.proto
 
 protoc-gen-grpc-ts \
---ts_out=grpc_js:${OUTPUT_DEST} \
+--ts_out=grpc_js,keep_case:${OUTPUT_DEST} \
 --proto_path ${PROTO_DEST} \
 ${PROTO_DEST}/*.proto
 

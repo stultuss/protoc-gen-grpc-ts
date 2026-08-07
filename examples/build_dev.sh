@@ -14,7 +14,7 @@ node ../bin/protoc-gen-grpc.js \
 ${PROTO_DEST}/*.proto
 
 node ../bin/protoc-gen-grpc-ts.js \
---ts_out=grpc_js:${OUTPUT_DEST} \
+--ts_out=grpc_js,keep_case:${OUTPUT_DEST} \
 --proto_path ${PROTO_DEST} \
 ${PROTO_DEST}/*.proto
 

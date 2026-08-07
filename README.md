@@ -61,7 +61,7 @@ protoc-gen-grpc \
 
 # generate d.ts codes with @grpc/grpc-js
 protoc-gen-grpc-ts \
---ts_out=grpc_js:./examples/src/proto \
+--ts_out=grpc_js,keep_case:./examples/src/proto \
 --proto_path ./examples/proto \
 ./examples/proto/product.proto
 ```
@@ -137,6 +137,7 @@ message Product {
     int64 id = 1;
     string name = 2;
     string category = 3;
+    optional string remark = 4;
 }
 
 message GetProductRequest {
@@ -157,6 +158,13 @@ service ProductService {
 message Shop {
     string name = 1;
     map<int64, Product> list = 2;
+}
+
+message Order {
+    oneof payment {
+        int64 cash = 1;
+        string card = 2;
+    }
 }
 ```
 
@@ -272,6 +280,11 @@ export class Product extends jspb.Message {
   getCategory(): string;
   setCategory(value: string): void;
 
+  hasRemark(): boolean;
+  clearRemark(): void;
+  getRemark(): string;
+  setRemark(value: string): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): Product.AsObject;
   static toObject(includeInstance: boolean, msg: Product): Product.AsObject;
@@ -287,6 +300,7 @@ export namespace Product {
     id: number,
     name: string,
     category: string,
+    remark: string,
   }
 }
 
@@ -350,6 +364,41 @@ export namespace Shop {
   export type AsObject = {
     name: string,
     listMap: Array<[number, Product.AsObject]>,
+  }
+}
+
+export class Order extends jspb.Message {
+  hasCash(): boolean;
+  clearCash(): void;
+  getCash(): number;
+  setCash(value: number): void;
+
+  hasCard(): boolean;
+  clearCard(): void;
+  getCard(): string;
+  setCard(value: string): void;
+
+  getPaymentCase(): Order.PaymentCase;
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): Order.AsObject;
+  static toObject(includeInstance: boolean, msg: Order): Order.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: Order, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): Order;
+  static deserializeBinaryFromReader(message: Order, reader: jspb.BinaryReader): Order;
+}
+
+export namespace Order {
+  export type AsObject = {
+    cash: number,
+    card: string,
+  }
+
+  export enum PaymentCase {
+    PAYMENT_NOT_SET = 0,
+    CASH = 1,
+    CARD = 2,
   }
 }
 ```
