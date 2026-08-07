@@ -10,6 +10,7 @@
 - 2026-08-07: 用户偏好：不需要推送，之后不再提醒推送事项。
 - 2026-08-07: 开始 P2：参数逗号解析 + 错误写入 CodeGeneratorResponse.error 并带上下文。
 - 2026-08-07: P2 已完成：参数按逗号解析（grpc_js,keep_case 实证通过）、错误经 response.error 上报（不再 process.exit）、错误信息含文件名/消息名/字段名；88 个测试全绿。
+- 2026-08-07: 用户指令：若存在客户端使用变化，更新 README（P0-A/P2 已造成使用变化，README 已同步更新）。
 
 ## 关键参数
 - 项目: protoc-gen-grpc v3.0.0（protoc 插件，为 gRPC TypeScript 生成 *_pb.d.ts / *_grpc_pb.d.ts，基于 jspb / google-protobuf）

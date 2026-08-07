@@ -2,40 +2,24 @@ protoc-gen-grpc
 =========================
 [![NPM Version][npm-image]][npm-url]
 [![NPM Downloads][downloads-image]][downloads-url]
-[![Build][travis-image]][travis-url]
-[![Test Coverage][coveralls-image]][coveralls-url]
 
 > Protocol compiler plugin for generating grpc interfaces in TypeScript.
-
-## WARN 
-
-> About Apple M1 arm64
-
-```bash
-npm_config_target_arch=x64 npm i grpc-tools
-```
-
-> About node-pre-gyp ERR! stack Error: There was a fatal problem while downloading/extracting the tarball
-
-issue：https://github.com/mapbox/node-pre-gyp/issues/462
-
-```bash
-npm install request -g
-```
 
 ## Install
 
 ```bash
-npm config set unsafe-perm true
 npm install protoc-gen-grpc -g
 ```
-> If you don't want to set up a public configuration for NPM, you can try to add after the installation command `-unsafe-perm` parameters.
 
 ## How to use
 
 **Example**
 
 Please try ./example/build.sh
+
+The plugin generates TypeScript declarations for `@grpc/grpc-js` and supports
+proto3 `optional` fields. Pass `grpc_js` as the `--ts_out` parameter; additional
+comma-separated parameters are allowed, e.g. `--ts_out=grpc_js,keep_case:...`.
 
 **Support - grpc-js**
 
@@ -47,13 +31,13 @@ protoc-gen-grpc \
 --js_out=import_style=commonjs,binary:${OUTPUT_DEST} \
 --grpc_out=grpc_js:./examples/src/proto \
 --proto_path ./examples/proto \
-./examples/proto/student.proto
+./examples/proto/product.proto
 
 # generate d.ts codes with @grpc/grpc-js
 protoc-gen-grpc-ts \
 --ts_out=grpc_js:./examples/src/proto \
 --proto_path ./examples/proto \
-./examples/proto/student.proto
+./examples/proto/product.proto
 ```
 server.ts
 
@@ -66,7 +50,11 @@ const server = new grpc.Server();
 server.addService(ProductServiceService, ServerImpl);
 ```
 
-**Support - grpc**
+**Support - grpc (deprecated)**
+
+> The legacy `grpc` npm package is no longer maintained and cannot be installed
+> on current Node.js versions. Use `@grpc/grpc-js` instead; the generated
+> `--ts_out` without the `grpc_js` parameter targets the legacy package.
 
 bash
 
@@ -76,13 +64,13 @@ protoc-gen-grpc \
 --js_out=import_style=commonjs,binary:./examples/src/proto \
 --grpc_out=./examples/src/proto \
 --proto_path ./examples/proto \
-./examples/proto/student.proto
+./examples/proto/product.proto
 
 # generate d.ts codes with grpc
 protoc-gen-grpc-ts \
 --ts_out=./examples/src/proto \
 --proto_path ./examples/proto \
-./examples/proto/student.proto
+./examples/proto/product.proto
 ```
 
 server.ts
@@ -348,11 +336,3 @@ export namespace Shop {
 [npm-url]: https://npmjs.org/package/protoc-gen-grpc
 [downloads-image]: https://img.shields.io/npm/dm/protoc-gen-grpc.svg
 [downloads-url]: https://npmjs.org/package/protoc-gen-grpc
-[travis-image]: https://app.travis-ci.com/stultuss/protoc-gen-grpc-ts.svg?branch=master
-[travis-url]: https://app.travis-ci.com/stultuss/protoc-gen-grpc-ts
-[travis-linux-image]: https://img.shields.io/travis/stultuss/protoc-gen-grpc-ts/master.svg?label=linux
-[travis-linux-url]: https://app.travis-ci.org/stultuss/protoc-gen-grpc-ts
-[travis-windows-image]: https://img.shields.io/travis/stultuss/protoc-gen-grpc-ts/master.svg?label=windows
-[travis-windows-url]: https://app.travis-ci.org/stultuss/protoc-gen-grpc-ts
-[coveralls-image]: https://img.shields.io/coveralls/stultuss/protoc-gen-grpc-ts/master.svg
-[coveralls-url]: https://coveralls.io/r/stultuss/protoc-gen-grpc-ts?branch=master
