@@ -6,3 +6,4 @@ bin/grpc_node_plugin
 bin/protoc
 yarn.lock
 build/
+project_history.md
