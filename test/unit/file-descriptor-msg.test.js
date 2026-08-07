@@ -10,6 +10,7 @@ const {
     kitchenSinkFile,
     serviceFile,
     externalTypesFile,
+    noPackageFile,
     proto2File,
     proto3OptionalFile,
 } = require('../helpers/fixtures');
@@ -45,6 +46,12 @@ test('FileDescriptorMSG proto2 output matches the golden baseline', () => {
     assert.equal(FileDescriptorMSG.print(proto2, all), readGolden('legacy-old_pb.d.ts'));
 });
 
+test('FileDescriptorMSG no-package output matches the golden baseline', () => {
+    const noPkg = noPackageFile();
+    const all = entryMapFor(noPkg);
+    assert.equal(FileDescriptorMSG.print(noPkg, all), readGolden('nopkg-plain_pb.d.ts'));
+});
+
 test('FileDescriptorMSG proto3-optional output matches the golden baseline', () => {
     const optional = proto3OptionalFile();
     const all = entryMapFor(kitchenSinkFile(), serviceFile(), externalTypesFile(), proto2File(), optional);
@@ -65,11 +72,11 @@ test('relative dependencies import with path to root', () => {
     assert.match(output, /import \* as other_types_pb from '\.\.\/other\/types_pb';/);
 });
 
-test('annotations dependency is NOT filtered in message files (current behaviour)', () => {
+test('annotations dependency is filtered in message files too', () => {
     const svc = serviceFile();
     const all = entryMapFor(svc);
     const output = FileDescriptorMSG.print(svc, all);
-    assert.match(output, /import \* as google_api_annotations_pb from '\.\.\/google\/api\/annotations_pb';/);
+    assert.equal(output.includes('annotations'), false);
 });
 
 test('empty file renders only header and jspb import', () => {

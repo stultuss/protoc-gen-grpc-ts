@@ -4,6 +4,7 @@ import {EntryMap} from '../EntryMap';
 import {Utility} from '../Utility';
 import {Printer} from '../Printer';
 import {DependencyTypesMap} from '../DependencyTypesMap';
+import {DependencyFilter} from '../DependencyFilter';
 
 import {Message} from './partial/Message';
 import {Enum} from './partial/Enum';
@@ -26,6 +27,9 @@ export namespace FileDescriptorMSG {
         printer.printLn(`import * as jspb from 'google-protobuf';`);
 
         fileDescriptor.getDependencyList().forEach((dependency: string) => {
+            if (DependencyFilter.indexOf(dependency) !== -1) {
+                return; // filtered
+            }
             const pseudoNamespace = Utility.filePathToPseudoNamespace(dependency);
             if (dependency in DependencyTypesMap) {
                 printer.printLn(`import * as ${pseudoNamespace} from '${DependencyTypesMap[dependency]}';`);

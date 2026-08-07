@@ -1,0 +1,79 @@
+// package: 
+// file: nopkg/plain.proto
+
+import * as jspb from 'google-protobuf';
+
+export class Outer extends jspb.Message {
+  getStatus(): Outer.Status;
+  setStatus(value: Outer.Status): void;
+
+  hasInner(): boolean;
+  clearInner(): void;
+  getInner(): Outer.Inner | undefined;
+  setInner(value?: Outer.Inner): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): Outer.AsObject;
+  static toObject(includeInstance: boolean, msg: Outer): Outer.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: Outer, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): Outer;
+  static deserializeBinaryFromReader(message: Outer, reader: jspb.BinaryReader): Outer;
+}
+
+export namespace Outer {
+  export type AsObject = {
+    status: Outer.Status,
+    inner?: Outer.Inner.AsObject,
+  }
+
+  export class Inner extends jspb.Message {
+    getV(): string;
+    setV(value: string): void;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): Inner.AsObject;
+    static toObject(includeInstance: boolean, msg: Inner): Inner.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: Inner, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): Inner;
+    static deserializeBinaryFromReader(message: Inner, reader: jspb.BinaryReader): Inner;
+  }
+
+  export namespace Inner {
+    export type AsObject = {
+      v: string,
+    }
+  }
+
+  export enum Status {
+    OK = 0,
+  }
+}
+
+export class Top extends jspb.Message {
+  getKind(): Color;
+  setKind(value: Color): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): Top.AsObject;
+  static toObject(includeInstance: boolean, msg: Top): Top.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: Top, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): Top;
+  static deserializeBinaryFromReader(message: Top, reader: jspb.BinaryReader): Top;
+}
+
+export namespace Top {
+  export type AsObject = {
+    kind: Color,
+  }
+}
+
+export enum Color {
+  RED = 0,
+}
+

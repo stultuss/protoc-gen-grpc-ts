@@ -125,6 +125,28 @@ function externalTypesFile() {
     });
 }
 
+/** File without a package exercising top-level and nested type resolution. */
+function noPackageFile() {
+    return fileDescriptor({
+        name: 'nopkg/plain.proto',
+        syntax: 'proto3',
+        messages: [
+            message('Outer', {
+                fields: [
+                    field('status', 1, T.TYPE_ENUM, {typeName: '.Outer.Status'}),
+                    field('inner', 2, T.TYPE_MESSAGE, {typeName: '.Outer.Inner'}),
+                ],
+                nestedMessages: [message('Inner', {fields: [field('v', 1, T.TYPE_STRING)]})],
+                enums: [enumType('Status', [['OK', 0]])],
+            }),
+            message('Top', {
+                fields: [field('kind', 1, T.TYPE_ENUM, {typeName: '.Color'})],
+            }),
+        ],
+        enums: [enumType('Color', [['RED', 0]])],
+    });
+}
+
 /** Minimal proto2 file to exercise presence semantics. */
 function proto2File() {
     return fileDescriptor({
@@ -183,6 +205,7 @@ module.exports = {
     kitchenSinkFile,
     serviceFile,
     externalTypesFile,
+    noPackageFile,
     proto2File,
     proto3OptionalFile,
     integrationRequest,

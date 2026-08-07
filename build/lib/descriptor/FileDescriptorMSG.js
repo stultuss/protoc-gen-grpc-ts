@@ -4,6 +4,7 @@ exports.FileDescriptorMSG = void 0;
 const Utility_1 = require("../Utility");
 const Printer_1 = require("../Printer");
 const DependencyTypesMap_1 = require("../DependencyTypesMap");
+const DependencyFilter_1 = require("../DependencyFilter");
 const Message_1 = require("./partial/Message");
 const Enum_1 = require("./partial/Enum");
 const Extensions_1 = require("./partial/Extensions");
@@ -19,6 +20,9 @@ var FileDescriptorMSG;
         const upToRoot = Utility_1.Utility.getPathToRoot(fileName);
         printer.printLn(`import * as jspb from 'google-protobuf';`);
         fileDescriptor.getDependencyList().forEach((dependency) => {
+            if (DependencyFilter_1.DependencyFilter.indexOf(dependency) !== -1) {
+                return; // filtered
+            }
             const pseudoNamespace = Utility_1.Utility.filePathToPseudoNamespace(dependency);
             if (dependency in DependencyTypesMap_1.DependencyTypesMap) {
                 printer.printLn(`import * as ${pseudoNamespace} from '${DependencyTypesMap_1.DependencyTypesMap[dependency]}';`);

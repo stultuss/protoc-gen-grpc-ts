@@ -44,10 +44,18 @@ test('parseFileDescriptor works without a package', () => {
     const entryMap = new EntryMap();
     entryMap.parseFileDescriptor(fd);
     assert.equal(entryMap.getMessageEntry('Foo').pkg, '');
-    // Current behaviour: enum keys keep a leading dot when there is no package,
-    // so lookups with the bare name fail. (Known limitation.)
-    assert.equal(entryMap.getEnumEntry('Bar'), undefined);
-    assert.equal(entryMap.getEnumEntry('.Bar').pkg, '');
+    assert.equal(entryMap.getEnumEntry('Bar').pkg, '');
+});
+
+test('no-package nested messages and enums resolve without leading dots', () => {
+    const {noPackageFile} = require('../helpers/fixtures');
+    const entryMap = new EntryMap();
+    entryMap.parseFileDescriptor(noPackageFile());
+    assert.equal(entryMap.getMessageEntry('Outer').pkg, '');
+    assert.equal(entryMap.getMessageEntry('Outer.Inner').pkg, '');
+    assert.equal(entryMap.getEnumEntry('Outer.Status').pkg, '');
+    assert.equal(entryMap.getEnumEntry('Color').pkg, '');
+    assert.equal(entryMap.getMessageEntry('.Outer'), undefined);
 });
 
 test('parseFileDescriptor records map entry options for map-entry messages', () => {

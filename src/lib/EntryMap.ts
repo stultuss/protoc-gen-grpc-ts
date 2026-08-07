@@ -52,13 +52,13 @@ export class EntryMap {
      * @param {FileDescriptorProto} fileDescriptor
      */
     public parseFileDescriptor(fileDescriptor: FileDescriptorProto) {
-        const scope = fileDescriptor.getPackage();
+        const scope = fileDescriptor.getPackage() || '';
         fileDescriptor.getMessageTypeList().forEach(messageType => {
             this.parseMessageNested(scope, fileDescriptor, messageType);
         });
 
         fileDescriptor.getEnumTypeList().forEach(enumType => {
-            this.enumEntryMap[scope + '.' + enumType.getName()] = {
+            this.enumEntryMap[this.joinScope(scope, enumType.getName())] = {
                 pkg: fileDescriptor.getPackage(),
                 fileName: fileDescriptor.getName(),
                 enumOptions: enumType.getOptions(),
@@ -84,20 +84,27 @@ export class EntryMap {
             } : undefined,
         };
 
-        const entryName = `${scope ? scope + '.' : ''}${message.getName()}`;
+        const entryName = this.joinScope(scope, message.getName());
         this.messageEntryMap[entryName] = messageEntry;
 
         message.getNestedTypeList().forEach(nested => {
-            this.parseMessageNested(scope + '.' + message.getName(), fileDescriptor, nested);
+            this.parseMessageNested(this.joinScope(scope, message.getName()), fileDescriptor, nested);
         });
 
         message.getEnumTypeList().forEach(enumType => {
-            const identifier = scope + '.' + message.getName() + '.' + enumType.getName();
+            const identifier = this.joinScope(this.joinScope(scope, message.getName()), enumType.getName());
             this.enumEntryMap[identifier] = {
                 pkg: fileDescriptor.getPackage(),
                 fileName: fileDescriptor.getName(),
                 enumOptions: enumType.getOptions(),
             };
         });
+    }
+
+    /**
+     * 拼接作用域与名称，空作用域时省略前导点。
+     */
+    private joinScope(scope: string, name: string): string {
+        return scope ? scope + '.' + name : name;
     }
 }
