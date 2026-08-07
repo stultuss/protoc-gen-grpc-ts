@@ -115,13 +115,14 @@ test('plugin error messages include file, message and field context', () => {
     assert.match(response.getError(), /field 'ext' of message 'Product' in 'kitchen\/product\.proto'/);
 });
 
-test('unparseable stdin currently yields an empty response with exit 0 (current behaviour)', () => {
+test('unparseable stdin is reported through the response error', () => {
     const result = spawnSync(process.execPath, [PLUGIN], {
         input: Buffer.from('this is not a CodeGeneratorRequest'),
         encoding: 'buffer',
     });
     assert.equal(result.status, 0);
     const response = CodeGeneratorResponse.deserializeBinary(result.stdout);
+    assert.match(response.getError(), /Invalid CodeGeneratorRequest/);
     assert.equal(response.getFileList().length, 0);
 });
 

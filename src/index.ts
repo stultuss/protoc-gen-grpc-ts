@@ -21,6 +21,9 @@ Utility.withAllStdIn((input: Buffer) => {
         binary.set(input);
 
         const request = CodeGeneratorRequest.deserializeBinary(binary);
+        if (request.getFileToGenerateList().length === 0 && request.getProtoFileList().length === 0) {
+            throw new Error('Invalid CodeGeneratorRequest: no proto files and nothing to generate');
+        }
         // protoc joins multiple --ts_out parameters with commas.
         const parameters = request.getParameter().split(',').map(p => p.trim());
         const isGrpcJs = parameters.indexOf('grpc_js') !== -1
