@@ -511,6 +511,10 @@ for every push and pull request, on Node.js 20 and 22. The workflow installs
 dependencies with `npm ci --ignore-scripts`, because the unit tests run the
 compiled plugin directly and do not need the grpc-tools binaries.
 
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md) for version history.
+
 [npm-image]: https://img.shields.io/npm/v/protoc-gen-grpc.svg
 [npm-url]: https://npmjs.org/package/protoc-gen-grpc
 [downloads-image]: https://img.shields.io/npm/dm/protoc-gen-grpc.svg
