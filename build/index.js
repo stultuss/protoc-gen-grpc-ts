@@ -20,6 +20,9 @@ Utility_1.Utility.withAllStdIn((input) => {
         const request = plugin_pb_1.CodeGeneratorRequest.deserializeBinary(binary);
         const response = new plugin_pb_1.CodeGeneratorResponse();
         const isGrpcJs = ['generate_package_definition', 'grpc_js'].indexOf(request.getParameter()) !== -1;
+        // Declare support for proto3 optional fields so protoc will invoke the
+        // plugin for protos that use them.
+        response.setSupportedFeatures(plugin_pb_1.CodeGeneratorResponse.Feature.FEATURE_PROTO3_OPTIONAL);
         // Parse request proto file
         const fileNameToDescriptor = {};
         const entryMap = new EntryMap_1.EntryMap();

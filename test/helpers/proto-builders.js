@@ -20,7 +20,7 @@ const L = FieldDescriptorProto.Label;
  * @param {string} name
  * @param {number} number
  * @param {number} type one of FieldDescriptorProto.Type.*
- * @param {{label?: number, typeName?: string, oneofIndex?: number}} [opts]
+ * @param {{label?: number, typeName?: string, oneofIndex?: number, proto3Optional?: boolean}} [opts]
  */
 function field(name, number, type, opts = {}) {
     const f = new FieldDescriptorProto();
@@ -30,6 +30,7 @@ function field(name, number, type, opts = {}) {
     if (opts.label !== undefined) f.setLabel(opts.label);
     if (opts.typeName !== undefined) f.setTypeName(opts.typeName);
     if (opts.oneofIndex !== undefined) f.setOneofIndex(opts.oneofIndex);
+    if (opts.proto3Optional !== undefined) f.setProto3Optional(opts.proto3Optional);
     return f;
 }
 

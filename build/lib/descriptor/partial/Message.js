@@ -41,6 +41,15 @@ var Message;
         return (Utility_1.Utility.isProto2(fileDescriptor));
     }
     Message.hasFieldPresence = hasFieldPresence;
+    /**
+     * protoc synthesises a oneof for each proto3 `optional` field. It holds
+     * exactly one field, which is marked proto3 optional. Those synthetic
+     * oneofs must not generate a `getXxxCase()` accessor or a Case enum.
+     */
+    function isSyntheticOneOf(oneOfDecl, fields) {
+        return fields.length === 1 && fields[0].getProto3Optional();
+    }
+    Message.isSyntheticOneOf = isSyntheticOneOf;
     function print(fileName, entryMap, descriptor, indentLevel, fileDescriptor) {
         let messageData = JSON.parse(Message.defaultMessageType);
         messageData.messageName = descriptor.getName();
@@ -185,7 +194,10 @@ var Message;
             printer.printEmptyLn();
         });
         printerToObjectType.printLn(`}`);
-        descriptor.getOneofDeclList().forEach(oneOfDecl => {
+        descriptor.getOneofDeclList().forEach((oneOfDecl, index) => {
+            if (Message.isSyntheticOneOf(oneOfDecl, oneOfGroups[index] || [])) {
+                return;
+            }
             printer.printIndentedLn(`get${Utility_1.Utility.oneOfName(oneOfDecl.getName())}Case(): ${messageData.messageName}.${Utility_1.Utility.oneOfName(oneOfDecl.getName())}Case;`);
         });
         printer.printIndentedLn(`serializeBinary(): Uint8Array;`);
@@ -211,6 +223,9 @@ var Message;
             printer.print(`${Enum_1.Enum.print(enumType, indentLevel + 1)}`);
         });
         descriptor.getOneofDeclList().forEach((oneOfDecl, index) => {
+            if (Message.isSyntheticOneOf(oneOfDecl, oneOfGroups[index] || [])) {
+                return;
+            }
             printer.print(`${OneOf_1.OneOf.print(oneOfDecl, oneOfGroups[index] || [], indentLevel + 1)}`);
         });
         descriptor.getExtensionList().forEach(extension => {

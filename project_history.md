@@ -5,11 +5,15 @@
 - 2026-08-07: 用户要求"从 P1～P5 设置优先级"——将优化方向整理为五级优先级排序。
 - 2026-08-07: 用户确认方案：先做单元测试（全覆盖），保存输出与测试结果；之后改动代码时保证各接口输出基本不变（golden 回归基线）。
 - 2026-08-07: 测试基线已落地：82 个测试全部通过，golden 输出与测试结果已保存。
+- 2026-08-07: 用户同意开始 P0-A（supported_features + 合成 oneof 过滤），前置条件：合并 Dependabot 分支；后续修改在独立分支 codex/optimizations 上进行。
+- 2026-08-07: P0-A 已完成：声明 FEATURE_PROTO3_OPTIONAL + 过滤合成 oneof；87 个测试全绿；真实 protoc 端到端实证通过。
 
 ## 关键参数
 - 项目: protoc-gen-grpc v3.0.0（protoc 插件，为 gRPC TypeScript 生成 *_pb.d.ts / *_grpc_pb.d.ts，基于 jspb / google-protobuf）
 - 分支: master，工作区干净；最后提交 2025-03-04 "Update v3.0.0"
 - 定位: ts-protoc-gen 的 fork + node-pre-gyp 捆绑 protoc/grpc 二进制
+- 工作分支: codex/optimizations（2026-08-07 创建，后续所有修改在此分支）
+- 依赖合并: 2026-08-07 已合并 6 个 Dependabot 分支（@grpc/grpc-js 1.12.7、protobufjs 7.6.1、@protobufjs/utf8 1.1.1，主包+examples），octopus merge 4e66fb0
 - 优先级排序（用户已确认分级）:
   - P0(候选): proto3 optional 硬阻断（实证：protoc 拒绝生成，报错 "hasn't been updated to support optional fields in proto3"）
   - P0(候选): 安装链路/供应链风险（node-pre-gyp 从 grpc.io 下载二进制；捆绑 libprotoc 3.19.1，2021 年产物）
@@ -25,7 +29,7 @@
 
 ## 已知问题
 - 2026-08-07 实证: ./bin/protoc --version = libprotoc 3.19.1（捆绑 grpc-tools v1.13.0，2021 年产物）
-- 2026-08-07 实证: 含 proto3 optional 字段的 proto 直接报错退出（code generator protoc-gen-ts hasn't been updated to support optional fields）
+- 2026-08-07: proto3 optional 硬阻断已修复（P0-A），端到端实证 protoc exit=0，输出含 has/clear 且无合成 oneof Case 枚举
 - 2026-08-07 测试基线发现的真实行为（测试已固化）:
   - 无 package 的 proto 文件，enum 的 EntryMap key 带前导点（如 '.Bar'），裸名查找失败 → 无包名 + enum 的项目会生成报错
   - 插件参数是数组 indexOf 精确匹配，逗号分隔的多参数（如 grpc_js,keep_case）不生效，回落到 legacy grpc
@@ -59,3 +63,6 @@
 - 2026-08-07: "有 P0 级的吗？"（回答：两个准 P0——proto3 optional 功能硬阻断、安装/供应链风险）
 - 2026-08-07: "先做一次单元测试吧，并保存输出和测试结果…然后我们再改动代码，确保各接口改动后输出保持基本不变。"
 - 2026-08-07: "确认构建的单元测试是否正确。"（完成覆盖率 + 真实文件对比 + 变异测试三重验证）
+- 2026-08-07: "提交"（提交 2d134df 测试基线）
+- 2026-08-07: "可以。但需要先将依赖bot的git合并过来"（合并 6 个 Dependabot 分支）
+- 2026-08-07: "记得创建一个测试用分支，后续修改用该分支"（创建 codex/optimizations）

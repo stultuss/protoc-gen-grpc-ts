@@ -80,11 +80,11 @@ test('files without services produce only the message declaration file', () => {
     assert.deepEqual(response.getFileList().map(f => f.getName()), ['kitchen/product_pb.d.ts']);
 });
 
-test('plugin response declares no supported features yet (baseline for proto3 optional)', () => {
+test('plugin response declares support for proto3 optional fields', () => {
     const result = runPlugin(integrationRequest('grpc_js'));
     assert.equal(result.status, 0, result.stderr.toString());
     const response = CodeGeneratorResponse.deserializeBinary(result.stdout);
-    assert.equal(response.getSupportedFeatures(), 0);
+    assert.equal(response.getSupportedFeatures(), CodeGeneratorResponse.Feature.FEATURE_PROTO3_OPTIONAL);
 });
 
 test('plugin exits non-zero with an error message when generation fails', () => {

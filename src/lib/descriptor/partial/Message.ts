@@ -71,6 +71,15 @@ export namespace Message {
         return (Utility.isProto2(fileDescriptor));
     }
 
+    /**
+     * protoc synthesises a oneof for each proto3 `optional` field. It holds
+     * exactly one field, which is marked proto3 optional. Those synthetic
+     * oneofs must not generate a `getXxxCase()` accessor or a Case enum.
+     */
+    export function isSyntheticOneOf(oneOfDecl: OneofDescriptorProto, fields: Array<FieldDescriptorProto>): boolean {
+        return fields.length === 1 && fields[0].getProto3Optional();
+    }
+
 
     export function print(fileName: string, entryMap: EntryMap, descriptor: DescriptorProto, indentLevel: number, fileDescriptor: FileDescriptorProto) {
 
@@ -234,7 +243,10 @@ export namespace Message {
 
         printerToObjectType.printLn(`}`);
 
-        descriptor.getOneofDeclList().forEach(oneOfDecl => {
+        descriptor.getOneofDeclList().forEach((oneOfDecl, index) => {
+            if (Message.isSyntheticOneOf(oneOfDecl, oneOfGroups[index] || [])) {
+                return;
+            }
             printer.printIndentedLn(`get${Utility.oneOfName(oneOfDecl.getName())}Case(): ${messageData.messageName}.${Utility.oneOfName(oneOfDecl.getName())}Case;`);
         });
 
@@ -265,6 +277,9 @@ export namespace Message {
             printer.print(`${Enum.print(enumType, indentLevel + 1)}`);
         });
         descriptor.getOneofDeclList().forEach((oneOfDecl, index) => {
+            if (Message.isSyntheticOneOf(oneOfDecl, oneOfGroups[index] || [])) {
+                return;
+            }
             printer.print(`${OneOf.print(oneOfDecl, oneOfGroups[index] || [], indentLevel + 1)}`);
         });
         descriptor.getExtensionList().forEach(extension => {

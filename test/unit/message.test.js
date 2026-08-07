@@ -148,6 +148,25 @@ test('oneof fields render case accessor and enum', () => {
     assert.match(output, /  export enum PaymentCase \{\n    PAYMENT_NOT_SET = 0,\n    CASH = 1,\n    CARD = 2,\n  \}/);
 });
 
+test('proto3 optional fields keep has/clear but skip the synthetic case enum', () => {
+    const fd = fileDescriptor({
+        name: 'opt.proto',
+        pkg: 'com.o',
+        syntax: 'proto3',
+        messages: [message('OptMsg', {
+            oneofs: [oneof('_name')],
+            fields: [
+                field('name', 1, T.TYPE_STRING, {oneofIndex: 0, proto3Optional: true}),
+            ],
+        })],
+    });
+    const output = printTopLevel(fd);
+    assert.match(output, /  hasName\(\): boolean;/);
+    assert.match(output, /  clearName\(\): void;/);
+    assert.equal(output.includes('NameCase'), false);
+    assert.equal(output.includes('getNameCase'), false);
+});
+
 test('map fields render jspb.Map getter and tuple AsObject', () => {
     const fd = fileDescriptor({
         name: 'mp.proto',

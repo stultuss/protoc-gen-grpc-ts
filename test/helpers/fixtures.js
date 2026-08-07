@@ -159,7 +159,7 @@ function proto3OptionalFile() {
             message('OptMsg', {
                 oneofs: [oneof('_name')],
                 fields: [
-                    field('name', 1, T.TYPE_STRING, { oneofIndex: 0 }),
+                    field('name', 1, T.TYPE_STRING, { oneofIndex: 0, proto3Optional: true }),
                 ],
             }),
         ],
