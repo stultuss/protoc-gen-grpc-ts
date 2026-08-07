@@ -26,6 +26,17 @@ function deserialize_com_product_GetProductViaCategoryRequest(buffer_arg) {
   return product_pb.GetProductViaCategoryRequest.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
+function serialize_com_product_Order(arg) {
+  if (!(arg instanceof product_pb.Order)) {
+    throw new Error('Expected argument of type com.product.Order');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_com_product_Order(buffer_arg) {
+  return product_pb.Order.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
 function serialize_com_product_Product(arg) {
   if (!(arg instanceof product_pb.Product)) {
     throw new Error('Expected argument of type com.product.Product');
@@ -82,6 +93,17 @@ var ProductServiceService = exports.ProductServiceService = {
     requestDeserialize: deserialize_com_product_GetProductRequest,
     responseSerialize: serialize_com_product_Product,
     responseDeserialize: deserialize_com_product_Product,
+  },
+  createOrder: {
+    path: '/com.product.ProductService/CreateOrder',
+    requestStream: false,
+    responseStream: false,
+    requestType: product_pb.Order,
+    responseType: product_pb.Order,
+    requestSerialize: serialize_com_product_Order,
+    requestDeserialize: deserialize_com_product_Order,
+    responseSerialize: serialize_com_product_Order,
+    responseDeserialize: deserialize_com_product_Order,
   },
 };
 

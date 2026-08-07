@@ -153,6 +153,7 @@ service ProductService {
     rpc GetProductViaCategory (GetProductViaCategoryRequest) returns (stream Product) {}
     rpc GetBestProduct (stream GetProductRequest) returns (Product) {}
     rpc GetProducts (stream GetProductRequest) returns (stream Product) {}
+    rpc CreateOrder (Order) returns (Order) {}
 }
 
 message Shop {
@@ -181,6 +182,7 @@ interface IProductServiceService extends grpc.ServiceDefinition<grpc.UntypedServ
   getProductViaCategory: IProductServiceService_IGetProductViaCategory;
   getBestProduct: IProductServiceService_IGetBestProduct;
   getProducts: IProductServiceService_IGetProducts;
+  createOrder: IProductServiceService_ICreateOrder;
 }
 
 interface IProductServiceService_IGetProduct extends grpc.MethodDefinition<product_pb.GetProductRequest, product_pb.Product> {
@@ -223,12 +225,23 @@ interface IProductServiceService_IGetProducts extends grpc.MethodDefinition<prod
   responseDeserialize: grpc.deserialize<product_pb.Product>;
 }
 
+interface IProductServiceService_ICreateOrder extends grpc.MethodDefinition<product_pb.Order, product_pb.Order> {
+  path: '/com.product.ProductService/CreateOrder'
+  requestStream: false
+  responseStream: false
+  requestSerialize: grpc.serialize<product_pb.Order>;
+  requestDeserialize: grpc.deserialize<product_pb.Order>;
+  responseSerialize: grpc.serialize<product_pb.Order>;
+  responseDeserialize: grpc.deserialize<product_pb.Order>;
+}
+
 export const ProductServiceService: IProductServiceService;
 export interface IProductServiceServer extends grpc.UntypedServiceImplementation {
   getProduct: grpc.handleUnaryCall<product_pb.GetProductRequest, product_pb.Product>;
   getProductViaCategory: grpc.handleServerStreamingCall<product_pb.GetProductViaCategoryRequest, product_pb.Product>;
   getBestProduct: grpc.handleClientStreamingCall<product_pb.GetProductRequest, product_pb.Product>;
   getProducts: grpc.handleBidiStreamingCall<product_pb.GetProductRequest, product_pb.Product>;
+  createOrder: grpc.handleUnaryCall<product_pb.Order, product_pb.Order>;
 }
 
 export interface IProductServiceClient {
@@ -244,6 +257,9 @@ export interface IProductServiceClient {
   getProducts(): grpc.ClientDuplexStream<product_pb.GetProductRequest, product_pb.Product>;
   getProducts(options: Partial<grpc.CallOptions>): grpc.ClientDuplexStream<product_pb.GetProductRequest, product_pb.Product>;
   getProducts(metadata: grpc.Metadata, options?: Partial<grpc.CallOptions>): grpc.ClientDuplexStream<product_pb.GetProductRequest, product_pb.Product>;
+  createOrder(request: product_pb.Order, callback: (error: grpc.ServiceError | null, response: product_pb.Order) => void): grpc.ClientUnaryCall;
+  createOrder(request: product_pb.Order, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: product_pb.Order) => void): grpc.ClientUnaryCall;
+  createOrder(request: product_pb.Order, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: product_pb.Order) => void): grpc.ClientUnaryCall;
 }
 
 export class ProductServiceClient extends grpc.Client implements IProductServiceClient {
@@ -260,7 +276,11 @@ export class ProductServiceClient extends grpc.Client implements IProductService
   public getProducts(): grpc.ClientDuplexStream<product_pb.GetProductRequest, product_pb.Product>;
   public getProducts(options?: Partial<grpc.CallOptions>): grpc.ClientDuplexStream<product_pb.GetProductRequest, product_pb.Product>;
   public getProducts(metadata?: grpc.Metadata, options?: Partial<grpc.CallOptions>): grpc.ClientDuplexStream<product_pb.GetProductRequest, product_pb.Product>;
+  public createOrder(request: product_pb.Order, callback: (error: grpc.ServiceError | null, response: product_pb.Order) => void): grpc.ClientUnaryCall;
+  public createOrder(request: product_pb.Order, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: product_pb.Order) => void): grpc.ClientUnaryCall;
+  public createOrder(request: product_pb.Order, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: product_pb.Order) => void): grpc.ClientUnaryCall;
 }
+
 ```
 
 ### product_pb.d.ts

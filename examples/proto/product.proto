@@ -22,6 +22,7 @@ service ProductService {
     rpc GetProductViaCategory (GetProductViaCategoryRequest) returns (stream Product) {}
     rpc GetBestProduct (stream GetProductRequest) returns (Product) {}
     rpc GetProducts (stream GetProductRequest) returns (stream Product) {}
+    rpc CreateOrder (Order) returns (Order) {}
 }
 
 message Shop {
