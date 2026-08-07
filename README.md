@@ -17,6 +17,9 @@ protoc-gen-grpc
 - **Zero setup**: install once globally and run `protoc-gen-grpc` /
   `protoc-gen-grpc-ts` from any project. No need to install `protoc` or
   `grpc-tools` separately.
+- **Non-invasive**: never touches project code — nothing is added to your
+  project's `package.json` or `node_modules`, and the tool lives completely
+  outside the project tree.
 - **All-in-one**: generates both JavaScript (`*_pb.js`, `*_grpc_pb.js`) and
   TypeScript declarations (`*_pb.d.ts`, `*_grpc_pb.d.ts`) from your `.proto`
   files.
