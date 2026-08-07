@@ -1,0 +1,192 @@
+// package: com.kitchen
+// file: kitchen/product.proto
+
+import * as jspb from 'google-protobuf';
+import * as google_protobuf_timestamp_pb from 'google-protobuf/google/protobuf/timestamp_pb';
+import * as other_types_pb from '../other/types_pb';
+
+export class Product extends jspb.Message {
+  getId(): number;
+  setId(value: number): void;
+
+  getName(): string;
+  setName(value: string): void;
+
+  clearTagsList(): void;
+  getTagsList(): Array<string>;
+  setTagsList(value: Array<string>): void;
+  addTags(value: string, index?: number): string;
+
+  getData(): Uint8Array | string;
+  getData_asU8(): Uint8Array;
+  getData_asB64(): string;
+  setData(value: Uint8Array | string): void;
+
+  clearHistoryList(): void;
+  getHistoryList(): Array<Uint8Array | string>;
+  getHistoryList_asU8(): Array<Uint8Array>;
+  getHistoryList_asB64(): Array<string>;
+  setHistoryList(value: Array<Uint8Array | string>): void;
+  addHistory(value: Uint8Array | string, index?: number): Uint8Array | string;
+
+  getDefault(): boolean;
+  setDefault(value: boolean): void;
+
+  hasMeta(): boolean;
+  clearMeta(): void;
+  getMeta(): Meta | undefined;
+  setMeta(value?: Meta): void;
+
+  hasKind(): boolean;
+  clearKind(): void;
+  getKind(): Product.Kind | undefined;
+  setKind(value?: Product.Kind): void;
+
+  getStatus(): Product.Status;
+  setStatus(value: Product.Status): void;
+
+  hasExt(): boolean;
+  clearExt(): void;
+  getExt(): other_types_pb.External | undefined;
+  setExt(value?: other_types_pb.External): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): Product.AsObject;
+  static toObject(includeInstance: boolean, msg: Product): Product.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: Product, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): Product;
+  static deserializeBinaryFromReader(message: Product, reader: jspb.BinaryReader): Product;
+}
+
+export namespace Product {
+  export type AsObject = {
+    id: number,
+    name: string,
+    tagsList: Array<string>,
+    data: Uint8Array | string,
+    historyList: Array<Uint8Array | string>,
+    pb_default: boolean,
+    meta?: Meta.AsObject,
+    kind?: Product.Kind.AsObject,
+    status: Product.Status,
+    ext?: other_types_pb.External.AsObject,
+  }
+
+  export class Kind extends jspb.Message {
+    getLabel(): string;
+    setLabel(value: string): void;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): Kind.AsObject;
+    static toObject(includeInstance: boolean, msg: Kind): Kind.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: Kind, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): Kind;
+    static deserializeBinaryFromReader(message: Kind, reader: jspb.BinaryReader): Kind;
+  }
+
+  export namespace Kind {
+    export type AsObject = {
+      label: string,
+    }
+  }
+
+  export enum Status {
+    UNKNOWN = 0,
+    ACTIVE = 1,
+  }
+}
+
+export class Meta extends jspb.Message {
+  getValue(): string;
+  setValue(value: string): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): Meta.AsObject;
+  static toObject(includeInstance: boolean, msg: Meta): Meta.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: Meta, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): Meta;
+  static deserializeBinaryFromReader(message: Meta, reader: jspb.BinaryReader): Meta;
+}
+
+export namespace Meta {
+  export type AsObject = {
+    value: string,
+  }
+}
+
+export class Order extends jspb.Message {
+  hasCash(): boolean;
+  clearCash(): void;
+  getCash(): number;
+  setCash(value: number): void;
+
+  hasCard(): boolean;
+  clearCard(): void;
+  getCard(): string;
+  setCard(value: string): void;
+
+  getNote(): string;
+  setNote(value: string): void;
+
+  getPaymentCase(): Order.PaymentCase;
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): Order.AsObject;
+  static toObject(includeInstance: boolean, msg: Order): Order.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: Order, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): Order;
+  static deserializeBinaryFromReader(message: Order, reader: jspb.BinaryReader): Order;
+}
+
+export namespace Order {
+  export type AsObject = {
+    cash: number,
+    card: string,
+    note: string,
+  }
+
+  export enum PaymentCase {
+    PAYMENT_NOT_SET = 0,
+    CASH = 1,
+    CARD = 2,
+  }
+}
+
+export class Shop extends jspb.Message {
+  getName(): string;
+  setName(value: string): void;
+
+  getListMap(): jspb.Map<number, Product>;
+  clearListMap(): void;
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): Shop.AsObject;
+  static toObject(includeInstance: boolean, msg: Shop): Shop.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: Shop, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): Shop;
+  static deserializeBinaryFromReader(message: Shop, reader: jspb.BinaryReader): Shop;
+}
+
+export namespace Shop {
+  export type AsObject = {
+    name: string,
+    listMap: Array<[number, Product.AsObject]>,
+  }
+}
+
+  export const kitchenTag: jspb.ExtensionFieldInfo<number>;
+
+export enum Color {
+  RED = 0,
+  GREEN = 1,
+  BLUE = 2,
+}
+

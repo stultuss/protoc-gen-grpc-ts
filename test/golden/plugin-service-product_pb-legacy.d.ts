@@ -1,0 +1,48 @@
+// package: com.svc
+// file: service/product.proto
+
+import * as jspb from 'google-protobuf';
+import * as google_protobuf_empty_pb from 'google-protobuf/google/protobuf/empty_pb';
+import * as google_api_annotations_pb from '../google/api/annotations_pb';
+import * as kitchen_product_pb from '../kitchen/product_pb';
+
+export class GetReq extends jspb.Message {
+  getId(): string;
+  setId(value: string): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): GetReq.AsObject;
+  static toObject(includeInstance: boolean, msg: GetReq): GetReq.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: GetReq, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetReq;
+  static deserializeBinaryFromReader(message: GetReq, reader: jspb.BinaryReader): GetReq;
+}
+
+export namespace GetReq {
+  export type AsObject = {
+    id: string,
+  }
+}
+
+export class Item extends jspb.Message {
+  getName(): string;
+  setName(value: string): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): Item.AsObject;
+  static toObject(includeInstance: boolean, msg: Item): Item.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: Item, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): Item;
+  static deserializeBinaryFromReader(message: Item, reader: jspb.BinaryReader): Item;
+}
+
+export namespace Item {
+  export type AsObject = {
+    name: string,
+  }
+}
+

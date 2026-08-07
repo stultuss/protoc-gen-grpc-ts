@@ -1,0 +1,67 @@
+// package: com.legacy
+// file: legacy/old.proto
+
+import * as jspb from 'google-protobuf';
+
+export class OldMsg extends jspb.Message {
+  hasReq(): boolean;
+  clearReq(): void;
+  getReq(): string | undefined;
+  setReq(value: string): void;
+
+  hasOpt(): boolean;
+  clearOpt(): void;
+  getOpt(): number | undefined;
+  setOpt(value: number): void;
+
+  clearRepList(): void;
+  getRepList(): Array<string>;
+  setRepList(value: Array<string>): void;
+  addRep(value: string, index?: number): string;
+
+  hasChild(): boolean;
+  clearChild(): void;
+  getChild(): OldMsg.Child | undefined;
+  setChild(value?: OldMsg.Child): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): OldMsg.AsObject;
+  static toObject(includeInstance: boolean, msg: OldMsg): OldMsg.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: OldMsg, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): OldMsg;
+  static deserializeBinaryFromReader(message: OldMsg, reader: jspb.BinaryReader): OldMsg;
+}
+
+export namespace OldMsg {
+  export type AsObject = {
+    req?: string,
+    opt?: number,
+    repList: Array<string>,
+    child?: OldMsg.Child.AsObject,
+  }
+
+  export class Child extends jspb.Message {
+    hasName(): boolean;
+    clearName(): void;
+    getName(): string | undefined;
+    setName(value: string): void;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): Child.AsObject;
+    static toObject(includeInstance: boolean, msg: Child): Child.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: Child, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): Child;
+    static deserializeBinaryFromReader(message: Child, reader: jspb.BinaryReader): Child;
+  }
+
+  export namespace Child {
+    export type AsObject = {
+      name?: string,
+    }
+  }
+}
+
