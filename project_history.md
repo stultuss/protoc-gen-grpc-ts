@@ -12,6 +12,7 @@
 - 2026-08-07: P2 已完成：参数按逗号解析（grpc_js,keep_case 实证通过）、错误经 response.error 上报（不再 process.exit）、错误信息含文件名/消息名/字段名；88 个测试全绿。
 - 2026-08-07: 用户指令：若存在客户端使用变化，更新 README（P0-A/P2 已造成使用变化，README 已同步更新）。
 - 2026-08-07: 修复两个行为 bug：EntryMap 无 package 时作用域拼接带前导点（顶层/嵌套 enum 与嵌套 message 查找失败）；FileDescriptorMSG 不过滤 google/api/annotations.proto。90 个测试全绿，真实 protoc 实证通过。
+- 2026-08-07: 用户要求暂停任务，重新规划项目优化方向，并列出每项的优化点/原因/不处理的结果/处理后的结果。
 
 ## 关键参数
 - 项目: protoc-gen-grpc v3.0.0（protoc 插件，为 gRPC TypeScript 生成 *_pb.d.ts / *_grpc_pb.d.ts，基于 jspb / google-protobuf）
