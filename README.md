@@ -438,6 +438,13 @@ The test suite covers every generator module and compares generated output
 against golden baselines in `test/golden`. After an intentional output change,
 regenerate the baselines with `npm run test:update-golden` and review the diff.
 
+## CI
+
+Tests also run automatically on GitHub Actions (see `.github/workflows/ci.yml`)
+for every push and pull request, on Node.js 20 and 22. The workflow installs
+dependencies with `npm ci --ignore-scripts`, because the unit tests run the
+compiled plugin directly and do not need the grpc-tools binaries.
+
 [npm-image]: https://img.shields.io/npm/v/protoc-gen-grpc.svg
 [npm-url]: https://npmjs.org/package/protoc-gen-grpc
 [downloads-image]: https://img.shields.io/npm/dm/protoc-gen-grpc.svg
