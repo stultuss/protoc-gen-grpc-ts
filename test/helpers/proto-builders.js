@@ -10,6 +10,7 @@ const {
     ServiceDescriptorProto,
     MethodDescriptorProto,
     MessageOptions,
+    FieldOptions,
 } = require('google-protobuf/google/protobuf/descriptor_pb');
 
 const T = FieldDescriptorProto.Type;
@@ -20,7 +21,7 @@ const L = FieldDescriptorProto.Label;
  * @param {string} name
  * @param {number} number
  * @param {number} type one of FieldDescriptorProto.Type.*
- * @param {{label?: number, typeName?: string, oneofIndex?: number, proto3Optional?: boolean}} [opts]
+ * @param {{label?: number, typeName?: string, oneofIndex?: number, proto3Optional?: boolean, options?: any}} [opts]
  */
 function field(name, number, type, opts = {}) {
     const f = new FieldDescriptorProto();
@@ -31,6 +32,7 @@ function field(name, number, type, opts = {}) {
     if (opts.typeName !== undefined) f.setTypeName(opts.typeName);
     if (opts.oneofIndex !== undefined) f.setOneofIndex(opts.oneofIndex);
     if (opts.proto3Optional !== undefined) f.setProto3Optional(opts.proto3Optional);
+    if (opts.options !== undefined) f.setOptions(opts.options);
     return f;
 }
 
@@ -129,6 +131,7 @@ function fileDescriptor(opts = {}) {
 module.exports = {
     T,
     L,
+    FieldOptions,
     field,
     oneof,
     enumType,

@@ -64,6 +64,10 @@ export namespace Message {
             return false;
         }
 
+        if (field.getProto3Optional()) {
+            return true;
+        }
+
         if (field.hasOneofIndex()) {
             return true;
         }
@@ -122,7 +126,7 @@ export namespace Message {
 
             fieldData.snakeCaseName = field.getName().toLowerCase();
             fieldData.camelCaseName = Utility.snakeToCamel(fieldData.snakeCaseName);
-            fieldData.camelUpperName = Utility.ucFirst(fieldData.camelCaseName);
+            fieldData.camelUpperName = Utility.formatOccupiedName(Utility.ucFirst(fieldData.camelCaseName));
             fieldData.type = field.getType();
 
             let exportType;
@@ -182,7 +186,15 @@ export namespace Message {
                     break;
 
                 default:
-                    fieldData.exportType = FieldTypes.getTypeName(fieldData.type);
+                    let fieldType = FieldTypes.getTypeName(fieldData.type);
+                    const fieldOptions = field.getOptions();
+                    if (fieldOptions !== undefined && fieldOptions.hasJstype()) {
+                        const jstypeName = FieldTypes.getJsTypeName(fieldOptions.getJstype());
+                        if (jstypeName !== undefined) {
+                            fieldType = jstypeName;
+                        }
+                    }
+                    fieldData.exportType = fieldType;
                     break;
             }
 
@@ -236,6 +248,8 @@ export namespace Message {
                         if (!Utility.isProto2(fileDescriptor) || (field.getLabel() === FieldDescriptorProto.Label.LABEL_OPTIONAL)) {
                             canBeUndefined = true;
                         }
+                    } else if (field.getProto3Optional()) {
+                        canBeUndefined = true;
                     } else {
                         if (Utility.isProto2(fileDescriptor)) {
                             canBeUndefined = true;

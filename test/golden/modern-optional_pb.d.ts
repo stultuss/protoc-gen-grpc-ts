@@ -6,7 +6,7 @@ import * as jspb from 'google-protobuf';
 export class OptMsg extends jspb.Message {
   hasName(): boolean;
   clearName(): void;
-  getName(): string;
+  getName(): string | undefined;
   setName(value: string): void;
 
   serializeBinary(): Uint8Array;
@@ -21,7 +21,7 @@ export class OptMsg extends jspb.Message {
 
 export namespace OptMsg {
   export type AsObject = {
-    name: string,
+    name?: string,
   }
 }
 

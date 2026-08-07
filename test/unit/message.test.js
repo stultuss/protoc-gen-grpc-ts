@@ -7,6 +7,7 @@ const {EntryMap} = require('../../build/lib/EntryMap');
 const {
     T,
     L,
+    FieldOptions,
     field,
     oneof,
     enumType,
@@ -163,8 +164,41 @@ test('proto3 optional fields keep has/clear but skip the synthetic case enum', (
     const output = printTopLevel(fd);
     assert.match(output, /  hasName\(\): boolean;/);
     assert.match(output, /  clearName\(\): void;/);
+    assert.match(output, /    name\?: string,/);
     assert.equal(output.includes('NameCase'), false);
     assert.equal(output.includes('getNameCase'), false);
+});
+
+test('jstype JS_STRING fields map to string', () => {
+    const options = new FieldOptions();
+    options.setJstype(FieldOptions.JSType.JS_STRING);
+    const fd = fileDescriptor({
+        name: 'js.proto',
+        pkg: 'com.j',
+        syntax: 'proto3',
+        messages: [message('Big', {
+            fields: [field('id', 1, T.TYPE_INT64, {options})],
+        })],
+    });
+    const output = printTopLevel(fd);
+    assert.match(output, /  getId\(\): string;/);
+    assert.match(output, /  setId\(value: string\): void;/);
+    assert.match(output, /    id: string,/);
+});
+
+test('occupied field names get a $ suffix like the JS generator', () => {
+    const fd = fileDescriptor({
+        name: 'occ.proto',
+        pkg: 'com.o',
+        syntax: 'proto3',
+        messages: [message('ExtMsg', {
+            fields: [field('extension', 1, T.TYPE_STRING)],
+        })],
+    });
+    const output = printTopLevel(fd);
+    assert.match(output, /  getExtension\$\(\): string;/);
+    assert.match(output, /  setExtension\$\(value: string\): void;/);
+    assert.match(output, /    extension: string,/);
 });
 
 test('map fields render jspb.Map getter and tuple AsObject', () => {

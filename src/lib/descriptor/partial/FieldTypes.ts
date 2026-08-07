@@ -1,10 +1,14 @@
-import {FieldDescriptorProto} from 'google-protobuf/google/protobuf/descriptor_pb';
+import {FieldDescriptorProto, FieldOptions} from 'google-protobuf/google/protobuf/descriptor_pb';
 import {EntryMap, EnumEntry, MessageEntry} from '../../EntryMap';
 import {Utility} from '../../Utility';
 
 export const MESSAGE_TYPE = FieldDescriptorProto.Type.TYPE_MESSAGE;
 export const BYTES_TYPE = FieldDescriptorProto.Type.TYPE_BYTES;
 export const ENUM_TYPE = FieldDescriptorProto.Type.TYPE_ENUM;
+
+export const JS_NORMAL = FieldOptions.JSType.JS_NORMAL;
+export const JS_STRING = FieldOptions.JSType.JS_STRING;
+export const JS_NUMBER = FieldOptions.JSType.JS_NUMBER;
 
 const TypeNumToTypeString: {[key: number]: string} = {};
 TypeNumToTypeString[FieldDescriptorProto.Type.TYPE_DOUBLE] = 'number';
@@ -26,10 +30,18 @@ TypeNumToTypeString[FieldDescriptorProto.Type.TYPE_SFIXED64] = 'number';
 TypeNumToTypeString[FieldDescriptorProto.Type.TYPE_SINT32] = 'number';
 TypeNumToTypeString[FieldDescriptorProto.Type.TYPE_SINT64] = 'number';
 
+const JsTypeNumToTypeString: {[key: number]: string} = {};
+JsTypeNumToTypeString[JS_STRING] = 'string'; // [jstype = JS_STRING]
+JsTypeNumToTypeString[JS_NUMBER] = 'number'; // [jstype = JS_NUMBER]
+
 export namespace FieldTypes {
 
     export function getTypeName(fieldTypeNum: number): string {
         return TypeNumToTypeString[fieldTypeNum];
+    }
+
+    export function getJsTypeName(jstype: number): string | undefined {
+        return JsTypeNumToTypeString[jstype];
     }
 
     export function getFieldType(type: FieldDescriptorProto.Type, typeName: string, currentFileName: string, entryMap: EntryMap): string {

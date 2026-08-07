@@ -142,4 +142,15 @@ export namespace Utility {
         }
         return name;
     }
+
+    /**
+     * jspb's JavaScript generator appends '$' to a small set of occupied
+     * method names; mirror that so the d.ts matches the generated JS.
+     */
+    export function formatOccupiedName(name: string): string {
+        if (name === 'Extension' || name === 'JsPbMessageId') {
+            name += '$';
+        }
+        return name;
+    }
 }
