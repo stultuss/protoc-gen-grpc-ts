@@ -84,9 +84,9 @@ test('cross-file method types resolve through the pseudo namespace', () => {
     assert.match(output, /getKitchen: grpc\.handleUnaryCall<service_product_pb\.GetReq, kitchen_product_pb\.Product>;/);
 });
 
-test('default service data templates are valid JSON', () => {
-    assert.deepEqual(JSON.parse(FileDescriptorGRPC.defaultServiceType), {serviceName: '', methods: []});
-    assert.deepEqual(JSON.parse(FileDescriptorGRPC.defaultServiceMethodType), {
+test('service data factories return fresh default objects', () => {
+    assert.deepEqual(FileDescriptorGRPC.newServiceType(), {serviceName: '', methods: []});
+    assert.deepEqual(FileDescriptorGRPC.newServiceMethodType(), {
         packageName: '',
         serviceName: '',
         methodName: '',
@@ -96,4 +96,7 @@ test('default service data templates are valid JSON', () => {
         responseTypeName: '',
         type: 'ClientUnaryCall',
     });
+    const first = FileDescriptorGRPC.newServiceType();
+    first.serviceName = 'mutated';
+    assert.deepEqual(FileDescriptorGRPC.newServiceType(), {serviceName: '', methods: []});
 });

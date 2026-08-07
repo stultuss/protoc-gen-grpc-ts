@@ -19,10 +19,12 @@ export namespace FileDescriptorGRPC {
         methods: Array<ServiceMethodType>;
     }
 
-    export const defaultServiceType = JSON.stringify({
-        serviceName: '',
-        methods: [],
-    } as ServiceType);
+    export function newServiceType(): ServiceType {
+        return {
+            serviceName: '',
+            methods: [],
+        };
+    }
 
     export interface ServiceMethodType {
         packageName: string;
@@ -35,16 +37,18 @@ export namespace FileDescriptorGRPC {
         type: string; // 'ClientUnaryCall' || 'ClientWritableStream' || 'ClientReadableStream' || 'ClientDuplexStream'
     }
 
-    export const defaultServiceMethodType = JSON.stringify({
-        packageName: '',
-        serviceName: '',
-        methodName: '',
-        requestStream: false,
-        responseStream: false,
-        requestTypeName: '',
-        responseTypeName: '',
-        type: 'ClientUnaryCall',
-    } as ServiceMethodType);
+    export function newServiceMethodType(): ServiceMethodType {
+        return {
+            packageName: '',
+            serviceName: '',
+            methodName: '',
+            requestStream: false,
+            responseStream: false,
+            requestTypeName: '',
+            responseTypeName: '',
+            type: 'ClientUnaryCall',
+        };
+    }
 
     export function print(fileDescriptor: FileDescriptorProto, entryMap: EntryMap, isGrpcJs: boolean): string {
         if (fileDescriptor.getServiceList().length === 0) {
@@ -84,12 +88,12 @@ export namespace FileDescriptorGRPC {
         printer.printEmptyLn();
 
         fileDescriptor.getServiceList().forEach((service: ServiceDescriptorProto) => {
-            let serviceData = JSON.parse(defaultServiceType) as ServiceType;
+            let serviceData = FileDescriptorGRPC.newServiceType();
 
             serviceData.serviceName = service.getName();
 
             service.getMethodList().forEach((method: MethodDescriptorProto) => {
-                let methodData = JSON.parse(defaultServiceMethodType) as ServiceMethodType;
+                let methodData = FileDescriptorGRPC.newServiceMethodType();
                 methodData.packageName = packageName;
                 methodData.serviceName = serviceData.serviceName;
                 methodData.methodName = method.getName();
@@ -233,5 +237,4 @@ export namespace FileDescriptorGRPC {
         return printer.getOutput();
     }
 }
-
 

@@ -2,29 +2,29 @@ import {FieldDescriptorProto} from 'google-protobuf/google/protobuf/descriptor_p
 import {EntryMap, EnumEntry, MessageEntry} from '../../EntryMap';
 import {Utility} from '../../Utility';
 
-export const MESSAGE_TYPE = 11;
-export const BYTES_TYPE = 12;
-export const ENUM_TYPE = 14;
+export const MESSAGE_TYPE = FieldDescriptorProto.Type.TYPE_MESSAGE;
+export const BYTES_TYPE = FieldDescriptorProto.Type.TYPE_BYTES;
+export const ENUM_TYPE = FieldDescriptorProto.Type.TYPE_ENUM;
 
 const TypeNumToTypeString: {[key: number]: string} = {};
-TypeNumToTypeString[1] = 'number'; // TYPE_DOUBLE
-TypeNumToTypeString[2] = 'number'; // TYPE_FLOAT
-TypeNumToTypeString[3] = 'number'; // TYPE_INT64
-TypeNumToTypeString[4] = 'number'; // TYPE_UINT64
-TypeNumToTypeString[5] = 'number'; // TYPE_INT32
-TypeNumToTypeString[6] = 'number'; // TYPE_FIXED64
-TypeNumToTypeString[7] = 'number'; // TYPE_FIXED32
-TypeNumToTypeString[8] = 'boolean'; // TYPE_BOOL
-TypeNumToTypeString[9] = 'string'; // TYPE_STRING
-TypeNumToTypeString[10] = 'Object'; // TYPE_GROUP
-TypeNumToTypeString[MESSAGE_TYPE] = 'Object'; // TYPE_MESSAGE - Length-delimited aggregate.
-TypeNumToTypeString[BYTES_TYPE] = 'Uint8Array'; // TYPE_BYTES
-TypeNumToTypeString[13] = 'number'; // TYPE_UINT32
-TypeNumToTypeString[ENUM_TYPE] = 'number'; // TYPE_ENUM
-TypeNumToTypeString[15] = 'number'; // TYPE_SFIXED32
-TypeNumToTypeString[16] = 'number'; // TYPE_SFIXED64
-TypeNumToTypeString[17] = 'number'; // TYPE_SINT32 - Uses ZigZag encoding.
-TypeNumToTypeString[18] = 'number'; // TYPE_SINT64 - Uses ZigZag encoding.
+TypeNumToTypeString[FieldDescriptorProto.Type.TYPE_DOUBLE] = 'number';
+TypeNumToTypeString[FieldDescriptorProto.Type.TYPE_FLOAT] = 'number';
+TypeNumToTypeString[FieldDescriptorProto.Type.TYPE_INT64] = 'number';
+TypeNumToTypeString[FieldDescriptorProto.Type.TYPE_UINT64] = 'number';
+TypeNumToTypeString[FieldDescriptorProto.Type.TYPE_INT32] = 'number';
+TypeNumToTypeString[FieldDescriptorProto.Type.TYPE_FIXED64] = 'number';
+TypeNumToTypeString[FieldDescriptorProto.Type.TYPE_FIXED32] = 'number';
+TypeNumToTypeString[FieldDescriptorProto.Type.TYPE_BOOL] = 'boolean';
+TypeNumToTypeString[FieldDescriptorProto.Type.TYPE_STRING] = 'string';
+TypeNumToTypeString[FieldDescriptorProto.Type.TYPE_GROUP] = 'Object';
+TypeNumToTypeString[FieldDescriptorProto.Type.TYPE_MESSAGE] = 'Object';
+TypeNumToTypeString[FieldDescriptorProto.Type.TYPE_BYTES] = 'Uint8Array';
+TypeNumToTypeString[FieldDescriptorProto.Type.TYPE_UINT32] = 'number';
+TypeNumToTypeString[FieldDescriptorProto.Type.TYPE_ENUM] = 'number';
+TypeNumToTypeString[FieldDescriptorProto.Type.TYPE_SFIXED32] = 'number';
+TypeNumToTypeString[FieldDescriptorProto.Type.TYPE_SFIXED64] = 'number';
+TypeNumToTypeString[FieldDescriptorProto.Type.TYPE_SINT32] = 'number';
+TypeNumToTypeString[FieldDescriptorProto.Type.TYPE_SINT64] = 'number';
 
 export namespace FieldTypes {
 

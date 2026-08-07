@@ -8,20 +8,26 @@ const DependencyFilter_1 = require("../DependencyFilter");
 const FieldTypes_1 = require("./partial/FieldTypes");
 var FileDescriptorGRPC;
 (function (FileDescriptorGRPC) {
-    FileDescriptorGRPC.defaultServiceType = JSON.stringify({
-        serviceName: '',
-        methods: [],
-    });
-    FileDescriptorGRPC.defaultServiceMethodType = JSON.stringify({
-        packageName: '',
-        serviceName: '',
-        methodName: '',
-        requestStream: false,
-        responseStream: false,
-        requestTypeName: '',
-        responseTypeName: '',
-        type: 'ClientUnaryCall',
-    });
+    function newServiceType() {
+        return {
+            serviceName: '',
+            methods: [],
+        };
+    }
+    FileDescriptorGRPC.newServiceType = newServiceType;
+    function newServiceMethodType() {
+        return {
+            packageName: '',
+            serviceName: '',
+            methodName: '',
+            requestStream: false,
+            responseStream: false,
+            requestTypeName: '',
+            responseTypeName: '',
+            type: 'ClientUnaryCall',
+        };
+    }
+    FileDescriptorGRPC.newServiceMethodType = newServiceMethodType;
     function print(fileDescriptor, entryMap, isGrpcJs) {
         if (fileDescriptor.getServiceList().length === 0) {
             return '';
@@ -57,10 +63,10 @@ var FileDescriptorGRPC;
         });
         printer.printEmptyLn();
         fileDescriptor.getServiceList().forEach((service) => {
-            let serviceData = JSON.parse(FileDescriptorGRPC.defaultServiceType);
+            let serviceData = FileDescriptorGRPC.newServiceType();
             serviceData.serviceName = service.getName();
             service.getMethodList().forEach((method) => {
-                let methodData = JSON.parse(FileDescriptorGRPC.defaultServiceMethodType);
+                let methodData = FileDescriptorGRPC.newServiceMethodType();
                 methodData.packageName = packageName;
                 methodData.serviceName = serviceData.serviceName;
                 methodData.methodName = method.getName();

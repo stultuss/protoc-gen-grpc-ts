@@ -11,23 +11,29 @@ const Extensions_1 = require("./Extensions");
 exports.OBJECT_TYPE_NAME = 'AsObject';
 var Message;
 (function (Message) {
-    Message.defaultMessageType = JSON.stringify({
-        messageName: '',
-        oneOfGroups: [],
-        oneOfDeclList: [],
-        fields: [],
-        nestedTypes: [],
-        formattedEnumListStr: [],
-        formattedOneOfListStr: [],
-        formattedExtListStr: [],
-    });
-    Message.defaultMessageFieldType = JSON.stringify({
-        snakeCaseName: '',
-        camelCaseName: '',
-        camelUpperName: '',
-        type: undefined,
-        exportType: '',
-    });
+    function newMessageType() {
+        return {
+            messageName: '',
+            oneOfGroups: [],
+            oneOfDeclList: [],
+            fields: [],
+            nestedTypes: [],
+            formattedEnumListStr: [],
+            formattedOneOfListStr: [],
+            formattedExtListStr: [],
+        };
+    }
+    Message.newMessageType = newMessageType;
+    function newMessageFieldType() {
+        return {
+            snakeCaseName: '',
+            camelCaseName: '',
+            camelUpperName: '',
+            type: undefined,
+            exportType: '',
+        };
+    }
+    Message.newMessageFieldType = newMessageFieldType;
     function hasFieldPresence(field, fileDescriptor) {
         if (field.getLabel() === descriptor_pb_1.FieldDescriptorProto.Label.LABEL_REPEATED) {
             return false;
@@ -51,7 +57,7 @@ var Message;
     }
     Message.isSyntheticOneOf = isSyntheticOneOf;
     function print(fileName, entryMap, descriptor, indentLevel, fileDescriptor) {
-        let messageData = JSON.parse(Message.defaultMessageType);
+        let messageData = Message.newMessageType();
         messageData.messageName = descriptor.getName();
         messageData.oneOfDeclList = descriptor.getOneofDeclList();
         let messageOptions = descriptor.getOptions();
@@ -66,7 +72,7 @@ var Message;
         printerToObjectType.printLn(`export type ${exports.OBJECT_TYPE_NAME} = {`);
         const oneOfGroups = [];
         descriptor.getFieldList().forEach(field => {
-            let fieldData = JSON.parse(Message.defaultMessageFieldType);
+            let fieldData = Message.newMessageFieldType();
             if (field.hasOneofIndex()) {
                 let oneOfIndex = field.getOneofIndex();
                 let existing = oneOfGroups[oneOfIndex];

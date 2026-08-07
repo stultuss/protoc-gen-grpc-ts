@@ -13,6 +13,8 @@
 - 2026-08-07: 用户指令：若存在客户端使用变化，更新 README（P0-A/P2 已造成使用变化，README 已同步更新）。
 - 2026-08-07: 修复两个行为 bug：EntryMap 无 package 时作用域拼接带前导点（顶层/嵌套 enum 与嵌套 message 查找失败）；FileDescriptorMSG 不过滤 google/api/annotations.proto。90 个测试全绿，真实 protoc 实证通过。
 - 2026-08-07: 用户要求暂停任务，重新规划项目优化方向，并列出每项的优化点/原因/不处理的结果/处理后的结果。
+- 2026-08-07: 用户确认按顺序执行：CI → P4 可维护性重构 → 发布整洁 → 其余跟踪项。
+- 2026-08-07: CI（GitHub Actions，node 20/22，npm ci --ignore-scripts）已提交 f376014；P4 重构完成（JSON 模板克隆换工厂函数、FieldTypes 魔法数字换枚举），90 测试全绿、golden 零变化。
 
 ## 关键参数
 - 项目: protoc-gen-grpc v3.0.0（protoc 插件，为 gRPC TypeScript 生成 *_pb.d.ts / *_grpc_pb.d.ts，基于 jspb / google-protobuf）

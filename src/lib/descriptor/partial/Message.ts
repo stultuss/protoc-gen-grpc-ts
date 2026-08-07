@@ -28,16 +28,18 @@ export namespace Message {
         formattedExtListStr: Array<string>;
     }
 
-    export const defaultMessageType = JSON.stringify({
-        messageName: '',
-        oneOfGroups: [],
-        oneOfDeclList: [],
-        fields: [],
-        nestedTypes: [],
-        formattedEnumListStr: [],
-        formattedOneOfListStr: [],
-        formattedExtListStr: [],
-    } as MessageType);
+    export function newMessageType(): MessageType {
+        return {
+            messageName: '',
+            oneOfGroups: [],
+            oneOfDeclList: [],
+            fields: [],
+            nestedTypes: [],
+            formattedEnumListStr: [],
+            formattedOneOfListStr: [],
+            formattedExtListStr: [],
+        };
+    }
 
     export interface MessageFieldType {
         snakeCaseName: string;
@@ -47,13 +49,15 @@ export namespace Message {
         exportType: string;
     }
 
-    export const defaultMessageFieldType = JSON.stringify({
-        snakeCaseName: '',
-        camelCaseName: '',
-        camelUpperName: '',
-        type: undefined,
-        exportType: '',
-    } as MessageFieldType);
+    export function newMessageFieldType(): MessageFieldType {
+        return {
+            snakeCaseName: '',
+            camelCaseName: '',
+            camelUpperName: '',
+            type: undefined,
+            exportType: '',
+        };
+    }
 
     export function hasFieldPresence(field: FieldDescriptorProto, fileDescriptor: FileDescriptorProto): boolean {
         if (field.getLabel() === FieldDescriptorProto.Label.LABEL_REPEATED) {
@@ -83,7 +87,7 @@ export namespace Message {
 
     export function print(fileName: string, entryMap: EntryMap, descriptor: DescriptorProto, indentLevel: number, fileDescriptor: FileDescriptorProto) {
 
-        let messageData = JSON.parse(defaultMessageType) as MessageType;
+        let messageData = Message.newMessageType();
 
         messageData.messageName = descriptor.getName();
         messageData.oneOfDeclList = descriptor.getOneofDeclList();
@@ -104,7 +108,7 @@ export namespace Message {
 
         descriptor.getFieldList().forEach(field => {
 
-            let fieldData = JSON.parse(defaultMessageFieldType) as MessageFieldType;
+            let fieldData = Message.newMessageFieldType();
 
             if (field.hasOneofIndex()) {
                 let oneOfIndex = field.getOneofIndex();
