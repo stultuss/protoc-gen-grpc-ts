@@ -18,6 +18,7 @@
 - 2026-08-07: 发布整洁完成：package.json 加 files 白名单（5 个 bin 脚本 + build，不含下载二进制）；build/ 取消 git 跟踪（prepare 发布前自动构建）；npm pack 包体积 3.3MB → 13.7kB。
 - 2026-08-07: 开始依赖升级（第 8 项）：grpc-js 1.14.4、node-pre-gyp 2.0.3、@types/node 22、typescript 5.9、rimraf 6；google-protobuf 保持 3.21.4（4.x 破坏性，待单独评估）。
 - 2026-08-07: 依赖升级完成：npm audit 从 5 个漏洞（含 1 critical）降到 0；tar 显式声明为直接依赖修复 node-pre-gyp 链的 critical（overrides 对 bundleDependencies 无效，npm 11 行为）；90 测试全绿。
+- 2026-08-07: examples 依赖对齐主包：grpc-js ~1.14.4、typescript ^5.9.3、@types/node ^22；TS 5.9 编译示例通过。
 
 ## 关键参数
 - 项目: protoc-gen-grpc v3.0.0（protoc 插件，为 gRPC TypeScript 生成 *_pb.d.ts / *_grpc_pb.d.ts，基于 jspb / google-protobuf）
@@ -59,6 +60,7 @@
 - 2026-08-07: 偏好：不推送、不提醒推送（原: 汇报里提到推送 → 改: 全部省略）
 - 2026-08-07: 决策：删除 yarn.lock（主包与 examples），保留 npm package-lock.json；.gitignore 增加 yarn.lock 防止误提交（原: 双 lockfile 并存 → 改: 只保留 npm lockfile）
 - 2026-08-07: 决策：legacy grpc 代码保留现状（不删除），改为 README 顶部醒目 WARNING 提醒用户必须传 grpc_js 参数（原: 待决策 → 改: 保留 + 文档提醒）
+- 2026-08-07: 决策：不做 google-protobuf 4.x 迁移——破坏性大版本且 jspb 4 支持存在问题；package.json 维持 ~3.21.2（天然锁 3.x，不会自动升 4）
 
 ## 待解决问题
 - 待用户确认优先方向后，再决定是否实施（例如先补测试与 CI，还是先修功能缺口）
