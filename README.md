@@ -36,7 +36,7 @@ npm install protoc-gen-grpc -g
 
 **Example**
 
-Please try ./example/build.sh
+Please try ./examples/build.sh
 
 The plugin generates TypeScript declarations for `@grpc/grpc-js` and supports
 proto3 `optional` fields. Pass `grpc_js` as the `--ts_out` parameter; additional
@@ -113,7 +113,7 @@ There is a complete & runnable example in folder `examples`.
 ## bash1
 cd ./examples
 npm install
-sh ./bash/build.sh  # build js & d.ts codes from proto file, and tsc to build/*.js
+sh ./build.sh       # build js & d.ts codes from proto file, and tsc to build/*.js
 sh ./bash/server.sh # start the grpc server
 
 ## bash2
