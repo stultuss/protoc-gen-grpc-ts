@@ -6,6 +6,8 @@ message Product {
     int64 id = 1;
     string name = 2;
     string category = 3;
+    optional string remark = 4;
+    int64 big_id = 5 [jstype = JS_STRING];
 }
 
 message GetProductRequest {
@@ -21,9 +23,21 @@ service ProductService {
     rpc GetProductViaCategory (GetProductViaCategoryRequest) returns (stream Product) {}
     rpc GetBestProduct (stream GetProductRequest) returns (Product) {}
     rpc GetProducts (stream GetProductRequest) returns (stream Product) {}
+    rpc CreateOrder (Order) returns (Order) {}
 }
 
 message Shop {
     string name = 1;
     map<int64, Product> list = 2;
+}
+
+message Order {
+    oneof payment {
+        int64 cash = 1;
+        string card = 2;
+    }
+}
+
+message ExtensionDemo {
+    string extension = 1;
 }

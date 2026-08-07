@@ -15,7 +15,26 @@ const ServerImpl = {
         vo.setId(call.request.getId());
         vo.setName('DefaultName');
         vo.setCategory('DefaultCategory');
+        vo.setRemark('DefaultRemark'); // proto3 optional
+        vo.setBigId('9007199254740993'); // [jstype = JS_STRING]
         log(`[getProduct] Done: ${JSON.stringify(vo.toObject())}`);
+        callback(null, vo);
+    },
+    createOrder: (call, callback) => {
+        const req = call.request;
+        const vo = new product_pb_1.Order();
+        // oneof: check which payment field is set
+        if (req.getPaymentCase() === product_pb_1.Order.PaymentCase.CASH) {
+            log(`[createOrder] Pay by cash: ${req.getCash()}`);
+            vo.setCash(req.getCash());
+        }
+        else if (req.getPaymentCase() === product_pb_1.Order.PaymentCase.CARD) {
+            log(`[createOrder] Pay by card: ${req.getCard()}`);
+            vo.setCard(req.getCard());
+        }
+        else {
+            log('[createOrder] No payment method set');
+        }
         callback(null, vo);
     },
     getProductViaCategory: (call) => {

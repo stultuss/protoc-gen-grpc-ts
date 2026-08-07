@@ -13,6 +13,14 @@ export class Product extends jspb.Message {
   getCategory(): string;
   setCategory(value: string): void;
 
+  hasRemark(): boolean;
+  clearRemark(): void;
+  getRemark(): string | undefined;
+  setRemark(value: string): void;
+
+  getBigId(): string;
+  setBigId(value: string): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): Product.AsObject;
   static toObject(includeInstance: boolean, msg: Product): Product.AsObject;
@@ -28,6 +36,8 @@ export namespace Product {
     id: number,
     name: string,
     category: string,
+    remark?: string,
+    bigId: string,
   }
 }
 
@@ -91,6 +101,61 @@ export namespace Shop {
   export type AsObject = {
     name: string,
     listMap: Array<[number, Product.AsObject]>,
+  }
+}
+
+export class Order extends jspb.Message {
+  hasCash(): boolean;
+  clearCash(): void;
+  getCash(): number;
+  setCash(value: number): void;
+
+  hasCard(): boolean;
+  clearCard(): void;
+  getCard(): string;
+  setCard(value: string): void;
+
+  getPaymentCase(): Order.PaymentCase;
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): Order.AsObject;
+  static toObject(includeInstance: boolean, msg: Order): Order.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: Order, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): Order;
+  static deserializeBinaryFromReader(message: Order, reader: jspb.BinaryReader): Order;
+}
+
+export namespace Order {
+  export type AsObject = {
+    cash: number,
+    card: string,
+  }
+
+  export enum PaymentCase {
+    PAYMENT_NOT_SET = 0,
+    CASH = 1,
+    CARD = 2,
+  }
+}
+
+export class ExtensionDemo extends jspb.Message {
+  getExtension$(): string;
+  setExtension$(value: string): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): ExtensionDemo.AsObject;
+  static toObject(includeInstance: boolean, msg: ExtensionDemo): ExtensionDemo.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: ExtensionDemo, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): ExtensionDemo;
+  static deserializeBinaryFromReader(message: ExtensionDemo, reader: jspb.BinaryReader): ExtensionDemo;
+}
+
+export namespace ExtensionDemo {
+  export type AsObject = {
+    extension: string,
   }
 }
 

@@ -18,7 +18,36 @@ const getProduct = async (id) => {
                 return;
             }
             log(`[getProduct] Response: ${JSON.stringify(data.toObject())}`);
+            // proto3 optional: hasRemark()/getRemark()
+            if (data.hasRemark()) {
+                log(`[getProduct] remark: ${data.getRemark()}`);
+            }
+            log(`[getProduct] bigId: ${data.getBigId()}`); // [jstype = JS_STRING]
             resolve(data);
+        });
+    });
+};
+const extensionDemo = () => {
+    const demo = new product_pb_1.ExtensionDemo();
+    demo.setExtension$('demo-value'); // occupied field name -> $ suffix
+    log(`[extensionDemo] extension$: ${demo.getExtension$()}`);
+};
+const createOrder = () => {
+    return new Promise((resolve, reject) => {
+        const order = new product_pb_1.Order();
+        order.setCash(100); // oneof: set the cash field
+        log(`[createOrder] Request: paymentCase=${order.getPaymentCase()}`);
+        client.createOrder(order, (e, data) => {
+            if (e) {
+                debug(`[createOrder] err:\nerr.message: ${e.message}\nerr.stack:\n${e.stack}`);
+                reject(e);
+                return;
+            }
+            const paid = data.getPaymentCase() === product_pb_1.Order.PaymentCase.CASH
+                ? `cash ${data.getCash()}`
+                : `card ${data.getCard()}`;
+            log(`[createOrder] Response: paid by ${paid}`);
+            resolve();
         });
     });
 };
@@ -89,6 +118,8 @@ async function main() {
     await getProductViaCategory('CategoryName');
     await getBestProduct();
     await getProducts();
+    await createOrder();
+    extensionDemo();
 }
 main().then((_) => _);
 process.on('uncaughtException', (err) => {

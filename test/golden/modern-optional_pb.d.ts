@@ -6,10 +6,9 @@ import * as jspb from 'google-protobuf';
 export class OptMsg extends jspb.Message {
   hasName(): boolean;
   clearName(): void;
-  getName(): string;
+  getName(): string | undefined;
   setName(value: string): void;
 
-  getNameCase(): OptMsg.NameCase;
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): OptMsg.AsObject;
   static toObject(includeInstance: boolean, msg: OptMsg): OptMsg.AsObject;
@@ -22,12 +21,7 @@ export class OptMsg extends jspb.Message {
 
 export namespace OptMsg {
   export type AsObject = {
-    name: string,
-  }
-
-  export enum NameCase {
-    _NAME_NOT_SET = 0,
-    NAME = 1,
+    name?: string,
   }
 }
 

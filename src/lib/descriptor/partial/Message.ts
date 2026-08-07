@@ -28,16 +28,18 @@ export namespace Message {
         formattedExtListStr: Array<string>;
     }
 
-    export const defaultMessageType = JSON.stringify({
-        messageName: '',
-        oneOfGroups: [],
-        oneOfDeclList: [],
-        fields: [],
-        nestedTypes: [],
-        formattedEnumListStr: [],
-        formattedOneOfListStr: [],
-        formattedExtListStr: [],
-    } as MessageType);
+    export function newMessageType(): MessageType {
+        return {
+            messageName: '',
+            oneOfGroups: [],
+            oneOfDeclList: [],
+            fields: [],
+            nestedTypes: [],
+            formattedEnumListStr: [],
+            formattedOneOfListStr: [],
+            formattedExtListStr: [],
+        };
+    }
 
     export interface MessageFieldType {
         snakeCaseName: string;
@@ -47,17 +49,23 @@ export namespace Message {
         exportType: string;
     }
 
-    export const defaultMessageFieldType = JSON.stringify({
-        snakeCaseName: '',
-        camelCaseName: '',
-        camelUpperName: '',
-        type: undefined,
-        exportType: '',
-    } as MessageFieldType);
+    export function newMessageFieldType(): MessageFieldType {
+        return {
+            snakeCaseName: '',
+            camelCaseName: '',
+            camelUpperName: '',
+            type: undefined,
+            exportType: '',
+        };
+    }
 
     export function hasFieldPresence(field: FieldDescriptorProto, fileDescriptor: FileDescriptorProto): boolean {
         if (field.getLabel() === FieldDescriptorProto.Label.LABEL_REPEATED) {
             return false;
+        }
+
+        if (field.getProto3Optional()) {
+            return true;
         }
 
         if (field.hasOneofIndex()) {
@@ -71,10 +79,19 @@ export namespace Message {
         return (Utility.isProto2(fileDescriptor));
     }
 
+    /**
+     * protoc synthesises a oneof for each proto3 `optional` field. It holds
+     * exactly one field, which is marked proto3 optional. Those synthetic
+     * oneofs must not generate a `getXxxCase()` accessor or a Case enum.
+     */
+    export function isSyntheticOneOf(oneOfDecl: OneofDescriptorProto, fields: Array<FieldDescriptorProto>): boolean {
+        return fields.length === 1 && fields[0].getProto3Optional();
+    }
+
 
     export function print(fileName: string, entryMap: EntryMap, descriptor: DescriptorProto, indentLevel: number, fileDescriptor: FileDescriptorProto) {
 
-        let messageData = JSON.parse(defaultMessageType) as MessageType;
+        let messageData = Message.newMessageType();
 
         messageData.messageName = descriptor.getName();
         messageData.oneOfDeclList = descriptor.getOneofDeclList();
@@ -95,7 +112,7 @@ export namespace Message {
 
         descriptor.getFieldList().forEach(field => {
 
-            let fieldData = JSON.parse(defaultMessageFieldType) as MessageFieldType;
+            let fieldData = Message.newMessageFieldType();
 
             if (field.hasOneofIndex()) {
                 let oneOfIndex = field.getOneofIndex();
@@ -109,7 +126,7 @@ export namespace Message {
 
             fieldData.snakeCaseName = field.getName().toLowerCase();
             fieldData.camelCaseName = Utility.snakeToCamel(fieldData.snakeCaseName);
-            fieldData.camelUpperName = Utility.ucFirst(fieldData.camelCaseName);
+            fieldData.camelUpperName = Utility.formatOccupiedName(Utility.ucFirst(fieldData.camelCaseName));
             fieldData.type = field.getType();
 
             let exportType;
@@ -120,7 +137,10 @@ export namespace Message {
                 case MESSAGE_TYPE:
                     const fieldMessageType = entryMap.getMessageEntry(fullTypeName);
                     if (fieldMessageType === undefined) {
-                        throw new Error('No message export for: ' + fullTypeName);
+                        throw new Error(
+                            `No message export for: ${fullTypeName} ` +
+                            `(field '${field.getName()}' of message '${descriptor.getName()}' in '${fileName}')`
+                        );
                     }
 
                     if (fieldMessageType.messageOptions !== undefined && fieldMessageType.messageOptions.getMapEntry()) {
@@ -151,7 +171,10 @@ export namespace Message {
                 case ENUM_TYPE:
                     let fieldEnumType = entryMap.getEnumEntry(fullTypeName);
                     if (fieldEnumType === undefined) {
-                        throw new Error('No enum export for: ' + fullTypeName);
+                        throw new Error(
+                            `No enum export for: ${fullTypeName} ` +
+                            `(field '${field.getName()}' of message '${descriptor.getName()}' in '${fileName}')`
+                        );
                     }
                     withinNamespace = Utility.withinNamespaceFromExportEntry(fullTypeName, fieldEnumType);
                     if (fieldEnumType.fileName === fileName) {
@@ -163,7 +186,15 @@ export namespace Message {
                     break;
 
                 default:
-                    fieldData.exportType = FieldTypes.getTypeName(fieldData.type);
+                    let fieldType = FieldTypes.getTypeName(fieldData.type);
+                    const fieldOptions = field.getOptions();
+                    if (fieldOptions !== undefined && fieldOptions.hasJstype()) {
+                        const jstypeName = FieldTypes.getJsTypeName(fieldOptions.getJstype());
+                        if (jstypeName !== undefined) {
+                            fieldType = jstypeName;
+                        }
+                    }
+                    fieldData.exportType = fieldType;
                     break;
             }
 
@@ -217,6 +248,8 @@ export namespace Message {
                         if (!Utility.isProto2(fileDescriptor) || (field.getLabel() === FieldDescriptorProto.Label.LABEL_OPTIONAL)) {
                             canBeUndefined = true;
                         }
+                    } else if (field.getProto3Optional()) {
+                        canBeUndefined = true;
                     } else {
                         if (Utility.isProto2(fileDescriptor)) {
                             canBeUndefined = true;
@@ -234,7 +267,10 @@ export namespace Message {
 
         printerToObjectType.printLn(`}`);
 
-        descriptor.getOneofDeclList().forEach(oneOfDecl => {
+        descriptor.getOneofDeclList().forEach((oneOfDecl, index) => {
+            if (Message.isSyntheticOneOf(oneOfDecl, oneOfGroups[index] || [])) {
+                return;
+            }
             printer.printIndentedLn(`get${Utility.oneOfName(oneOfDecl.getName())}Case(): ${messageData.messageName}.${Utility.oneOfName(oneOfDecl.getName())}Case;`);
         });
 
@@ -265,6 +301,9 @@ export namespace Message {
             printer.print(`${Enum.print(enumType, indentLevel + 1)}`);
         });
         descriptor.getOneofDeclList().forEach((oneOfDecl, index) => {
+            if (Message.isSyntheticOneOf(oneOfDecl, oneOfGroups[index] || [])) {
+                return;
+            }
             printer.print(`${OneOf.print(oneOfDecl, oneOfGroups[index] || [], indentLevel + 1)}`);
         });
         descriptor.getExtensionList().forEach(extension => {

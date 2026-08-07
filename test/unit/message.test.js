@@ -7,6 +7,7 @@ const {EntryMap} = require('../../build/lib/EntryMap');
 const {
     T,
     L,
+    FieldOptions,
     field,
     oneof,
     enumType,
@@ -146,6 +147,58 @@ test('oneof fields render case accessor and enum', () => {
     assert.match(output, /  getCash\(\): number;/);
     assert.match(output, /  getPaymentCase\(\): Choice\.PaymentCase;/);
     assert.match(output, /  export enum PaymentCase \{\n    PAYMENT_NOT_SET = 0,\n    CASH = 1,\n    CARD = 2,\n  \}/);
+});
+
+test('proto3 optional fields keep has/clear but skip the synthetic case enum', () => {
+    const fd = fileDescriptor({
+        name: 'opt.proto',
+        pkg: 'com.o',
+        syntax: 'proto3',
+        messages: [message('OptMsg', {
+            oneofs: [oneof('_name')],
+            fields: [
+                field('name', 1, T.TYPE_STRING, {oneofIndex: 0, proto3Optional: true}),
+            ],
+        })],
+    });
+    const output = printTopLevel(fd);
+    assert.match(output, /  hasName\(\): boolean;/);
+    assert.match(output, /  clearName\(\): void;/);
+    assert.match(output, /    name\?: string,/);
+    assert.equal(output.includes('NameCase'), false);
+    assert.equal(output.includes('getNameCase'), false);
+});
+
+test('jstype JS_STRING fields map to string', () => {
+    const options = new FieldOptions();
+    options.setJstype(FieldOptions.JSType.JS_STRING);
+    const fd = fileDescriptor({
+        name: 'js.proto',
+        pkg: 'com.j',
+        syntax: 'proto3',
+        messages: [message('Big', {
+            fields: [field('id', 1, T.TYPE_INT64, {options})],
+        })],
+    });
+    const output = printTopLevel(fd);
+    assert.match(output, /  getId\(\): string;/);
+    assert.match(output, /  setId\(value: string\): void;/);
+    assert.match(output, /    id: string,/);
+});
+
+test('occupied field names get a $ suffix like the JS generator', () => {
+    const fd = fileDescriptor({
+        name: 'occ.proto',
+        pkg: 'com.o',
+        syntax: 'proto3',
+        messages: [message('ExtMsg', {
+            fields: [field('extension', 1, T.TYPE_STRING)],
+        })],
+    });
+    const output = printTopLevel(fd);
+    assert.match(output, /  getExtension\$\(\): string;/);
+    assert.match(output, /  setExtension\$\(value: string\): void;/);
+    assert.match(output, /    extension: string,/);
 });
 
 test('map fields render jspb.Map getter and tuple AsObject', () => {
@@ -304,7 +357,10 @@ test('missing message entry throws with the full type name', () => {
         pkg: 'com.e',
         messages: [message('Bad', {fields: [field('m', 1, T.TYPE_MESSAGE, {typeName: '.missing.Type'})]})],
     });
-    assert.throws(() => printTopLevel(fd), /No message export for: missing\.Type/);
+    assert.throws(
+        () => printTopLevel(fd),
+        /No message export for: missing\.Type \(field 'm' of message 'Bad' in 'err\.proto'\)/,
+    );
 });
 
 test('missing enum entry throws with the full type name', () => {
@@ -313,7 +369,10 @@ test('missing enum entry throws with the full type name', () => {
         pkg: 'com.e',
         messages: [message('Bad', {fields: [field('e', 1, T.TYPE_ENUM, {typeName: '.missing.Enum'})]})],
     });
-    assert.throws(() => printTopLevel(fd), /No enum export for: missing\.Enum/);
+    assert.throws(
+        () => printTopLevel(fd),
+        /No enum export for: missing\.Enum \(field 'e' of message 'Bad' in 'err\.proto'\)/,
+    );
 });
 
 test('field names are lowercased before camel-casing', () => {

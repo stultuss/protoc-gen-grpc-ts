@@ -5,7 +5,7 @@ import * as grpc from '@grpc/grpc-js';
 // import * as grpc from 'grpc';
 
 import {IProductServiceServer, ProductServiceService} from './proto/product_grpc_pb';
-import {GetProductRequest, GetProductViaCategoryRequest, Product} from './proto/product_pb';
+import {GetProductRequest, GetProductViaCategoryRequest, Order, Product} from './proto/product_pb';
 
 const log = debug('[Demo:GrpcServer]');
 
@@ -18,8 +18,26 @@ const ServerImpl: IProductServiceServer = {
         vo.setId(call.request.getId());
         vo.setName('DefaultName');
         vo.setCategory('DefaultCategory');
+        vo.setRemark('DefaultRemark'); // proto3 optional
+        vo.setBigId('9007199254740993'); // [jstype = JS_STRING]
         
         log(`[getProduct] Done: ${JSON.stringify(vo.toObject())}`);
+        callback(null, vo);
+    },
+
+    createOrder: (call: grpc.ServerUnaryCall<Order, Order>, callback: grpc.sendUnaryData<Order>): void => {
+        const req = call.request;
+        const vo = new Order();
+        // oneof: check which payment field is set
+        if (req.getPaymentCase() === Order.PaymentCase.CASH) {
+            log(`[createOrder] Pay by cash: ${req.getCash()}`);
+            vo.setCash(req.getCash());
+        } else if (req.getPaymentCase() === Order.PaymentCase.CARD) {
+            log(`[createOrder] Pay by card: ${req.getCard()}`);
+            vo.setCard(req.getCard());
+        } else {
+            log('[createOrder] No payment method set');
+        }
         callback(null, vo);
     },
     

@@ -1,35 +1,47 @@
-import {FieldDescriptorProto} from 'google-protobuf/google/protobuf/descriptor_pb';
+import {FieldDescriptorProto, FieldOptions} from 'google-protobuf/google/protobuf/descriptor_pb';
 import {EntryMap, EnumEntry, MessageEntry} from '../../EntryMap';
 import {Utility} from '../../Utility';
 
-export const MESSAGE_TYPE = 11;
-export const BYTES_TYPE = 12;
-export const ENUM_TYPE = 14;
+export const MESSAGE_TYPE = FieldDescriptorProto.Type.TYPE_MESSAGE;
+export const BYTES_TYPE = FieldDescriptorProto.Type.TYPE_BYTES;
+export const ENUM_TYPE = FieldDescriptorProto.Type.TYPE_ENUM;
+
+export const JS_NORMAL = FieldOptions.JSType.JS_NORMAL;
+export const JS_STRING = FieldOptions.JSType.JS_STRING;
+export const JS_NUMBER = FieldOptions.JSType.JS_NUMBER;
 
 const TypeNumToTypeString: {[key: number]: string} = {};
-TypeNumToTypeString[1] = 'number'; // TYPE_DOUBLE
-TypeNumToTypeString[2] = 'number'; // TYPE_FLOAT
-TypeNumToTypeString[3] = 'number'; // TYPE_INT64
-TypeNumToTypeString[4] = 'number'; // TYPE_UINT64
-TypeNumToTypeString[5] = 'number'; // TYPE_INT32
-TypeNumToTypeString[6] = 'number'; // TYPE_FIXED64
-TypeNumToTypeString[7] = 'number'; // TYPE_FIXED32
-TypeNumToTypeString[8] = 'boolean'; // TYPE_BOOL
-TypeNumToTypeString[9] = 'string'; // TYPE_STRING
-TypeNumToTypeString[10] = 'Object'; // TYPE_GROUP
-TypeNumToTypeString[MESSAGE_TYPE] = 'Object'; // TYPE_MESSAGE - Length-delimited aggregate.
-TypeNumToTypeString[BYTES_TYPE] = 'Uint8Array'; // TYPE_BYTES
-TypeNumToTypeString[13] = 'number'; // TYPE_UINT32
-TypeNumToTypeString[ENUM_TYPE] = 'number'; // TYPE_ENUM
-TypeNumToTypeString[15] = 'number'; // TYPE_SFIXED32
-TypeNumToTypeString[16] = 'number'; // TYPE_SFIXED64
-TypeNumToTypeString[17] = 'number'; // TYPE_SINT32 - Uses ZigZag encoding.
-TypeNumToTypeString[18] = 'number'; // TYPE_SINT64 - Uses ZigZag encoding.
+TypeNumToTypeString[FieldDescriptorProto.Type.TYPE_DOUBLE] = 'number';
+TypeNumToTypeString[FieldDescriptorProto.Type.TYPE_FLOAT] = 'number';
+TypeNumToTypeString[FieldDescriptorProto.Type.TYPE_INT64] = 'number';
+TypeNumToTypeString[FieldDescriptorProto.Type.TYPE_UINT64] = 'number';
+TypeNumToTypeString[FieldDescriptorProto.Type.TYPE_INT32] = 'number';
+TypeNumToTypeString[FieldDescriptorProto.Type.TYPE_FIXED64] = 'number';
+TypeNumToTypeString[FieldDescriptorProto.Type.TYPE_FIXED32] = 'number';
+TypeNumToTypeString[FieldDescriptorProto.Type.TYPE_BOOL] = 'boolean';
+TypeNumToTypeString[FieldDescriptorProto.Type.TYPE_STRING] = 'string';
+TypeNumToTypeString[FieldDescriptorProto.Type.TYPE_GROUP] = 'Object';
+TypeNumToTypeString[FieldDescriptorProto.Type.TYPE_MESSAGE] = 'Object';
+TypeNumToTypeString[FieldDescriptorProto.Type.TYPE_BYTES] = 'Uint8Array';
+TypeNumToTypeString[FieldDescriptorProto.Type.TYPE_UINT32] = 'number';
+TypeNumToTypeString[FieldDescriptorProto.Type.TYPE_ENUM] = 'number';
+TypeNumToTypeString[FieldDescriptorProto.Type.TYPE_SFIXED32] = 'number';
+TypeNumToTypeString[FieldDescriptorProto.Type.TYPE_SFIXED64] = 'number';
+TypeNumToTypeString[FieldDescriptorProto.Type.TYPE_SINT32] = 'number';
+TypeNumToTypeString[FieldDescriptorProto.Type.TYPE_SINT64] = 'number';
+
+const JsTypeNumToTypeString: {[key: number]: string} = {};
+JsTypeNumToTypeString[JS_STRING] = 'string'; // [jstype = JS_STRING]
+JsTypeNumToTypeString[JS_NUMBER] = 'number'; // [jstype = JS_NUMBER]
 
 export namespace FieldTypes {
 
     export function getTypeName(fieldTypeNum: number): string {
         return TypeNumToTypeString[fieldTypeNum];
+    }
+
+    export function getJsTypeName(jstype: number): string | undefined {
+        return JsTypeNumToTypeString[jstype];
     }
 
     export function getFieldType(type: FieldDescriptorProto.Type, typeName: string, currentFileName: string, entryMap: EntryMap): string {
@@ -41,7 +53,7 @@ export namespace FieldTypes {
             case MESSAGE_TYPE:
                 fromExport = entryMap.getMessageEntry(typeName);
                 if (!fromExport) {
-                    throw new Error('Could not getFieldType for message: ' + typeName);
+                    throw new Error('Could not getFieldType for message: ' + typeName + ' (in ' + currentFileName + ')');
                 }
                 withinNamespace = Utility.withinNamespaceFromExportEntry(typeName, fromExport);
                 if (fromExport.fileName === currentFileName) {
@@ -54,7 +66,7 @@ export namespace FieldTypes {
             case ENUM_TYPE:
                 fromExport = entryMap.getEnumEntry(typeName);
                 if (!fromExport) {
-                    throw new Error('Could not getFieldType for enum: ' + typeName);
+                    throw new Error('Could not getFieldType for enum: ' + typeName + ' (in ' + currentFileName + ')');
                 }
                 withinNamespace = Utility.withinNamespaceFromExportEntry(typeName, fromExport);
                 if (fromExport.fileName === currentFileName) {

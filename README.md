@@ -4,37 +4,85 @@ protoc-gen-grpc
 [![NPM Downloads][downloads-image]][downloads-url]
 [![CI](https://github.com/stultuss/protoc-gen-grpc-ts/actions/workflows/ci.yml/badge.svg)](https://github.com/stultuss/protoc-gen-grpc-ts/actions/workflows/ci.yml)
 
-> Protocol compiler plugin for generating grpc interfaces in TypeScript.
+> An all-in-one `protoc` toolchain for gRPC in TypeScript. It bundles `protoc`
+> and the gRPC plugin, so a single global install works in every project.
 
-## WARN 
+> **WARNING:** the legacy `grpc` npm package is no longer maintained and cannot
+> be installed on current Node.js. Declarations generated without the
+> `grpc_js` parameter import from that abandoned package and will not compile.
+> Always pass `grpc_js` to `--ts_out` (e.g. `--ts_out=grpc_js:./out`) unless
+> you are locked to the old runtime.
 
-> About Apple M1 arm64
+## Why protoc-gen-grpc?
 
-```bash
-npm_config_target_arch=x64 npm i grpc-tools
-```
+### 🛡️ Non-invasive & fully isolated from your project
 
-> About node-pre-gyp ERR! stack Error: There was a fatal problem while downloading/extracting the tarball
+A **global tool** that never touches your project code — nothing is added to
+your project's `package.json` or `node_modules`, and the generator lives
+**completely outside** your project tree. Your project stays exactly as it was.
 
-issue：https://github.com/mapbox/node-pre-gyp/issues/462
-
-```bash
-npm install request -g
-```
+- **Non-invasive**: never touches project code, `package.json` or
+  `node_modules` — fully isolated from your project tree.
+- **Zero setup**: install once globally and run `protoc-gen-grpc` /
+  `protoc-gen-grpc-ts` from any project. No need to install `protoc` or
+  `grpc-tools` separately.
+- **All-in-one**: generates both JavaScript (`*_pb.js`, `*_grpc_pb.js`) and
+  TypeScript declarations (`*_pb.d.ts`, `*_grpc_pb.d.ts`) from your `.proto`
+  files.
+- **Small footprint**: the published npm package is only ~14 kB; the
+  `protoc`/`grpc_node_plugin` binaries are fetched once at install time.
+- **Modern**: `@grpc/grpc-js` output, proto3 `optional` fields, `oneof` groups,
+  and comma-joined `--ts_out` parameters.
+- **Tested**: 90+ unit tests with golden output baselines, run automatically
+  on GitHub Actions for Node.js 20 and 22.
 
 ## Install
 
 ```bash
-npm config set unsafe-perm true
 npm install protoc-gen-grpc -g
 ```
-> If you don't want to set up a public configuration for NPM, you can try to add after the installation command `-unsafe-perm` parameters.
+
+It also works as a project-local dev dependency, e.g. for reproducible CI
+builds:
+
+```bash
+npm install protoc-gen-grpc --save-dev
+# then use the binaries under ./node_modules/.bin
+```
+
+## Binary downloads
+
+During `npm install`, the package downloads the `protoc` and `grpc_node_plugin`
+binaries from `node-precompiled-binaries.grpc.io` (grpc-tools v1.13.0, bundling
+protoc 3.19.1). If that host is unreachable in your environment, point
+node-pre-gyp at a mirror:
+
+```bash
+export npm_config_grpc_tools_binary_host_mirror=https://your-mirror.example.com/
+npm install protoc-gen-grpc -g
+```
+
+> Known limitation: grpc-tools has not published a newer release, so the
+> bundled protoc stays at 3.19.1 and does not support proto editions.
 
 ## How to use
 
+**Supported features**
+
+- Generates TypeScript declarations for `@grpc/grpc-js`. Pass `grpc_js` as the
+  `--ts_out` parameter; additional comma-separated parameters are allowed,
+  e.g. `--ts_out=grpc_js,keep_case:...`.
+- Supports `oneof` groups with a `get<Name>Case()` accessor and a `<Name>Case`
+  enum.
+- Supports proto3 `optional` fields.
+- Supports `[jstype = JS_STRING]` fields, mapping `int64`/`uint64` to `string`
+  to avoid precision loss.
+- Occupied field names such as `extension` get a `$` suffix (`getExtension$()`),
+  matching the generated JavaScript.
+
 **Example**
 
-Please try ./example/build.sh
+Please try ./examples/build.sh
 
 **Support - grpc-js**
 
@@ -46,13 +94,13 @@ protoc-gen-grpc \
 --js_out=import_style=commonjs,binary:${OUTPUT_DEST} \
 --grpc_out=grpc_js:./examples/src/proto \
 --proto_path ./examples/proto \
-./examples/proto/student.proto
+./examples/proto/product.proto
 
 # generate d.ts codes with @grpc/grpc-js
 protoc-gen-grpc-ts \
---ts_out=grpc_js:./examples/src/proto \
+--ts_out=grpc_js,keep_case:./examples/src/proto \
 --proto_path ./examples/proto \
-./examples/proto/student.proto
+./examples/proto/product.proto
 ```
 server.ts
 
@@ -65,7 +113,11 @@ const server = new grpc.Server();
 server.addService(ProductServiceService, ServerImpl);
 ```
 
-**Support - grpc**
+**Support - grpc (deprecated)**
+
+> The legacy `grpc` npm package is no longer maintained and cannot be installed
+> on current Node.js versions. Use `@grpc/grpc-js` instead; the generated
+> `--ts_out` without the `grpc_js` parameter targets the legacy package.
 
 bash
 
@@ -75,13 +127,13 @@ protoc-gen-grpc \
 --js_out=import_style=commonjs,binary:./examples/src/proto \
 --grpc_out=./examples/src/proto \
 --proto_path ./examples/proto \
-./examples/proto/student.proto
+./examples/proto/product.proto
 
 # generate d.ts codes with grpc
 protoc-gen-grpc-ts \
 --ts_out=./examples/src/proto \
 --proto_path ./examples/proto \
-./examples/proto/student.proto
+./examples/proto/product.proto
 ```
 
 server.ts
@@ -103,7 +155,7 @@ There is a complete & runnable example in folder `examples`.
 ## bash1
 cd ./examples
 npm install
-sh ./bash/build.sh  # build js & d.ts codes from proto file, and tsc to build/*.js
+sh ./build.sh       # build js & d.ts codes from proto file, and tsc to build/*.js
 sh ./bash/server.sh # start the grpc server
 
 ## bash2
@@ -122,6 +174,8 @@ message Product {
     int64 id = 1;
     string name = 2;
     string category = 3;
+    optional string remark = 4;
+    int64 big_id = 5 [jstype = JS_STRING];
 }
 
 message GetProductRequest {
@@ -137,11 +191,23 @@ service ProductService {
     rpc GetProductViaCategory (GetProductViaCategoryRequest) returns (stream Product) {}
     rpc GetBestProduct (stream GetProductRequest) returns (Product) {}
     rpc GetProducts (stream GetProductRequest) returns (stream Product) {}
+    rpc CreateOrder (Order) returns (Order) {}
 }
 
 message Shop {
     string name = 1;
     map<int64, Product> list = 2;
+}
+
+message Order {
+    oneof payment {
+        int64 cash = 1;
+        string card = 2;
+    }
+}
+
+message ExtensionDemo {
+    string extension = 1;
 }
 ```
 
@@ -158,6 +224,7 @@ interface IProductServiceService extends grpc.ServiceDefinition<grpc.UntypedServ
   getProductViaCategory: IProductServiceService_IGetProductViaCategory;
   getBestProduct: IProductServiceService_IGetBestProduct;
   getProducts: IProductServiceService_IGetProducts;
+  createOrder: IProductServiceService_ICreateOrder;
 }
 
 interface IProductServiceService_IGetProduct extends grpc.MethodDefinition<product_pb.GetProductRequest, product_pb.Product> {
@@ -200,12 +267,23 @@ interface IProductServiceService_IGetProducts extends grpc.MethodDefinition<prod
   responseDeserialize: grpc.deserialize<product_pb.Product>;
 }
 
+interface IProductServiceService_ICreateOrder extends grpc.MethodDefinition<product_pb.Order, product_pb.Order> {
+  path: '/com.product.ProductService/CreateOrder'
+  requestStream: false
+  responseStream: false
+  requestSerialize: grpc.serialize<product_pb.Order>;
+  requestDeserialize: grpc.deserialize<product_pb.Order>;
+  responseSerialize: grpc.serialize<product_pb.Order>;
+  responseDeserialize: grpc.deserialize<product_pb.Order>;
+}
+
 export const ProductServiceService: IProductServiceService;
 export interface IProductServiceServer extends grpc.UntypedServiceImplementation {
   getProduct: grpc.handleUnaryCall<product_pb.GetProductRequest, product_pb.Product>;
   getProductViaCategory: grpc.handleServerStreamingCall<product_pb.GetProductViaCategoryRequest, product_pb.Product>;
   getBestProduct: grpc.handleClientStreamingCall<product_pb.GetProductRequest, product_pb.Product>;
   getProducts: grpc.handleBidiStreamingCall<product_pb.GetProductRequest, product_pb.Product>;
+  createOrder: grpc.handleUnaryCall<product_pb.Order, product_pb.Order>;
 }
 
 export interface IProductServiceClient {
@@ -221,6 +299,9 @@ export interface IProductServiceClient {
   getProducts(): grpc.ClientDuplexStream<product_pb.GetProductRequest, product_pb.Product>;
   getProducts(options: Partial<grpc.CallOptions>): grpc.ClientDuplexStream<product_pb.GetProductRequest, product_pb.Product>;
   getProducts(metadata: grpc.Metadata, options?: Partial<grpc.CallOptions>): grpc.ClientDuplexStream<product_pb.GetProductRequest, product_pb.Product>;
+  createOrder(request: product_pb.Order, callback: (error: grpc.ServiceError | null, response: product_pb.Order) => void): grpc.ClientUnaryCall;
+  createOrder(request: product_pb.Order, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: product_pb.Order) => void): grpc.ClientUnaryCall;
+  createOrder(request: product_pb.Order, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: product_pb.Order) => void): grpc.ClientUnaryCall;
 }
 
 export class ProductServiceClient extends grpc.Client implements IProductServiceClient {
@@ -237,7 +318,11 @@ export class ProductServiceClient extends grpc.Client implements IProductService
   public getProducts(): grpc.ClientDuplexStream<product_pb.GetProductRequest, product_pb.Product>;
   public getProducts(options?: Partial<grpc.CallOptions>): grpc.ClientDuplexStream<product_pb.GetProductRequest, product_pb.Product>;
   public getProducts(metadata?: grpc.Metadata, options?: Partial<grpc.CallOptions>): grpc.ClientDuplexStream<product_pb.GetProductRequest, product_pb.Product>;
+  public createOrder(request: product_pb.Order, callback: (error: grpc.ServiceError | null, response: product_pb.Order) => void): grpc.ClientUnaryCall;
+  public createOrder(request: product_pb.Order, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: product_pb.Order) => void): grpc.ClientUnaryCall;
+  public createOrder(request: product_pb.Order, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: product_pb.Order) => void): grpc.ClientUnaryCall;
 }
+
 ```
 
 ### product_pb.d.ts
@@ -257,6 +342,14 @@ export class Product extends jspb.Message {
   getCategory(): string;
   setCategory(value: string): void;
 
+  hasRemark(): boolean;
+  clearRemark(): void;
+  getRemark(): string | undefined;
+  setRemark(value: string): void;
+
+  getBigId(): string;
+  setBigId(value: string): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): Product.AsObject;
   static toObject(includeInstance: boolean, msg: Product): Product.AsObject;
@@ -272,6 +365,8 @@ export namespace Product {
     id: number,
     name: string,
     category: string,
+    remark?: string,
+    bigId: string,
   }
 }
 
@@ -337,11 +432,84 @@ export namespace Shop {
     listMap: Array<[number, Product.AsObject]>,
   }
 }
+
+export class Order extends jspb.Message {
+  hasCash(): boolean;
+  clearCash(): void;
+  getCash(): number;
+  setCash(value: number): void;
+
+  hasCard(): boolean;
+  clearCard(): void;
+  getCard(): string;
+  setCard(value: string): void;
+
+  getPaymentCase(): Order.PaymentCase;
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): Order.AsObject;
+  static toObject(includeInstance: boolean, msg: Order): Order.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: Order, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): Order;
+  static deserializeBinaryFromReader(message: Order, reader: jspb.BinaryReader): Order;
+}
+
+export namespace Order {
+  export type AsObject = {
+    cash: number,
+    card: string,
+  }
+
+  export enum PaymentCase {
+    PAYMENT_NOT_SET = 0,
+    CASH = 1,
+    CARD = 2,
+  }
+}
+
+export class ExtensionDemo extends jspb.Message {
+  getExtension$(): string;
+  setExtension$(value: string): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): ExtensionDemo.AsObject;
+  static toObject(includeInstance: boolean, msg: ExtensionDemo): ExtensionDemo.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: ExtensionDemo, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): ExtensionDemo;
+  static deserializeBinaryFromReader(message: ExtensionDemo, reader: jspb.BinaryReader): ExtensionDemo;
+}
+
+export namespace ExtensionDemo {
+  export type AsObject = {
+    extension: string,
+  }
+}
+
 ```
 
 ## License
 
 [MIT](LICENSE)
+
+## Testing
+
+```bash
+npm test
+```
+
+The test suite covers every generator module and compares generated output
+against golden baselines in `test/golden`. After an intentional output change,
+regenerate the baselines with `npm run test:update-golden` and review the diff.
+
+## CI
+
+Tests also run automatically on GitHub Actions (see `.github/workflows/ci.yml`)
+for every push and pull request, on Node.js 20 and 22. The workflow installs
+dependencies with `npm ci --ignore-scripts`, because the unit tests run the
+compiled plugin directly and do not need the grpc-tools binaries.
 
 [npm-image]: https://img.shields.io/npm/v/protoc-gen-grpc.svg
 [npm-url]: https://npmjs.org/package/protoc-gen-grpc

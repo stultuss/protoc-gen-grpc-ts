@@ -15,13 +15,23 @@ import {FileDescriptorMSG} from './lib/descriptor/FileDescriptorMSG';
 import {FileDescriptorGRPC} from './lib/descriptor/FileDescriptorGRPC';
 
 Utility.withAllStdIn((input: Buffer) => {
+    const response = new CodeGeneratorResponse();
     try {
         const binary = new Uint8Array(input.length);
         binary.set(input);
 
         const request = CodeGeneratorRequest.deserializeBinary(binary);
-        const response = new CodeGeneratorResponse();
-        const isGrpcJs = ['generate_package_definition', 'grpc_js'].indexOf(request.getParameter()) !== -1;
+        if (request.getFileToGenerateList().length === 0 && request.getProtoFileList().length === 0) {
+            throw new Error('Invalid CodeGeneratorRequest: no proto files and nothing to generate');
+        }
+        // protoc joins multiple --ts_out parameters with commas.
+        const parameters = request.getParameter().split(',').map(p => p.trim());
+        const isGrpcJs = parameters.indexOf('grpc_js') !== -1
+            || parameters.indexOf('generate_package_definition') !== -1;
+
+        // Declare support for proto3 optional fields so protoc will invoke
+        // the plugin for protos that use them.
+        response.setSupportedFeatures(CodeGeneratorResponse.Feature.FEATURE_PROTO3_OPTIONAL);
 
         // Parse request proto file
         const fileNameToDescriptor: { [key: string]: FileDescriptorProto } = {};
@@ -48,10 +58,11 @@ Utility.withAllStdIn((input: Buffer) => {
                 response.addFile(thisServiceFile);
             }
         });
-
-        process.stdout.write(Buffer.from(response.serializeBinary()));
     } catch (err) {
-        console.error('error: ' + err.stack + '\n');
-        process.exit(1);
+        // Report failures through the response so protoc can surface them
+        // to the user, instead of dying with a non-zero exit code.
+        response.setError(err && err.stack ? err.stack : String(err));
     }
+
+    process.stdout.write(Buffer.from(response.serializeBinary()));
 });

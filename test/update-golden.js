@@ -19,6 +19,7 @@ const {
     kitchenSinkFile,
     serviceFile,
     externalTypesFile,
+    noPackageFile,
     proto2File,
     proto3OptionalFile,
     integrationRequest,
@@ -43,11 +44,13 @@ function generateUnitBaselines() {
     const kitchen = kitchenSinkFile();
     const svc = serviceFile();
     const external = externalTypesFile();
+    const noPkg = noPackageFile();
     const proto2 = proto2File();
     const optional = proto3OptionalFile();
-    const all = entryMapFor(kitchen, svc, external, proto2, optional);
+    const all = entryMapFor(kitchen, svc, external, noPkg, proto2, optional);
 
     writeGolden('kitchen-product_pb.d.ts', FileDescriptorMSG.print(kitchen, all));
+    writeGolden('nopkg-plain_pb.d.ts', FileDescriptorMSG.print(noPkg, all));
     writeGolden('service-product_pb.d.ts', FileDescriptorMSG.print(svc, all));
     writeGolden('service-product_grpc_pb.d.ts', FileDescriptorGRPC.print(svc, all, true));
     writeGolden('service-product_grpc_pb-legacy.d.ts', FileDescriptorGRPC.print(svc, all, false));
