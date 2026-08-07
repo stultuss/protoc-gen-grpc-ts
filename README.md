@@ -353,6 +353,16 @@ export namespace Shop {
 
 [MIT](LICENSE)
 
+## Testing
+
+```bash
+npm test
+```
+
+The test suite covers every generator module and compares generated output
+against golden baselines in `test/golden`. After an intentional output change,
+regenerate the baselines with `npm run test:update-golden` and review the diff.
+
 [npm-image]: https://img.shields.io/npm/v/protoc-gen-grpc.svg
 [npm-url]: https://npmjs.org/package/protoc-gen-grpc
 [downloads-image]: https://img.shields.io/npm/dm/protoc-gen-grpc.svg
