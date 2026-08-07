@@ -16,6 +16,8 @@
 - 2026-08-07: 用户确认按顺序执行：CI → P4 可维护性重构 → 发布整洁 → 其余跟踪项。
 - 2026-08-07: CI（GitHub Actions，node 20/22，npm ci --ignore-scripts）已提交 f376014；P4 重构完成（JSON 模板克隆换工厂函数、FieldTypes 魔法数字换枚举），90 测试全绿、golden 零变化。
 - 2026-08-07: 发布整洁完成：package.json 加 files 白名单（5 个 bin 脚本 + build，不含下载二进制）；build/ 取消 git 跟踪（prepare 发布前自动构建）；npm pack 包体积 3.3MB → 13.7kB。
+- 2026-08-07: 开始依赖升级（第 8 项）：grpc-js 1.14.4、node-pre-gyp 2.0.3、@types/node 22、typescript 5.9、rimraf 6；google-protobuf 保持 3.21.4（4.x 破坏性，待单独评估）。
+- 2026-08-07: 依赖升级完成：npm audit 从 5 个漏洞（含 1 critical）降到 0；tar 显式声明为直接依赖修复 node-pre-gyp 链的 critical（overrides 对 bundleDependencies 无效，npm 11 行为）；90 测试全绿。
 
 ## 关键参数
 - 项目: protoc-gen-grpc v3.0.0（protoc 插件，为 gRPC TypeScript 生成 *_pb.d.ts / *_grpc_pb.d.ts，基于 jspb / google-protobuf）
