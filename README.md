@@ -74,6 +74,8 @@ npm install protoc-gen-grpc -g
 - Supports `oneof` groups with a `get<Name>Case()` accessor and a `<Name>Case`
   enum.
 - Supports proto3 `optional` fields.
+- Supports `[jstype = JS_STRING]` fields, mapping `int64`/`uint64` to `string`
+  to avoid precision loss.
 
 **Example**
 
