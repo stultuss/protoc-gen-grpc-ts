@@ -29,7 +29,7 @@
     "build": "rimraf build && tsc",
     "clean": "rimraf build",
     "prepare": "npm run build",
-    "test": "npm run build && node --test --test-reporter=spec --test-reporter-destination=stdout --test-reporter=junit --test-reporter-destination=test/results/test-results.xml 'test/**/*.test.js' && node test/summarize.mjs",
+    "test": "npm run build && node --test --test-reporter=spec --test-reporter-destination=stdout --test-reporter=junit --test-reporter-destination=test/results/test-results.xml test/unit/*.test.js test/integration/*.test.js && node test/summarize.mjs",
     "test:update-golden": "node test/update-golden.js",
     "test-js-out": "node ./bin/protoc-gen-grpc.js --js_out=import_style=commonjs,binary:./examples/src/proto --grpc_out=grpc_js:./examples/src/proto --proto_path ./examples/proto ./examples/proto/product.proto",
     "test-ts-out": "node ./bin/protoc-gen-grpc-ts.js --ts_out=grpc_js,keep_case:./examples/src/proto --proto_path ./examples/proto ./examples/proto/product.proto"
