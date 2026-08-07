@@ -15,6 +15,7 @@
 - 2026-08-07: 用户要求暂停任务，重新规划项目优化方向，并列出每项的优化点/原因/不处理的结果/处理后的结果。
 - 2026-08-07: 用户确认按顺序执行：CI → P4 可维护性重构 → 发布整洁 → 其余跟踪项。
 - 2026-08-07: CI（GitHub Actions，node 20/22，npm ci --ignore-scripts）已提交 f376014；P4 重构完成（JSON 模板克隆换工厂函数、FieldTypes 魔法数字换枚举），90 测试全绿、golden 零变化。
+- 2026-08-07: 发布整洁完成：package.json 加 files 白名单（5 个 bin 脚本 + build，不含下载二进制）；build/ 取消 git 跟踪（prepare 发布前自动构建）；npm pack 包体积 3.3MB → 13.7kB。
 
 ## 关键参数
 - 项目: protoc-gen-grpc v3.0.0（protoc 插件，为 gRPC TypeScript 生成 *_pb.d.ts / *_grpc_pb.d.ts，基于 jspb / google-protobuf）
