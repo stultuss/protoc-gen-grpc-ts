@@ -39,6 +39,8 @@ npm install protoc-gen-grpc -g
 - Generates TypeScript declarations for `@grpc/grpc-js`. Pass `grpc_js` as the
   `--ts_out` parameter; additional comma-separated parameters are allowed,
   e.g. `--ts_out=grpc_js,keep_case:...`.
+- Supports `oneof` groups with a `get<Name>Case()` accessor and a `<Name>Case`
+  enum.
 - Supports proto3 `optional` fields.
 
 **Example**
