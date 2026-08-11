@@ -57,6 +57,14 @@ export npm_config_grpc_tools_binary_host_mirror=https://your-mirror.example.com/
 npm install protoc-gen-grpc -g
 ```
 
+> **npm 11 note:** npm 11 may print an `allow-scripts` warning for the
+> `install: node scripts/install.js` script. The binary download still runs
+> by default; if your npm policy blocks it (or the wrapper reports a missing
+> binary), allow the script once with
+> `npm install -g --allow-scripts=protoc-gen-grpc`, or persist the allowance
+> with `npm config set allow-scripts=protoc-gen-grpc --location=user`. Verify
+> the install with `protoc-gen-grpc --version` (expect `libprotoc 3.19.1`).
+
 > Known limitation: grpc-tools has not published a newer release, so the
 > bundled protoc stays at 3.19.1 and does not support proto editions.
 
