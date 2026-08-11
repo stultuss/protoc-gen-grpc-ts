@@ -3,8 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const debug = require("debug");
 // support grpc-js
 const grpc = require("@grpc/grpc-js");
-// support grpc
-// import * as grpc from 'grpc';
 const product_grpc_pb_1 = require("./proto/product_grpc_pb");
 const product_pb_1 = require("./proto/product_pb");
 const log = debug('[Demo:GrpcServer]');

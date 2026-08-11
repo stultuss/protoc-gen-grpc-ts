@@ -4,6 +4,8 @@ import path from 'path';
 const resultsFile = path.join(import.meta.dirname, 'results', 'test-results.xml');
 const summaryFile = path.join(import.meta.dirname, 'results', 'SUMMARY.md');
 
+fs.mkdirSync(path.dirname(summaryFile), {recursive: true});
+
 const xml = fs.readFileSync(resultsFile, 'utf8');
 
 const passed = Number((xml.match(/<!-- pass (\d+) -->/) || [])[1] || 0);

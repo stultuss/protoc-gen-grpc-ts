@@ -29,6 +29,7 @@
     "build": "rimraf build && tsc",
     "clean": "rimraf build",
     "prepare": "npm run build",
+    "pretest": "node -e \"require('fs').mkdirSync('test/results',{recursive:true})\"",
     "test": "npm run build && node --test --test-reporter=spec --test-reporter-destination=stdout --test-reporter=junit --test-reporter-destination=test/results/test-results.xml test/unit/*.test.js test/integration/*.test.js && node test/summarize.mjs",
     "test:update-golden": "node test/update-golden.js",
     "test:differential": "npm run build && node test/differential.js",
