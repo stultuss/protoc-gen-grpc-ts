@@ -26,7 +26,7 @@
 'use strict';
 
 var path = require('path');
-var execFile = require('child_process').execFile;
+var spawn = require('child_process').spawn;
 
 var exe_ext = process.platform === 'win32' ? '.exe' : '';
 
@@ -36,11 +36,13 @@ var plugin = path.resolve(__dirname, 'grpc_node_plugin' + exe_ext);
 
 var args = ['--plugin=protoc-gen-grpc=' + plugin].concat(process.argv.slice(2));
 
-var child_process = execFile(protoc, args, function(error, stdout, stderr) {
-    if (error) {
-        throw error;
-    }
+var child = spawn(protoc, args, {stdio: 'inherit'});
+
+child.on('error', function(error) {
+  process.stderr.write('failed to run protoc: ' + error.message + '\n');
+  process.exit(1);
 });
 
-child_process.stdout.pipe(process.stdout);
-child_process.stderr.pipe(process.stderr);
+child.on('exit', function(code) {
+  process.exit(code === null ? 1 : code);
+});

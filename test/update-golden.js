@@ -52,29 +52,25 @@ function generateUnitBaselines() {
     writeGolden('kitchen-product_pb.d.ts', FileDescriptorMSG.print(kitchen, all));
     writeGolden('nopkg-plain_pb.d.ts', FileDescriptorMSG.print(noPkg, all));
     writeGolden('service-product_pb.d.ts', FileDescriptorMSG.print(svc, all));
-    writeGolden('service-product_grpc_pb.d.ts', FileDescriptorGRPC.print(svc, all, true));
-    writeGolden('service-product_grpc_pb-legacy.d.ts', FileDescriptorGRPC.print(svc, all, false));
+    writeGolden('service-product_grpc_pb.d.ts', FileDescriptorGRPC.print(svc, all));
     writeGolden('legacy-old_pb.d.ts', FileDescriptorMSG.print(proto2, all));
     writeGolden('modern-optional_pb.d.ts', FileDescriptorMSG.print(optional, all));
 }
 
 function generatePluginBaselines() {
-    for (const parameter of ['grpc_js', '']) {
-        const request = integrationRequest(parameter);
-        const result = spawnSync(process.execPath, [path.join(ROOT, 'build', 'index.js')], {
-            input: Buffer.from(request.serializeBinary()),
-            encoding: 'buffer',
-        });
-        if (result.status !== 0) {
-            throw new Error(`plugin exited ${result.status}: ${result.stderr.toString()}`);
-        }
-        const response = CodeGeneratorResponse.deserializeBinary(result.stdout);
-        const suffix = parameter === '' ? '-legacy' : '';
-        response.getFileList().forEach(file => {
-            const base = file.getName().replace(/\//g, '-').replace(/\.d\.ts$/, '');
-            writeGolden(`plugin-${base}${suffix}.d.ts`, file.getContent());
-        });
+    const request = integrationRequest();
+    const result = spawnSync(process.execPath, [path.join(ROOT, 'build', 'index.js')], {
+        input: Buffer.from(request.serializeBinary()),
+        encoding: 'buffer',
+    });
+    if (result.status !== 0) {
+        throw new Error(`plugin exited ${result.status}: ${result.stderr.toString()}`);
     }
+    const response = CodeGeneratorResponse.deserializeBinary(result.stdout);
+    response.getFileList().forEach(file => {
+        const base = file.getName().replace(/\//g, '-').replace(/\.d\.ts$/, '');
+        writeGolden(`plugin-${base}.d.ts`, file.getContent());
+    });
 }
 
 fs.mkdirSync(GOLDEN_DIR, {recursive: true});

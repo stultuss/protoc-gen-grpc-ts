@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+message Outer {
+    string v = 1;
+    enum Status {
+        OK = 0;
+    }
+    message Inner {
+        string name = 1;
+    }
+}
+
+message Top {
+    Outer outer = 1;
+}

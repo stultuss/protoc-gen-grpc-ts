@@ -1,0 +1,31 @@
+syntax = "proto2";
+
+package com.p2;
+
+message OldMsg {
+    required string req = 1;
+    optional int32 opt = 2;
+    repeated string rep = 3;
+    optional Nested child = 4;
+
+    enum Kind {
+        KIND_A = 0;
+        KIND_B = 1;
+    }
+
+    message Nested {
+        optional string name = 1;
+    }
+}
+
+message Base {
+    extensions 100 to max;
+}
+
+extend Base {
+    optional string tag = 100;
+}
+
+service LegacyService {
+    rpc Get (OldMsg) returns (OldMsg) {}
+}

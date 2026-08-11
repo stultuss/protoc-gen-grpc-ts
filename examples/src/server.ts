@@ -1,8 +1,6 @@
 import * as debug from 'debug';
 // support grpc-js
 import * as grpc from '@grpc/grpc-js';
-// support grpc
-// import * as grpc from 'grpc';
 
 import {IProductServiceServer, ProductServiceService} from './proto/product_grpc_pb';
 import {GetProductRequest, GetProductViaCategoryRequest, Order, Product} from './proto/product_pb';

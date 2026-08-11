@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+package com.kitchen;
+
+import "types.proto";
+
+enum Color {
+    RED = 0;
+    GREEN = 1;
+    BLUE = 2;
+}
+
+message Product {
+    int64 id = 1;
+    string name = 2;
+    repeated string tags = 3;
+    bytes data = 4;
+    repeated bytes history = 5;
+    bool default = 6;
+    Product.Kind kind = 7;
+    Product.Status status = 8;
+    other.types.External ext = 9;
+    map<string, Meta> metas = 10;
+
+    enum Status {
+        UNKNOWN = 0;
+        ACTIVE = 1;
+    }
+
+    message Kind {
+        string label = 1;
+    }
+}
+
+message Meta {
+    string value = 1;
+}
+
+message Order {
+    oneof payment {
+        int64 cash = 1;
+        string card = 2;
+    }
+    string note = 3;
+}
+
+service KitchenService {
+    rpc Get (Product) returns (Product) {}
+    rpc Watch (stream Product) returns (stream Meta) {}
+    rpc Upload (stream Order) returns (Order) {}
+    rpc Chat (stream Product) returns (stream Product) {}
+    rpc GetExternal (Product) returns (other.types.External) {}
+}

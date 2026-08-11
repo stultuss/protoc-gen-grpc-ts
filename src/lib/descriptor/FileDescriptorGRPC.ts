@@ -50,7 +50,7 @@ export namespace FileDescriptorGRPC {
         };
     }
 
-    export function print(fileDescriptor: FileDescriptorProto, entryMap: EntryMap, isGrpcJs: boolean): string {
+    export function print(fileDescriptor: FileDescriptorProto, entryMap: EntryMap): string {
         if (fileDescriptor.getServiceList().length === 0) {
             return '';
         }
@@ -65,12 +65,10 @@ export namespace FileDescriptorGRPC {
         printer.printLn(`// file: ${fileDescriptor.getName()}`);
         printer.printEmptyLn();
 
+        // grpc-js is the only supported runtime; the legacy `grpc` package is
+        // no longer maintained and cannot be installed on current Node.js.
+        printer.printLn(`import * as grpc from '@grpc/grpc-js';`);
         // Need to import the non-service file that was generated for this .proto file
-        if (isGrpcJs) {
-            printer.printLn(`import * as grpc from '@grpc/grpc-js';`);
-        } else {
-            printer.printLn(`import * as grpc from 'grpc';`);
-        }
         const asPseudoNamespace = Utility.filePathToPseudoNamespace(fileName);
         printer.printLn(`import * as ${asPseudoNamespace} from '${upToRoot}${Utility.filePathFromProtoWithoutExtension(fileName)}';`);
 

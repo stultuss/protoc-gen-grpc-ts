@@ -45,31 +45,14 @@ test('plugin generates grpc-js message and service files matching golden', () =>
     });
 });
 
-test('plugin generates legacy grpc output when the parameter is empty', () => {
-    const result = runPlugin(integrationRequest(''));
-    assert.equal(result.status, 0, result.stderr.toString());
-    const response = CodeGeneratorResponse.deserializeBinary(result.stdout);
-    response.getFileList().forEach(file => {
-        assert.equal(file.getContent(), readGolden(goldenNameFor(file.getName(), '-legacy')), file.getName());
-    });
-    const grpcFile = response.getFileList().find(f => f.getName().endsWith('_grpc_pb.d.ts'));
-    assert.match(grpcFile.getContent(), /import \* as grpc from 'grpc';/);
-});
-
-test('not_grpc_js does not select grpc-js', () => {
-    const result = runPlugin(integrationRequest('not_grpc_js'));
-    assert.equal(result.status, 0, result.stderr.toString());
-    const response = CodeGeneratorResponse.deserializeBinary(result.stdout);
-    const grpcFile = response.getFileList().find(f => f.getName().endsWith('_grpc_pb.d.ts'));
-    assert.match(grpcFile.getContent(), /import \* as grpc from 'grpc';/);
-});
-
-test('comma-joined grpc_js parameter selects grpc-js', () => {
-    const result = runPlugin(integrationRequest('grpc_js,keep_case'));
-    assert.equal(result.status, 0, result.stderr.toString());
-    const response = CodeGeneratorResponse.deserializeBinary(result.stdout);
-    const grpcFile = response.getFileList().find(f => f.getName().endsWith('_grpc_pb.d.ts'));
-    assert.match(grpcFile.getContent(), /import \* as grpc from '@grpc\/grpc-js';/);
+test('output always targets @grpc/grpc-js regardless of --ts_out parameters', () => {
+    for (const parameter of ['', 'grpc_js', 'grpc_js,keep_case', 'not_grpc_js']) {
+        const result = runPlugin(integrationRequest(parameter));
+        assert.equal(result.status, 0, result.stderr.toString());
+        const response = CodeGeneratorResponse.deserializeBinary(result.stdout);
+        const grpcFile = response.getFileList().find(f => f.getName().endsWith('_grpc_pb.d.ts'));
+        assert.match(grpcFile.getContent(), /import \* as grpc from '@grpc\/grpc-js';/);
+    }
 });
 
 test('files without services produce only the message declaration file', () => {

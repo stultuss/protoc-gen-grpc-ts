@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package com.product;
+
+message Product {
+    int64 id = 1;
+    string name = 2;
+    optional string remark = 3;
+    int64 big_id = 4 [jstype = JS_STRING];
+    bytes blob = 5;
+    bool default = 6;
+}
+
+message Order {
+    oneof payment {
+        int64 cash = 1;
+        string card = 2;
+    }
+}
+
+message Shop {
+    string name = 1;
+    map<string, Product> list = 2;
+}
+
+service ProductService {
+    rpc GetProduct (Product) returns (Product) {}
+    rpc WatchProducts (Product) returns (stream Product) {}
+    rpc UploadOrders (stream Order) returns (Order) {}
+    rpc Chat (stream Product) returns (stream Product) {}
+}

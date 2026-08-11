@@ -4,6 +4,38 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- Differential test (`npm run test:differential`): regenerates the corpus with
+  the bundled protoc + grpc_node_plugin and verifies the generated `.d.ts`
+  mirrors the real runtime JS surface (instance/static methods, enum members,
+  extensions, service paths and method keys). It requires the bundled
+  binaries and runs locally, not in CI.
+- README "Compatibility" section documenting the supported runtime and
+  toolchain boundaries (jspb 3.x, protoc 3.19.1, Node.js >= 18, x64 binaries).
+
+### Changed
+
+- `@grpc/grpc-js` is no longer a runtime dependency of the generator itself;
+  projects consuming the generated files install it themselves.
+- The `protoc-gen-grpc*` bin wrappers now propagate protoc's exit code and
+  report spawn failures cleanly instead of throwing an uncaught exception.
+- The install-time binary download is now verified against pinned sha512
+  checksums before extraction, replacing `@mapbox/node-pre-gyp` (which
+  performed no integrity check) with a small bundled installer.
+- CI gained an `e2e` job that installs with lifecycle scripts enabled and
+  runs the generator against the real bundled protoc toolchain, covering the
+  binary download, the differential test, and the bin wrappers.
+
+### Removed
+
+- Legacy `grpc` runtime support. Generated `.d.ts` files always import
+  `@grpc/grpc-js` now; the `grpc_js` `--ts_out` parameter is accepted for
+  compatibility and ignored. The legacy `grpc` package is deprecated and
+  cannot be installed on current Node.js, so its output could never compile.
+
 ## [4.0.0] - 2026-08-07
 
 This is a major release: relative to 3.0.0 the generator was rebuilt around a

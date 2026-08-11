@@ -7,12 +7,6 @@ protoc-gen-grpc
 > An all-in-one `protoc` toolchain for gRPC in TypeScript. It bundles `protoc`
 > and the gRPC plugin, so a single global install works in every project.
 
-> **WARNING:** the legacy `grpc` npm package is no longer maintained and cannot
-> be installed on current Node.js. Declarations generated without the
-> `grpc_js` parameter import from that abandoned package and will not compile.
-> Always pass `grpc_js` to `--ts_out` (e.g. `--ts_out=grpc_js:./out`) unless
-> you are locked to the old runtime.
-
 ## Why protoc-gen-grpc?
 
 ### 🛡️ Non-invasive & fully isolated from your project
@@ -31,8 +25,8 @@ your project's `package.json` or `node_modules`, and the generator lives
   files.
 - **Small footprint**: the published npm package is only ~14 kB; the
   `protoc`/`grpc_node_plugin` binaries are fetched once at install time.
-- **Modern**: `@grpc/grpc-js` output, proto3 `optional` fields, `oneof` groups,
-  and comma-joined `--ts_out` parameters.
+- **Modern**: `@grpc/grpc-js` output, proto3 `optional` fields, and `oneof`
+  groups.
 - **Tested**: 90+ unit tests with golden output baselines, run automatically
   on GitHub Actions for Node.js 20 and 22.
 
@@ -54,8 +48,9 @@ npm install protoc-gen-grpc --save-dev
 
 During `npm install`, the package downloads the `protoc` and `grpc_node_plugin`
 binaries from `node-precompiled-binaries.grpc.io` (grpc-tools v1.13.0, bundling
-protoc 3.19.1). If that host is unreachable in your environment, point
-node-pre-gyp at a mirror:
+protoc 3.19.1). Every download is verified against a pinned sha512 checksum
+before extraction; a mismatch aborts the install. If that host is unreachable
+in your environment, point the installer at a mirror:
 
 ```bash
 export npm_config_grpc_tools_binary_host_mirror=https://your-mirror.example.com/
@@ -65,13 +60,29 @@ npm install protoc-gen-grpc -g
 > Known limitation: grpc-tools has not published a newer release, so the
 > bundled protoc stays at 3.19.1 and does not support proto editions.
 
+## Compatibility
+
+- Generates TypeScript declarations for JavaScript produced by
+  `google-protobuf` (jspb) 3.x; the generated code imports `@grpc/grpc-js`,
+  which your project must install itself.
+- Bundled toolchain is grpc-tools v1.13.0 (protoc 3.19.1 + grpc_node_plugin,
+  2021-era): proto2 and proto3 are supported, proto editions are not.
+- Requires Node.js >= 18.
+- Bundled binaries are linux-x64, darwin-x64 and win32-x64 only: Apple Silicon
+  users need Rosetta 2, and arm64 Linux is not provided.
+- `npm run test:differential` regenerates the corpus with the real bundled
+  protoc and verifies the emitted `.d.ts` matches the runtime JS surface
+  (methods, enums, extensions, service paths). It needs the bundled binaries,
+  so it is not part of CI; run it locally after generator changes.
+
 ## How to use
 
 **Supported features**
 
-- Generates TypeScript declarations for `@grpc/grpc-js`. Pass `grpc_js` as the
-  `--ts_out` parameter; additional comma-separated parameters are allowed,
-  e.g. `--ts_out=grpc_js,keep_case:...`.
+- Generates TypeScript declarations for `@grpc/grpc-js` — the only supported
+  runtime (the legacy `grpc` package is no longer maintained). `--ts_out`
+  parameters such as `grpc_js` are accepted for compatibility and ignored;
+  your project must install `@grpc/grpc-js` to compile the generated code.
 - Supports `oneof` groups with a `get<Name>Case()` accessor and a `<Name>Case`
   enum.
 - Supports proto3 `optional` fields.
@@ -84,7 +95,7 @@ npm install protoc-gen-grpc -g
 
 Please try ./examples/build.sh
 
-**Support - grpc-js**
+**Support**
 
 bash
 
@@ -98,7 +109,7 @@ protoc-gen-grpc \
 
 # generate d.ts codes with @grpc/grpc-js
 protoc-gen-grpc-ts \
---ts_out=grpc_js,keep_case:./examples/src/proto \
+--ts_out=./examples/src/proto \
 --proto_path ./examples/proto \
 ./examples/proto/product.proto
 ```
@@ -111,40 +122,6 @@ import * as grpc from '@grpc/grpc-js';
 ...
 const server = new grpc.Server();
 server.addService(ProductServiceService, ServerImpl);
-```
-
-**Support - grpc (deprecated)**
-
-> The legacy `grpc` npm package is no longer maintained and cannot be installed
-> on current Node.js versions. Use `@grpc/grpc-js` instead; the generated
-> `--ts_out` without the `grpc_js` parameter targets the legacy package.
-
-bash
-
-```bash
-# generate js codes with grpc
-protoc-gen-grpc \
---js_out=import_style=commonjs,binary:./examples/src/proto \
---grpc_out=./examples/src/proto \
---proto_path ./examples/proto \
-./examples/proto/product.proto
-
-# generate d.ts codes with grpc
-protoc-gen-grpc-ts \
---ts_out=./examples/src/proto \
---proto_path ./examples/proto \
-./examples/proto/product.proto
-```
-
-server.ts
-
-```javascript
-// support grpc-js
-import * as grpc from 'grpc';
-...
-...
-const server = new grpc.Server();
-server.addService(ProductServiceService, new ServerImpl());
 ```
 
 ## Example

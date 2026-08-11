@@ -96,6 +96,6 @@ test('generated files carry the tool version header', () => {
     const output = FileDescriptorMSG.print(fd, new EntryMap());
     assert.equal(output.split('\n')[0], versionHeader());
     const svc = serviceFile();
-    const grpcOutput = FileDescriptorGRPC.print(svc, entryMapFor(kitchenSinkFile(), svc, externalTypesFile()), true);
+    const grpcOutput = FileDescriptorGRPC.print(svc, entryMapFor(kitchenSinkFile(), svc, externalTypesFile()));
     assert.equal(grpcOutput.split('\n')[0], versionHeader());
 });

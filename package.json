@@ -25,12 +25,13 @@
     "protoc-gen-grpc-ts": "./bin/protoc-gen-grpc-ts.js"
   },
   "scripts": {
-    "install": "node-pre-gyp install",
+    "install": "node scripts/install.js",
     "build": "rimraf build && tsc",
     "clean": "rimraf build",
     "prepare": "npm run build",
     "test": "npm run build && node --test --test-reporter=spec --test-reporter-destination=stdout --test-reporter=junit --test-reporter-destination=test/results/test-results.xml test/unit/*.test.js test/integration/*.test.js && node test/summarize.mjs",
     "test:update-golden": "node test/update-golden.js",
+    "test:differential": "npm run build && node test/differential.js",
     "test-js-out": "node ./bin/protoc-gen-grpc.js --js_out=import_style=commonjs,binary:./examples/src/proto --grpc_out=grpc_js:./examples/src/proto --proto_path ./examples/proto ./examples/proto/product.proto",
     "test-ts-out": "node ./bin/protoc-gen-grpc-ts.js --ts_out=grpc_js,keep_case:./examples/src/proto --proto_path ./examples/proto ./examples/proto/product.proto"
   },
@@ -41,13 +42,12 @@
     "bin/protoc-gen.js",
     "bin/protoc-gen-ts-plugin",
     "bin/protoc-gen-ts-plugin.cmd",
-    "build"
+    "build",
+    "scripts/install.js"
   ],
   "dependencies": {
-    "@grpc/grpc-js": "1.14.4",
     "google-protobuf": "~3.21.2",
-    "tar": "7.5.22",
-    "@mapbox/node-pre-gyp": "2.0.3"
+    "tar": "7.5.22"
   },
   "devDependencies": {
     "@types/google-protobuf": "^3.15.12",
@@ -61,9 +61,11 @@
     "host": "https://node-precompiled-binaries.grpc.io/",
     "remote_path": "grpc-tools/v1.13.0",
     "package_name": "{platform}-{arch}.tar.gz",
-    "module_path": "bin"
-  },
-  "bundleDependencies": [
-    "@mapbox/node-pre-gyp"
-  ]
+    "module_path": "bin",
+    "sha512": {
+      "darwin-x64": "c88ebc8fed4eb87a85207f3a4872be3ddec519895dc39c0c44cd2a7d4118ba5703d628d7cab3a2bf6d5dd5329ebbe088c514db582f09c11aa688b53e0514d1c5",
+      "linux-x64": "a34560b58fd2d1bcff18a84d6b15dc9d518af9b498a7e4c035daf764814a4ddbdf6089acc6d04c14e4f167feb2ac047b2d5144ce8cfe5404ad27cddd31f64b6c",
+      "win32-x64": "e31faf06b7d7dbb3919e0646f33110a7f3f1b8c29b52747e371507ea46c8f61deac54f8d818e99f3b95eac48b1ce43dd0f3fe7d5f2476211401250f560a711ca"
+    }
+  }
 }
