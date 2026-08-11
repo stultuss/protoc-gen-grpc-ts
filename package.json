@@ -1,6 +1,6 @@
 {
   "name": "protoc-gen-grpc",
-  "version": "4.0.0",
+  "version": "4.1.0",
   "author": "fengjie",
   "description": "Protocol Buffers Compiler (protoc) plugin for generating grpc interfaces in TypeScript..",
   "homepage": "https://github.com/stultuss/protoc-gen-grpc-ts#readme",
