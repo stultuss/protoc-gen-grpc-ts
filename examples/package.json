@@ -16,7 +16,7 @@
   "author": "fengjie",
   "license": "MIT",
   "dependencies": {
-    "@grpc/grpc-js": "~1.14.4",
+    "@grpc/grpc-js": "~1.14.5",
     "debug": "^4.4.0",
     "google-protobuf": "~3.21.2"
   },
